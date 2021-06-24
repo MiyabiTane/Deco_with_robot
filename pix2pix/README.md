@@ -17,6 +17,9 @@ input_pdfは[こちら](https://drive.google.com/drive/folders/1izehNB7GK3bh5nqr
     ※筆者はGoogle Slideにネットから拾った画像を貼り付けてtrain_B.pdfを作成した後、iPadのGoodNotesでpdfを開き、地道に手書きでマスク画像を作成した。もっと賢い方法ありそう。
 
 2. 以下のコマンドを実行すると```images/train```に学習用画像が生成される。
+    ```
+    $ python3 ./make_image_from_pdf.py --masked
+    ```
 
 ### pix2pixを用いた学習
 
@@ -66,6 +69,8 @@ input_pdfは[こちら](https://drive.google.com/drive/folders/1izehNB7GK3bh5nqr
 
 ### 仮想環境(pipenv)の作り方
 
+0. Linuxの人は[このサイト](https://qiita.com/sabaku20XX/items/67eb69f006adbbf9c525)を参照してpipenvを使える環境にする。Macの人は```brew install```とかで簡単に入るはず。
+
 1. 環境を作りたいディレクトリ下で以下のコマンドを実行することでpython3.7環境を作ることができる。
 ```
 $ pipenv install --python 3.7
@@ -74,7 +79,7 @@ $ pipenv install --python 3.7
 
 2. 使いたいツールを仮想環境内にインストール。以下一例。
 ```
-$ pipenv install tendorflow
+$ pipenv install tensorflow
 $ pipenv install matplotlib
 $ pipenv install IPython
 ```
@@ -90,3 +95,5 @@ $ pipenv --rm
 $ pipenv sync
 ```
 どこか中間点でおかしなファイルが生成されている場合が多いので、一旦消してから環境を作り直すと直る場合がある。
+
+
