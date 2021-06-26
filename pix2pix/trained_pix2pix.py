@@ -190,27 +190,10 @@ BATCH_SIZE = 1
 IMG_WIDTH = 256
 IMG_HEIGHT = 256
 
-"""
 def generate_images(model, test_input, save_name):
   prediction = model(test_input, training=True)
   plt.figure(figsize=(15, 15))
-
-  display_list = [test_input[0], prediction[0]]
-  title = ['Input Image', 'Predicted Image']
-
-  for i in range(2):
-    plt.subplot(1, 2, i+1)
-    plt.title(title[i])
-    # getting the pixel values between [0, 1] to plot it.
-    plt.imshow(display_list[i] * 0.5 + 0.5)
-    plt.axis('off')
-  plt.savefig(save_name)
-"""
-
-def generate_images(model, test_input, save_name):
-  prediction = model(test_input, training=True)
-  plt.figure(figsize=(15, 15))
-  plt.imshow(prediction[0])
+  plt.imshow(prediction[0] * 0.5 + 0.5)
   plt.axis('off')
   plt.subplots_adjust(left=0, right=1, bottom=0, top=1)
   plt.savefig(save_name)
@@ -227,7 +210,7 @@ def test_loader(image_file):
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--input", required=True)  # --input test
+parser.add_argument("--input", required=True)  # --input test.jpg
 args = parser.parse_args()
 
 INPUT_PATH = args.input
