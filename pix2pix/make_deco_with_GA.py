@@ -44,9 +44,9 @@ def get_inputs():
 
 
 class ThinkDecoration:
-    def __init__(self, deco_imgs, deco_masks, input_img, output_img, nums=11, generation=10, elite=5):
-        # self.visited = np.zeros((480, 640), dtype=np.int)
-        # ToDo: 複数の飾りが重ならないようにする
+    def __init__(self, deco_imgs, deco_masks, input_img, output_img, nums=11, generation=5, elite=5):
+        # 複数の飾りが重ならないようにする 0: 空きスペース, 1: 飾りが既にある, 2: 飾りが既にあり、書き換え不可能
+        self.visited = np.zeros((480, 640), dtype=np.int)
         self.input = input_img
         self.H, self.W, _ = self.input.shape
         self.output = output_img
@@ -57,22 +57,64 @@ class ThinkDecoration:
         self.generation = generation
         # 貼り付け位置
         self.genes = []
+        count = 0
         for _ in range(nums):
             gene = []
             for im in self.imgs:
                 h, w, _ = im.shape
                 random_x = random.randint(w / 2, self.W - w / 2)
                 random_y = random.randint(h / 2, self.H - h / 2)
-                gene.append((random_x, random_y))
+                gene.append((random_x, random_y, h, w))
+            gene = self.remove_overlap(gene)
             self.genes.append(gene)
+            output_img = self.generate_img(gene)
+            cv2.imwrite("ga_output" + str(count) + ".jpg", output_img)
+            count += 1
         # print(self.genes)
 
+
+    def remove_overlap(self, gene):
+        new_gene = []
+        self.visited = np.where(self.visited == 1, 0, self.visited)
+        for pos_x, pos_y, h, w in gene:
+            new_x, new_y = self.generate_new_pos(pos_x, pos_y, h, w)
+            self.visited[int(new_y - h/2): int(new_y + h/2), int(new_x - w/2): int(new_x + w/2)] = 1
+            new_gene.append((new_x, new_y, h, w))
+        return new_gene
+
+
+    def generate_new_pos(self, pos_x, pos_y, h, w):
+        ans_y = -1
+        ans_x = -1
+        check_array = self.visited[int(pos_y - h/2): int(pos_y + h/2), int(pos_x - w/2): int(pos_x + w/2)]
+        over_y, over_x = np.where((check_array == 1) | (check_array == 2))
+        # 重なりがなかった場合
+        if len(over_y) == 0 and len(over_x) == 0:
+            return pos_x, pos_y
+        # 左、上側に被っていたらそちら側に向けてずらす
+        if 0 in over_y:
+            ans_y = pos_y - max(over_y) - 1
+        if 0 in over_x:
+            ans_x = pos_x - max(over_x) - 1
+        if ans_y - h / 2 < 0:
+            ans_y = pos_y + (h - min(over_y))
+        if ans_x - w / 2 < 0:
+            ans_x = pos_x + (w - min(over_x))
+        # どちら側にもずらせない場合は画像の右下に配置
+        if ans_y + h / 2 > self.H:
+            ans_y = self.H - h / 2
+        if ans_x + w / 2 > self.W:
+            ans_x = self.W - w / 2
+        print(pos_x, pos_y, " -> ", ans_x, ans_y)
+        return int(ans_x), int(ans_y)
+
+
     def generate_img(self, gene):
+        # self.visited = np.where(self.visited == 1, 0, self.visited))
         output_img = deepcopy(self.input)
         for i, deco_img in enumerate(self.imgs):
-            pos_x, pos_y = gene[i]
+            pos_x, pos_y, h, w = gene[i]
             mask_img = self.masks[i]
-            h, w, _ = deco_img.shape
             back_img = output_img[int(pos_y - h/2): int(pos_y + h/2), int(pos_x - w/2): int(pos_x + w/2)]
             deco_img[mask_img < 150] = [0, 0, 0]
             back_img[mask_img >= 150] = [0, 0, 0]
@@ -86,10 +128,8 @@ class ThinkDecoration:
         points = []
         for i in range(self.nums):
             decorated_img = self.generate_img(self.genes[i])
-            target_color = skimage.color.rgb2lab(self.output)
-            compare_color = skimage.color.rgb2lab(decorated_img)
-            res = np.sum(skimage.color.deltaE_cie76(target_color, compare_color))
-            points.append(1/res)  # 値が小さいほうが類似度が高い
+            diff = np.sum(np.linalg.norm(decorated_img - self.output, axis=0))
+            points.append(1 / diff)  # diffが小さい方が類似度が高い
         print(max(points))
         points = points / sum(points)
         return points
@@ -104,8 +144,10 @@ class ThinkDecoration:
             target_index = cross_point + i
             value_1 = parent_1[target_index]
             value_2 = parent_2[target_index]
-            child_1[target_index] = (int((value_1[0] * 2 + value_2[0]) / 3), int((value_1[1] * 2 + value_2[1]) / 3))
-            child_2[target_index] = (int((value_1[0] + value_2[0] * 2) / 3), int((value_1[1] + value_2[1] * 2) / 3))
+            child_1[target_index] = (int((value_1[0] * 2 + value_2[0]) / 3), int((value_1[1] * 2 + value_2[1]) / 3), value_1[2], value_1[3])
+            child_2[target_index] = (int((value_1[0] + value_2[0] * 2) / 3), int((value_1[1] + value_2[1] * 2) / 3), value_2[2], value_2[3])
+        child_1 = self.remove_overlap(child_1)
+        child_2 = self.remove_overlap(child_2)
         return child_1, child_2
 
 
@@ -137,13 +179,15 @@ class ThinkDecoration:
                 h, w, _ = self.imgs[m_index].shape
                 random_x = random.randint(w / 2, self.W - w / 2)
                 random_y = random.randint(h / 2, self.H - h / 2)
-                self.genes[index][m_index] == (random_x, random_y)
+                self.genes[index][m_index] == (random_x, random_y, h, w)
+                self.genes[index] = self.remove_overlap(self.genes[index])
 
 
     def GA_calc(self):
         for _ in range(self.generation):
             self.generate_next_generation()
             self.mutation()
+            # print(self.genes)
         output_img = self.generate_img(self.genes[0])
         cv2.imwrite("ga_output.jpg", output_img)
 
