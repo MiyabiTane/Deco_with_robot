@@ -78,6 +78,11 @@ class ThinkDecoration:
         self.visited = np.where(self.visited == 1, 0, self.visited)
         for pos_x, pos_y, h, w in gene:
             new_x, new_y = self.generate_new_pos(pos_x, pos_y, h, w)
+            if new_x != pos_x or new_y != pos_y:
+                print(pos_x, pos_y, " -> ", new_x, new_y)
+                check_array = self.visited[int(new_y - h/2): int(new_y + h/2), int(new_x - w/2): int(new_x + w/2)]
+                over_y, over_x = np.where((check_array == 1) | (check_array == 2))
+                print(set(over_y), set(over_x))
             self.visited[int(new_y - h/2): int(new_y + h/2), int(new_x - w/2): int(new_x + w/2)] = 1
             new_gene.append((new_x, new_y, h, w))
         return new_gene
@@ -88,25 +93,28 @@ class ThinkDecoration:
         ans_x = -1
         check_array = self.visited[int(pos_y - h/2): int(pos_y + h/2), int(pos_x - w/2): int(pos_x + w/2)]
         over_y, over_x = np.where((check_array == 1) | (check_array == 2))
+        over_y, over_x = set(over_y), set(over_x)
         # 重なりがなかった場合
         if len(over_y) == 0 and len(over_x) == 0:
             return pos_x, pos_y
-        # 左、上側に被っていたらそちら側に向けてずらす
-        if 0 in over_y:
-            ans_y = pos_y - max(over_y) - 1
-        if 0 in over_x:
-            ans_x = pos_x - max(over_x) - 1
-        if ans_y - h / 2 < 0:
-            ans_y = pos_y + (h - min(over_y))
-        if ans_x - w / 2 < 0:
-            ans_x = pos_x + (w - min(over_x))
-        # どちら側にもずらせない場合は画像の右下に配置
-        if ans_y + h / 2 > self.H:
-            ans_y = self.H - h / 2
-        if ans_x + w / 2 > self.W:
-            ans_x = self.W - w / 2
-        print(pos_x, pos_y, " -> ", ans_x, ans_y)
-        return int(ans_x), int(ans_y)
+        print(" - - - ")
+        print(over_y, over_x)
+        if len(over_x) > len(over_y):
+            if 0 in over_x:  # 右側にずらす
+                ans_x = pos_x + max(over_x) + 1
+                if ans_x + w / 2 < self.W:
+                    return self.generate_new_pos(int(ans_x), pos_y, h, w)
+                ans_x = pos_x - (w - min(over_x))
+                if ans_x - w / 2 >= 0:
+                    return self.generate_new_pos(int(ans_x), pos_y, h, w)
+        if 0 in over_y:  # 下側にずらす
+            ans_y = pos_y + max(over_y) + 1
+            if ans_y - h / 2 < self.H:
+                return self.generate_new_pos(pos_x, int(ans_y), h, w)
+            ans_y = pos_y - (h - min(over_y))
+            if ans_y - h / 2 >= 0:
+                return self.generate_new_pos(pos_x, int(ans_y), h, w)
+        return int(self.W - w / 2), int(self.H - h / 2)  # どちら側にもずらせない場合は右下に配置
 
 
     def generate_img(self, gene):
