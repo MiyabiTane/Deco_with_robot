@@ -211,6 +211,7 @@ def test_loader(image_file):
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--input", required=True)  # --input test.jpg
+parser.add_argument("--output", required=True)  # --output output.jpg
 args = parser.parse_args()
 
 INPUT_PATH = args.input
@@ -218,7 +219,7 @@ test_dataset = tf.data.Dataset.list_files(INPUT_PATH)  # (INPUT_PATH + '/*.jpg')
 test_dataset = test_dataset.map(test_loader)
 test_dataset = test_dataset.batch(BATCH_SIZE)
 for inp in test_dataset.take(1):
-  generate_images(generator, inp, "output.jpg")
+  generate_images(generator, inp, args.output)
 
 # img = cv2.imread("output.jpg")
 # cv2.imwrite("output2.jpg", img)

@@ -6,8 +6,11 @@ import numpy as np
 import subprocess
 import random
 from copy import deepcopy
-import skimage.color
+# import skimage.colo
+from collections import deque
+
 TH = 150
+ALPHA = 0
 INPUT_PATH = "data/balloon/*.jpg"
 
 
@@ -15,9 +18,10 @@ def think_with_trained_pix2pix(input_name, output_name):
     input_img = cv2.imread(input_name)  # input_img.shape = (480, 640, 3)
     img = np.full((640, 640, 3), 255)
     img[90: 570] = input_img
-    cv2.imwrite(input_name, img)
+    save_name = input_name.rsplit(".")[0] + "_i.jpg"
+    cv2.imwrite(save_name, img)
     # 学習済みpix2pixによる飾り付け画像生成
-    subprocess.run(["pipenv", "run", "python", "trained_pix2pix.py", "--input", "input.jpg"])
+    subprocess.run(["pipenv", "run", "python", "trained_pix2pix.py", "--input", save_name, "--output", output_name])
     output_img = cv2.imread(output_name)
     output_img = cv2.resize(output_img , (640, 640))
     output_img = output_img[90: 570]
@@ -28,7 +32,6 @@ def get_inputs():
     deco_imgs = []
     files = glob.glob("input_gan_images/input*.jpg")
     files = sorted(files, key=lambda x: int(x[-5]))
-    print()
     for fi in files:
         img = cv2.imread(fi)
         deco_imgs.append(img)
@@ -44,7 +47,7 @@ def get_inputs():
 
 
 class ThinkDecoration:
-    def __init__(self, deco_imgs, deco_masks, input_img, output_img, nums=11, generation=5, elite=5):
+    def __init__(self, deco_imgs, deco_masks, input_img, output_img, nums=21, generation=20, elite=5):
         # 複数の飾りが重ならないようにする 0: 空きスペース, 1: 飾りが既にある, 2: 飾りが既にあり、書き換え不可能
         self.visited = np.zeros((480, 640), dtype=np.int)
         self.input = input_img
@@ -57,20 +60,30 @@ class ThinkDecoration:
         self.generation = generation
         # 貼り付け位置
         self.genes = []
-        count = 0
         for _ in range(nums):
             gene = []
             for im in self.imgs:
                 h, w, _ = im.shape
                 random_x = random.randint(w / 2, self.W - w / 2)
                 random_y = random.randint(h / 2, self.H - h / 2)
+                # print(h, w, random_x, random_y)
                 gene.append((random_x, random_y, h, w))
             gene = self.remove_overlap(gene)
             self.genes.append(gene)
             output_img = self.generate_img(gene)
-            cv2.imwrite("ga_output" + str(count) + ".jpg", output_img)
-            count += 1
         # print(self.genes)
+
+
+    def shift_pos(self, pos_x, pos_y, h, w):
+        if pos_x - w / 2 < 0:
+            pos_x = int(w / 2)
+        elif pos_x + w / 2 > self.W:
+            pos_x = int(self.W - w / 2)
+        if pos_y - h / 2 < 0:
+            pos_y = int(h / 2)
+        elif pos_y + h / 2 >= self.H:
+            pos_y = int(self.H - h / 2)
+        return pos_x, pos_y
 
 
     def remove_overlap(self, gene):
@@ -78,43 +91,38 @@ class ThinkDecoration:
         self.visited = np.where(self.visited == 1, 0, self.visited)
         for pos_x, pos_y, h, w in gene:
             new_x, new_y = self.generate_new_pos(pos_x, pos_y, h, w)
-            if new_x != pos_x or new_y != pos_y:
-                print(pos_x, pos_y, " -> ", new_x, new_y)
-                check_array = self.visited[int(new_y - h/2): int(new_y + h/2), int(new_x - w/2): int(new_x + w/2)]
-                over_y, over_x = np.where((check_array == 1) | (check_array == 2))
-                print(set(over_y), set(over_x))
             self.visited[int(new_y - h/2): int(new_y + h/2), int(new_x - w/2): int(new_x + w/2)] = 1
             new_gene.append((new_x, new_y, h, w))
         return new_gene
 
 
     def generate_new_pos(self, pos_x, pos_y, h, w):
-        ans_y = -1
-        ans_x = -1
-        check_array = self.visited[int(pos_y - h/2): int(pos_y + h/2), int(pos_x - w/2): int(pos_x + w/2)]
-        over_y, over_x = np.where((check_array == 1) | (check_array == 2))
-        over_y, over_x = set(over_y), set(over_x)
-        # 重なりがなかった場合
-        if len(over_y) == 0 and len(over_x) == 0:
-            return pos_x, pos_y
-        print(" - - - ")
-        print(over_y, over_x)
-        if len(over_x) > len(over_y):
-            if 0 in over_x:  # 右側にずらす
-                ans_x = pos_x + max(over_x) + 1
-                if ans_x + w / 2 < self.W:
-                    return self.generate_new_pos(int(ans_x), pos_y, h, w)
-                ans_x = pos_x - (w - min(over_x))
-                if ans_x - w / 2 >= 0:
-                    return self.generate_new_pos(int(ans_x), pos_y, h, w)
-        if 0 in over_y:  # 下側にずらす
+        to_visit = deque([(pos_x, pos_y)])
+        while to_visit:
+            pos_x, pos_y = to_visit.popleft()
+            check_array = self.visited[int(pos_y - h/2): int(pos_y + h/2), int(pos_x - w/2): int(pos_x + w/2)]
+            over_y, over_x = np.where((check_array == 1) | (check_array == 2))
+            over_y, over_x = set(over_y), set(over_x)
+            if len(over_x) == 0 and len(over_y) == 0:
+                return pos_x, pos_y
+            # 右側にずらした時の座標
+            ans_x = pos_x + max(over_x) + 1
+            if ans_x + w / 2 <= self.W:
+                to_visit.append((ans_x, pos_y))
+            # 左側にずらした時の座標
+            ans_x = pos_x - (w - min(over_x))
+            if ans_x - w / 2 >= 0:
+                to_visit.append((ans_x, pos_y))
+            # 下側側にずらした時の座標
             ans_y = pos_y + max(over_y) + 1
-            if ans_y - h / 2 < self.H:
-                return self.generate_new_pos(pos_x, int(ans_y), h, w)
+            if ans_y + h / 2 <= self.H:
+                to_visit.append((pos_x, ans_y))
+            # 上側にずらした時の座標
             ans_y = pos_y - (h - min(over_y))
             if ans_y - h / 2 >= 0:
-                return self.generate_new_pos(pos_x, int(ans_y), h, w)
-        return int(self.W - w / 2), int(self.H - h / 2)  # どちら側にもずらせない場合は右下に配置
+                to_visit.append((pos_x, ans_y))
+        # どこへもずらせない時は画像の右下に配置
+        return int(self.W - w / 2), int(self.H - h / 2)
 
 
     def generate_img(self, gene):
@@ -150,13 +158,23 @@ class ThinkDecoration:
         child_2 = parent_2
         for i in range(num - cross_point):
             target_index = cross_point + i
-            value_1 = parent_1[target_index]
-            value_2 = parent_2[target_index]
-            child_1[target_index] = (int((value_1[0] * 2 + value_2[0]) / 3), int((value_1[1] * 2 + value_2[1]) / 3), value_1[2], value_1[3])
-            child_2[target_index] = (int((value_1[0] + value_2[0] * 2) / 3), int((value_1[1] + value_2[1] * 2) / 3), value_2[2], value_2[3])
+            x1, y1, h, w = parent_1[target_index]
+            x2, y2, _h, _w = parent_2[target_index]
+            min_x, max_x = min(x1, x2), max(x1, x2)
+            min_y, max_y = min(y1, y2), max(y1, y2)
+            p1_x = int(min_x + ALPHA * random.random() * (max_x - min_x))
+            p2_x = int(min_x + ALPHA * random.random() * (max_x - min_x))
+            p1_y = int(min_y + ALPHA * random.random() * (max_y - min_y))
+            p2_y = int(min_y + ALPHA * random.random() * (max_y - min_y))
+            p1_x, p1_y = self.shift_pos(p1_x, p1_y, h, w)
+            p2_x, p2_y = self.shift_pos(p2_x, p2_y, h, w)
+            child_1[target_index] = (p1_x, p1_y, h, w)
+            child_2[target_index] = (p2_x, p2_y, h, w)
         child_1 = self.remove_overlap(child_1)
         child_2 = self.remove_overlap(child_2)
         return child_1, child_2
+        # ブレンド交叉
+        # https://qiita.com/simanezumi1989/items/4f821de2b77850fcf508
 
 
     def generate_next_generation(self):
@@ -200,22 +218,10 @@ class ThinkDecoration:
         cv2.imwrite("ga_output.jpg", output_img)
 
 
+think_with_trained_pix2pix("input_gan_images/back.jpg", "input_gan_images/pix2pix.jpg")
 deco_imgs, deco_masks, input_img, output_img = get_inputs()
 think_deco = ThinkDecoration(deco_imgs, deco_masks, input_img, output_img)
-# think_deco.evaluate()
 think_deco.GA_calc()
 
 
-
-# 画像の類似度を評価指標
-# https://qiita.com/best_not_best/items/c9497ffb5240622ede01
-# GAで遺伝子に各画像の貼り付け位置を与える
-# http://samuiui.com/2019/10/27/python%E3%81%A7%E9%81%BA%E4%BC%9D%E7%9A%84%E3%82%A2%E3%83%AB%E3%82%B4%E3%83%AA%E3%82%BA%E3%83%A0%EF%BC%88ga%EF%BC%89%E3%82%92%E5%AE%9F%E8%A3%85%E3%81%97%E3%81%A6%E5%B7%A1%E5%9B%9E%E3%82%BB%E3%83%BC/
-# https://pystyle.info/opencv-background-substraction/
-# https://pctraveljournal.com/?p=704 
-# bgObj =cv2.createBackgroundSubtractorMOG2()
-# https://qiita.com/AtomJamesScott/items/ccef87b1092d7407de0d
-# https://axa.biopapyrus.jp/ia/opencv/detect-contours.html
-# https://www.higashisalary.com/entry/python-cv2-add
-# https://zenn.dev/eetann/books/2020-09-25-make-mosaic-art-python/viewer/calculate-similar
-
+# GA http://samuiui.com/2019/10/27/python%E3%81%A7%E9%81%BA%E4%BC%9D%E7%9A%84%E3%82%A2%E3%83%AB%E3%82%B4%E3%83%AA%E3%82%BA%E3%83%A0%EF%BC%88ga%EF%BC%89%E3%82%92%E5%AE%9F%E8%A3%85%E3%81%97%E3%81%A6%E5%B7%A1%E5%9B%9E%E3%82%BB%E3%83%BC/
