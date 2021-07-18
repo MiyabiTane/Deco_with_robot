@@ -47,7 +47,7 @@ def get_inputs():
 
 
 class ThinkDecoration:
-    def __init__(self, deco_imgs, deco_masks, input_img, output_img, nums=21, generation=20, elite=5):
+    def __init__(self, deco_imgs, deco_masks, input_img, output_img, nums=21, generation=50, elite=5):
         # 複数の飾りが重ならないようにする 0: 空きスペース, 1: 飾りが既にある, 2: 飾りが既にあり、書き換え不可能
         self.visited = np.zeros((480, 640), dtype=np.int)
         self.input = input_img
@@ -144,10 +144,18 @@ class ThinkDecoration:
         points = []
         for i in range(self.nums):
             decorated_img = self.generate_img(self.genes[i])
-            diff = np.sum(np.linalg.norm(decorated_img - self.output, axis=0))
-            points.append(1 / diff)  # diffが小さい方が類似度が高い
+            # 各飾りに関して、置く前と置いた後のどちらが類似度が高いかを調べる
+            diff = 0
+            for pos_x, pos_y, h, w in self.genes[i]:
+                ly, ry, lx, rx = int(pos_y - h/2), int(pos_y + h/2), int(pos_x - w/2), int(pos_x + w/2)
+                before_diff = np.sum(np.linalg.norm(self.input[ly: ry, lx: rx, :] - self.output[ly: ry, lx: rx, :], axis=0))
+                after_diff = np.sum(np.linalg.norm(decorated_img[ly: ry, lx: rx, :] - self.output[ly: ry, lx: rx, :], axis=0))
+                diff += before_diff - after_diff  # 飾りを置くことでdiffが小さくなっていれば良い
+            points.append(diff)
+        points = np.array(points)
         print(max(points))
-        points = points / sum(points)
+        points = points - min(points) if min(points) < 0 else points
+        points = np.array([1/len(points)] * len(points)) if sum(points) == 0 else points / sum(points)
         return points
 
 
@@ -162,10 +170,14 @@ class ThinkDecoration:
             x2, y2, _h, _w = parent_2[target_index]
             min_x, max_x = min(x1, x2), max(x1, x2)
             min_y, max_y = min(y1, y2), max(y1, y2)
-            p1_x = int(min_x + ALPHA * random.random() * (max_x - min_x))
-            p2_x = int(min_x + ALPHA * random.random() * (max_x - min_x))
-            p1_y = int(min_y + ALPHA * random.random() * (max_y - min_y))
-            p2_y = int(min_y + ALPHA * random.random() * (max_y - min_y))
+            min_nx = int(min_x - ALPHA * random.random() * (max_x - min_x))
+            max_nx = int(max_x + ALPHA * random.random() * (max_x - min_x))
+            min_ny = int(min_y - ALPHA * random.random() * (max_y - min_y))
+            max_ny = int(max_y + ALPHA * random.random() * (max_y - min_y))
+            p1_x = random.randint(min_nx, max_nx)
+            p2_x = random.randint(min_nx, max_nx)
+            p1_y = random.randint(min_ny, max_ny)
+            p2_y = random.randint(min_ny, max_ny)
             p1_x, p1_y = self.shift_pos(p1_x, p1_y, h, w)
             p2_x, p2_y = self.shift_pos(p2_x, p2_y, h, w)
             child_1[target_index] = (p1_x, p1_y, h, w)
