@@ -47,7 +47,7 @@ def get_inputs():
 
 
 class ThinkDecoration:
-    def __init__(self, deco_imgs, deco_masks, input_img, output_img, nums=21, generation=50, elite=5):
+    def __init__(self, deco_imgs, deco_masks, input_img, output_img, nums=21, generation=30, elite=2):
         # 複数の飾りが重ならないようにする 0: 空きスペース, 1: 飾りが既にある, 2: 飾りが既にあり、書き換え不可能
         self.visited = np.zeros((480, 640), dtype=np.int)
         self.input = input_img
@@ -60,6 +60,7 @@ class ThinkDecoration:
         self.generation = generation
         # 貼り付け位置
         self.genes = []
+        self.best_gene = (-1 * float('inf'), None)
         for _ in range(nums):
             gene = []
             for im in self.imgs:
@@ -92,7 +93,7 @@ class ThinkDecoration:
         for pos_x, pos_y, h, w in gene:
             new_x, new_y = self.generate_new_pos(pos_x, pos_y, h, w)
             self.visited[int(new_y - h/2): int(new_y + h/2), int(new_x - w/2): int(new_x + w/2)] = 1
-            new_gene.append((new_x, new_y, h, w))
+            new_gene.append((new_x, new_y, h, w, ))
         return new_gene
 
 
@@ -154,6 +155,10 @@ class ThinkDecoration:
             points.append(diff)
         points = np.array(points)
         print(max(points))
+        if self.best_gene[0] < max(points):
+            best_index = np.argsort(points)[-1]
+            self.best_gene = (points[best_index], self.genes[best_index])
+            # print(self.best_gene)
         points = points - min(points) if min(points) < 0 else points
         points = np.array([1/len(points)] * len(points)) if sum(points) == 0 else points / sum(points)
         return points
@@ -226,11 +231,13 @@ class ThinkDecoration:
             self.generate_next_generation()
             self.mutation()
             # print(self.genes)
-        output_img = self.generate_img(self.genes[0])
+        best_point, best_gene = self.best_gene
+        print("BEST POINT: ", best_point)
+        output_img = self.generate_img(best_gene)
         cv2.imwrite("ga_output.jpg", output_img)
 
 
-think_with_trained_pix2pix("input_gan_images/back.jpg", "input_gan_images/pix2pix.jpg")
+# think_with_trained_pix2pix("input_gan_images/back.jpg", "input_gan_images/pix2pix.jpg")
 deco_imgs, deco_masks, input_img, output_img = get_inputs()
 think_deco = ThinkDecoration(deco_imgs, deco_masks, input_img, output_img)
 think_deco.GA_calc()
