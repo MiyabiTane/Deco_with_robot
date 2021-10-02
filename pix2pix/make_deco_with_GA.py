@@ -14,14 +14,17 @@ ALPHA = 0
 INPUT_PATH = "data/balloon/*.jpg"
 
 
-def think_with_trained_pix2pix(input_name, output_name):
+def think_with_trained_pix2pix():
+    input_name = "share/back.jpg"
+    output_name = "share/pix2pix.jpg"
     input_img = cv2.imread(input_name)  # input_img.shape = (480, 640, 3)
     img = np.full((640, 640, 3), 255)
     img[90: 570] = input_img
     save_name = input_name.rsplit(".")[0] + "_i.jpg"
     cv2.imwrite(save_name, img)
     # 学習済みpix2pixによる飾り付け画像生成
-    subprocess.run(["pipenv", "run", "python", "trained_pix2pix.py", "--input", save_name, "--output", output_name])
+    # subprocess.run(["pipenv", "run", "python", "trained_pix2pix.py", "--input", save_name, "--output", output_name])
+    subprocess.run(["docker", "run", "--rm", "-it", "--mount", "type=bind,source=/home/tork/pix2pix/share,target=/deco_tensor/share", "deco_tensor", "python3", "trained_pix2pix.py", "--input", save_name, "--output", output_name])
     output_img = cv2.imread(output_name)
     output_img = cv2.resize(output_img , (640, 640))
     output_img = output_img[90: 570]
@@ -233,14 +236,17 @@ class ThinkDecoration:
             # print(self.genes)
         best_point, best_gene = self.best_gene
         print("BEST POINT: ", best_point)
+        print(best_gene)
         output_img = self.generate_img(best_gene)
         cv2.imwrite("ga_output.jpg", output_img)
 
 
-# think_with_trained_pix2pix("input_gan_images/back.jpg", "input_gan_images/pix2pix.jpg")
+think_with_trained_pix2pix()
 deco_imgs, deco_masks, input_img, output_img = get_inputs()
 think_deco = ThinkDecoration(deco_imgs, deco_masks, input_img, output_img)
 think_deco.GA_calc()
 
 
 # GA http://samuiui.com/2019/10/27/python%E3%81%A7%E9%81%BA%E4%BC%9D%E7%9A%84%E3%82%A2%E3%83%AB%E3%82%B4%E3%83%AA%E3%82%BA%E3%83%A0%EF%BC%88ga%EF%BC%89%E3%82%92%E5%AE%9F%E8%A3%85%E3%81%97%E3%81%A6%E5%B7%A1%E5%9B%9E%E3%82%BB%E3%83%BC/
+# docker image build -t deco_tensor .
+# docker run --rm -it --mount type=bind,source="$(pwd)"/share,target=/deco_tensor/share deco_tensor python3 trained_pix2pix.py --input share/back_i.jpg --output share/pix2pix.jpg

@@ -4,8 +4,9 @@ import os
 import time
 
 from matplotlib import pyplot as plt
-from IPython import display
+# from IPython import display
 import cv2
+import numpy as np
 
 import argparse
 
