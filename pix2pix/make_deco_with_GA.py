@@ -2,33 +2,33 @@
 # -*- coding: utf-8 -*-
 import cv2
 import glob
+import roslib.packages
 import numpy as np
 import subprocess
 import random
 from copy import deepcopy
-# import skimage.colo
 from collections import deque
 
 TH = 150
 ALPHA = 0
-INPUT_PATH = "data/balloon/*.jpg"
+INPUT_NAME = "share/pix2pix_input.jpg"
+OUTPUT_NAME = "share/pix2pix_output.jpg"
+DIR_PATH = "/home/tork/pix2pix/"
 
 
-def think_with_trained_pix2pix():
-    input_name = "share/back.jpg"
-    output_name = "share/pix2pix.jpg"
-    input_img = cv2.imread(input_name)  # input_img.shape = (480, 640, 3)
+# you need to run: pr2eus_tutorials/scripts/deco_demo$ docker image build -t deco_tensor .
+def think_with_trained_pix2pix(input_img):
+    # input_img.shape = (480, 640, 3)
     img = np.full((640, 640, 3), 255)
     img[90: 570] = input_img
-    save_name = input_name.rsplit(".")[0] + "_i.jpg"
-    cv2.imwrite(save_name, img)
+    cv2.imwrite(DIR_PATH + INPUT_NAME, img)
     # 学習済みpix2pixによる飾り付け画像生成
-    # subprocess.run(["pipenv", "run", "python", "trained_pix2pix.py", "--input", save_name, "--output", output_name])
-    subprocess.run(["docker", "run", "--rm", "-it", "--mount", "type=bind,source=/home/tork/pix2pix/share,target=/deco_tensor/share", "deco_tensor", "python3", "trained_pix2pix.py", "--input", save_name, "--output", output_name])
-    output_img = cv2.imread(output_name)
+    subprocess.call(["docker", "run", "--rm", "-it", "--mount", "type=bind,source=" + DIR_PATH + "share,target=/deco_tensor/share",
+                    "deco_tensor", "python3", "trained_pix2pix.py", "--input", INPUT_NAME, "--output", OUTPUT_NAME])
+    output_img = cv2.imread(DIR_PATH + OUTPUT_NAME)
     output_img = cv2.resize(output_img , (640, 640))
     output_img = output_img[90: 570]
-    cv2.imwrite(output_name, output_img)
+    return output_img
 
 
 def get_inputs():
@@ -169,7 +169,7 @@ class ThinkDecoration:
 
     def partial_crossover(self, parent_1, parent_2):
         num = len(parent_1)
-        cross_point = random.randrange(2, num-1)
+        cross_point = random.randrange(2, num-1) if num > 2 else 0
         child_1 = parent_1
         child_2 = parent_2
         for i in range(num - cross_point):
@@ -238,15 +238,14 @@ class ThinkDecoration:
         print("BEST POINT: ", best_point)
         print(best_gene)
         output_img = self.generate_img(best_gene)
-        cv2.imwrite("ga_output.jpg", output_img)
+        cv2.imwrite(DIR_PATH + "share/ga_output.jpg", output_img)
+        return best_gene
 
-
-think_with_trained_pix2pix()
+input_img = cv2.imread("share/back.jpg")
+think_with_trained_pix2pix(input_img)
 deco_imgs, deco_masks, input_img, output_img = get_inputs()
 think_deco = ThinkDecoration(deco_imgs, deco_masks, input_img, output_img)
 think_deco.GA_calc()
 
-
 # GA http://samuiui.com/2019/10/27/python%E3%81%A7%E9%81%BA%E4%BC%9D%E7%9A%84%E3%82%A2%E3%83%AB%E3%82%B4%E3%83%AA%E3%82%BA%E3%83%A0%EF%BC%88ga%EF%BC%89%E3%82%92%E5%AE%9F%E8%A3%85%E3%81%97%E3%81%A6%E5%B7%A1%E5%9B%9E%E3%82%BB%E3%83%BC/
-# docker image build -t deco_tensor .
-# docker run --rm -it --mount type=bind,source="$(pwd)"/share,target=/deco_tensor/share deco_tensor python3 trained_pix2pix.py --input share/back_i.jpg --output share/pix2pix.jpg
+
