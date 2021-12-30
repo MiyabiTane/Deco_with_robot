@@ -8,6 +8,7 @@ import subprocess
 import random
 from copy import deepcopy
 from collections import deque
+from scipy.spatial import distance
 
 TH = 150
 ALPHA = 0
@@ -44,8 +45,8 @@ def get_inputs():
     for fi in files:
         img = cv2.imread(fi, 0)
         deco_masks.append(img)
-    input_img = cv2.imread("input_gan_images/back.jpg")
-    output_img = cv2.imread("input_gan_images/pix2pix.jpg")
+    input_img = cv2.imread(DIR_PATH + "share/back.jpg")
+    output_img = cv2.imread(DIR_PATH + "share/pix2pix.jpg")
     return deco_imgs, deco_masks, input_img, output_img
 
 
@@ -96,7 +97,7 @@ class ThinkDecoration:
         for pos_x, pos_y, h, w in gene:
             new_x, new_y = self.generate_new_pos(pos_x, pos_y, h, w)
             self.visited[int(new_y - h/2): int(new_y + h/2), int(new_x - w/2): int(new_x + w/2)] = 1
-            new_gene.append((new_x, new_y, h, w, ))
+            new_gene.append((new_x, new_y, h, w))
         return new_gene
 
 
@@ -144,26 +145,67 @@ class ThinkDecoration:
         return output_img
 
 
+    def calc_img_sim(self, img1, img2):
+        # 画像のpHashのハミング距離を取る
+        # 類似度が大きければ1, 小さければ0
+
+        def hash_array_to_hash_hex(hash_array):
+            # convert hash array of 0 or 1 to hash string in hex
+            hash_array = np.array(hash_array, dtype = np.uint8)
+            hash_str = ''.join(str(i) for i in 1 * hash_array.flatten())
+            return (hex(int(hash_str, 2)))
+
+        def hash_hex_to_hash_array(hash_hex):
+            # convert hash string in hex to hash values of 0 or 1
+            hash_str = int(hash_hex, 16)
+            array_str = bin(hash_str)[2:]
+            return np.array([i for i in array_str], dtype = np.float32)
+
+        def calc_hash(img):
+            # resize image and convert to gray scale
+            img = cv2.resize(img, (64, 64))
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+            img = np.array(img, dtype = np.float32)
+            # calculate dct of image
+            dct = cv2.dct(img)
+            # to reduce hash length take only 8*8 top-left block
+            # as this block has more information than the rest
+            dct_block = dct[: 8, : 8]
+            # caclulate mean of dct block excluding first term i.e, dct(0, 0)
+            dct_average = (dct_block.mean() * dct_block.size - dct_block[0, 0]) / (dct_block.size - 1)
+            # convert dct block to binary values based on dct_average
+            dct_block[dct_block < dct_average] = 0.0
+            dct_block[dct_block != 0] = 1.0
+            return hash_array_to_hash_hex(dct_block.flatten())
+
+        hash1 = calc_hash(img1)
+        hash2 = calc_hash(img2)
+        dis = distance.hamming(list(hash1), list(hash2))
+        return 1.0 - dis
+
+
     def evaluate(self):
         points = []
         for i in range(self.nums):
             decorated_img = self.generate_img(self.genes[i])
             # 各飾りに関して、置く前と置いた後のどちらが類似度が高いかを調べる
-            diff = 0
+            point = 0
             for pos_x, pos_y, h, w in self.genes[i]:
                 ly, ry, lx, rx = int(pos_y - h/2), int(pos_y + h/2), int(pos_x - w/2), int(pos_x + w/2)
-                before_diff = np.sum(np.linalg.norm(self.input[ly: ry, lx: rx, :] - self.output[ly: ry, lx: rx, :], axis=0))
-                after_diff = np.sum(np.linalg.norm(decorated_img[ly: ry, lx: rx, :] - self.output[ly: ry, lx: rx, :], axis=0))
-                diff += before_diff - after_diff  # 飾りを置くことでdiffが小さくなっていれば良い
-            points.append(diff)
+                similarity = self.calc_img_sim(decorated_img[ly: ry, lx: rx, :], self.output[ly: ry, lx: rx, :])
+                point += similarity
+            points.append(point)
         points = np.array(points)
         print(max(points))
         if self.best_gene[0] < max(points):
             best_index = np.argsort(points)[-1]
             self.best_gene = (points[best_index], self.genes[best_index])
             # print(self.best_gene)
-        points = points - min(points) if min(points) < 0 else points
-        points = np.array([1/len(points)] * len(points)) if sum(points) == 0 else points / sum(points)
+        points = map(lambda x: x-(min(points)), points)
+        if float(sum(points)) == 0:
+            points = [1.0/len(points)] * len(points)
+        else:
+            points = map(lambda x: float(x)/float(sum(points)), points)
         return points
 
 
@@ -241,8 +283,9 @@ class ThinkDecoration:
         cv2.imwrite(DIR_PATH + "share/ga_output.jpg", output_img)
         return best_gene
 
-input_img = cv2.imread("share/back.jpg")
-think_with_trained_pix2pix(input_img)
+
+input_img = cv2.imread(DIR_PATH + "share/back.jpg")
+# think_with_trained_pix2pix(input_img)
 deco_imgs, deco_masks, input_img, output_img = get_inputs()
 think_deco = ThinkDecoration(deco_imgs, deco_masks, input_img, output_img)
 think_deco.GA_calc()
