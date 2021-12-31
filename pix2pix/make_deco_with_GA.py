@@ -12,6 +12,7 @@ from scipy.spatial import distance
 
 TH = 150
 ALPHA = 0
+TEMP_TH = 0.9
 INPUT_NAME = "share/pix2pix_input.jpg"
 OUTPUT_NAME = "share/pix2pix_output.jpg"
 DIR_PATH = "/home/tork/pix2pix/"
@@ -45,15 +46,52 @@ def get_inputs():
     for fi in files:
         img = cv2.imread(fi, 0)
         deco_masks.append(img)
-    input_img = cv2.imread(DIR_PATH + "share/back.jpg")
     output_img = cv2.imread(DIR_PATH + "share/pix2pix.jpg")
-    return deco_imgs, deco_masks, input_img, output_img
+    return deco_imgs, deco_masks, output_img
+
+
+def remove_dup_deco(back_img, deco_imgs):
+
+    def visualize(back_img, deco_pos):
+        output_back_img = deepcopy(back_img)
+        for lx, ly, rx, ry in deco_pos:
+            cv2.rectangle(output_back_img, (lx, ly), (rx, ry), (255, 0, 0), thickness=2, lineType=cv2.LINE_4)
+        cv2.imwrite(DIR_PATH + "share/temp.jpg", output_back_img)
+
+    def check_dup(d_lx, d_ly, d_rx, d_ry, decorated_pos):
+        for lx, ly, rx, ry in decorated_pos:
+            y_len = min(ry, d_ry) - max(ly, d_ly)
+            x_len = min(rx, d_rx) - max(lx, d_lx)
+            if y_len > 0 and x_len > 0:
+                dup_area =  y_len * x_len
+                if dup_area / ((ry - ly) * (rx - lx)) > 0.7:
+                    return True
+        return False
+
+    # 2回目以降の飾り付け生成では既に置いた飾りは使わない
+    decorated_pos = []
+    for i, img in enumerate(deco_imgs):
+        res = cv2.matchTemplate(back_img, img, cv2.TM_CCOEFF_NORMED)
+        _min_val, max_val, _min_loc, max_loc = cv2.minMaxLoc(res)
+        if max_val > TEMP_TH:
+            H, W, _ = img.shape
+            lx, ly = max_loc
+            rx, ry = lx + W, ly + H
+            if not check_dup(lx, ly, rx, ry, decorated_pos):
+                # print("find balloon: ", i)
+                deco_imgs[i] = [[[-1, -1, -1]]]
+                decorated_pos.append((lx, ly, rx, ry))
+    deco_imgs = [img for img in deco_imgs if img[0][0][0] != -1]
+    # visualize(back_img, decorated_pos)
+    return deco_imgs, decorated_pos
 
 
 class ThinkDecoration:
-    def __init__(self, deco_imgs, deco_masks, input_img, output_img, nums=21, generation=30, elite=2):
+    def __init__(self, deco_imgs, deco_masks, input_img, output_img, decorated_pos, nums=21, generation=30, elite=2):
         # 複数の飾りが重ならないようにする 0: 空きスペース, 1: 飾りが既にある, 2: 飾りが既にあり、書き換え不可能
         self.visited = np.zeros((480, 640), dtype=np.int)
+        for lx, ly, rx, ry in decorated_pos:
+            self.visited[ly: ry, lx: ry] = 2
         self.input = input_img
         self.H, self.W, _ = self.input.shape
         self.output = output_img
@@ -284,10 +322,11 @@ class ThinkDecoration:
         return best_gene
 
 
-input_img = cv2.imread(DIR_PATH + "share/back.jpg")
+input_img = cv2.imread(DIR_PATH + "share/back_2.jpg")
 # think_with_trained_pix2pix(input_img)
-deco_imgs, deco_masks, input_img, output_img = get_inputs()
-think_deco = ThinkDecoration(deco_imgs, deco_masks, input_img, output_img)
+deco_imgs, deco_masks, output_img = get_inputs()
+deco_imgs, decorated_pos = remove_dup_deco(input_img, deco_imgs)
+think_deco = ThinkDecoration(deco_imgs, deco_masks, input_img, output_img, decorated_pos)
 think_deco.GA_calc()
 
 # GA http://samuiui.com/2019/10/27/python%E3%81%A7%E9%81%BA%E4%BC%9D%E7%9A%84%E3%82%A2%E3%83%AB%E3%82%B4%E3%83%AA%E3%82%BA%E3%83%A0%EF%BC%88ga%EF%BC%89%E3%82%92%E5%AE%9F%E8%A3%85%E3%81%97%E3%81%A6%E5%B7%A1%E5%9B%9E%E3%82%BB%E3%83%BC/
