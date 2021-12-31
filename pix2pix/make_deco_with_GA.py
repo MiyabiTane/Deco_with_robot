@@ -91,7 +91,10 @@ class ThinkDecoration:
         # 複数の飾りが重ならないようにする 0: 空きスペース, 1: 飾りが既にある, 2: 飾りが既にあり、書き換え不可能
         self.visited = np.zeros((480, 640), dtype=np.int)
         for lx, ly, rx, ry in decorated_pos:
-            self.visited[ly: ry, lx: ry] = 2
+            self.visited[ly: ry, lx: rx] = 2
+        print("Decorated_pos: ", decorated_pos)
+        test_visited = self.visited[150:240, 500:590]
+        y_range, x_range = np.where((test_visited == 2))
         self.input = input_img
         self.H, self.W, _ = self.input.shape
         self.output = output_img
@@ -129,24 +132,30 @@ class ThinkDecoration:
         return pos_x, pos_y
 
 
-    def remove_overlap(self, gene):
+    def remove_overlap(self, gene, debug=False):
         new_gene = []
         self.visited = np.where(self.visited == 1, 0, self.visited)
         for pos_x, pos_y, h, w in gene:
-            new_x, new_y = self.generate_new_pos(pos_x, pos_y, h, w)
+            new_x, new_y = self.generate_new_pos(pos_x, pos_y, h, w, debug)
             self.visited[int(new_y - h/2): int(new_y + h/2), int(new_x - w/2): int(new_x + w/2)] = 1
             new_gene.append((new_x, new_y, h, w))
         return new_gene
 
 
-    def generate_new_pos(self, pos_x, pos_y, h, w):
+    def generate_new_pos(self, pos_x, pos_y, h, w, debug=False):
         to_visit = deque([(pos_x, pos_y)])
+        count = 0
         while to_visit:
+            count += 1
             pos_x, pos_y = to_visit.popleft()
             check_array = self.visited[int(pos_y - h/2): int(pos_y + h/2), int(pos_x - w/2): int(pos_x + w/2)]
             over_y, over_x = np.where((check_array == 1) | (check_array == 2))
             over_y, over_x = set(over_y), set(over_x)
+            if debug:
+                print(over_y, over_x)
             if len(over_x) == 0 and len(over_y) == 0:
+                if debug:
+                    print("No overlap ", count)
                 return pos_x, pos_y
             # 右側にずらした時の座標
             ans_x = pos_x + max(over_x) + 1
@@ -316,6 +325,7 @@ class ThinkDecoration:
             # print(self.genes)
         best_point, best_gene = self.best_gene
         print("BEST POINT: ", best_point)
+        best_gene = self.remove_overlap(best_gene, debug=False)
         print(best_gene)
         output_img = self.generate_img(best_gene)
         cv2.imwrite(DIR_PATH + "share/ga_output.jpg", output_img)
