@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <title>File</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet"
+          href="{{url_for('static', filename='style.css')}}">
+</head>
+<body>
+  <p class="resizeimage">
+    {% if raw_img_url %}
+      <img src="{{ raw_img_url }}">
+    {% endif %}
+  </p>
+</body>
+</html>
