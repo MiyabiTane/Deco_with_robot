@@ -7,6 +7,8 @@ import numpy as np
 import time
 import subprocess
 import threading
+import time
+
 from std_msgs.msg import Float64MultiArray
 
 IMG_PATH_LBROW = "static/lbrow.jpg"
@@ -27,12 +29,14 @@ class FacialExpressNode:
         thread_1 = threading.Thread(target=self.run_server_1)
         thread_2 = threading.Thread(target=self.run_server_2)
         thread_3 = threading.Thread(target=self.run_server_3)
+        thread_4 = threading.Thread(target=self.reload_web)
         thread_1.start()
         thread_2.start()
         thread_3.start()
-    
+        thread_4.start()
+
     def run_server_1(self):
-        subprocess.call(["pipenv", "run", "python", "app_1.py", "--debugger", "--reload"])
+        subprocess.call(["pipenv", "run", "python", "app_1.py"])
     
     def run_server_2(self):
         subprocess.call(["pipenv", "run", "python", "app_2.py"])
@@ -40,15 +44,33 @@ class FacialExpressNode:
     def run_server_3(self):
         subprocess.call(["pipenv", "run", "python", "app_3.py"])
 
+    def reload_web(self):
+        subprocess.call(["pipenv", "run", "python", "reload_web.py"])
+
     def face_exp_cb(self, msg):
+        prev_score = int(self.score * 20)
         if len(msg.data) > 0:
             self.score = msg.data[0]  # -1: ネガティブ感情, 1: ポジティブ感情
             if len(msg.data) > 1:
                 self.magnitude = msg.data[1]  # 感情の強さ
         print("score, magnitude: ", self.score, self.magnitude)
-        self.update_lbrow(self.score * 20)
-        self.update_rbrow(self.score * 20)
-        self.update_mouth(self.score * 20)
+        cur_score = int(self.score * 20)
+        print(prev_score, cur_score)
+        if cur_score >= prev_score:
+            for deg in range(prev_score, cur_score, 2):
+                self.update_lbrow(deg)
+                self.update_rbrow(deg)
+                self.update_mouth(deg)
+                time.sleep(0.4)
+        else:
+            for deg in range(prev_score, cur_score, -2):
+                self.update_lbrow(deg)
+                self.update_rbrow(deg)
+                self.update_mouth(deg)
+                time.sleep(0.4)
+        self.update_lbrow(cur_score)
+        self.update_rbrow(cur_score)
+        self.update_mouth(cur_score)
 
     def update_lbrow(self, deg):
         img = np.full((SIZE_Y, SIZE_X, 3), 225, dtype=np.uint8)
@@ -64,7 +86,6 @@ class FacialExpressNode:
         pts = np.array((pt3, pt4, pt5))
         cv2.fillPoly(img, [pts], (0, 0, 0))
         cv2.imwrite(IMG_PATH_LBROW, img)
-        print("UPDATE: ", IMG_PATH_LBROW)
 
     def update_rbrow(self, deg):
         img = np.full((SIZE_Y, SIZE_X, 3), 225, dtype=np.uint8)
@@ -80,7 +101,6 @@ class FacialExpressNode:
         pts = np.array((pt3, pt4, pt5))
         cv2.fillPoly(img, [pts], (0, 0, 0))
         cv2.imwrite(IMG_PATH_RBROW, img)
-        print("UPDATE: ", IMG_PATH_RBROW)
 
     def update_mouth(self, deg):
         img = np.full((SIZE_Y, SIZE_X, 3), 225, dtype=np.uint8)
@@ -93,7 +113,6 @@ class FacialExpressNode:
         cv2.line(img, pt1, pt3, (0, 0, 0), thickness=60)
         cv2.line(img, pt2, pt4, (0, 0, 0), thickness=60)
         cv2.imwrite(IMG_PATH_MOUTH, img)
-        print("UPDATE: ", IMG_PATH_MOUTH)
 
 if __name__ == '__main__':
     rospy.init_node("facial_exp")

@@ -7,6 +7,8 @@ name = "pypi"
 flask = "*"
 opencv-python = "*"
 numpy = "*"
+selenium = "*"
+webdriver-manager = "*"
 
 [dev-packages]
 
