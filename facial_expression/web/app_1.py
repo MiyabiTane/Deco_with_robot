@@ -8,10 +8,11 @@ app = Flask(__name__)
 
 UPLOAD_FOLDER = '/static'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['ENV'] = 'development'
 
 @app.route('/')
 def index():
-    raw_img_url = os.path.join(app.config['UPLOAD_FOLDER'], 'face.jpg')
+    raw_img_url = os.path.join(app.config['UPLOAD_FOLDER'], 'lbrow.jpg')
     return render_template('index.html', raw_img_url=raw_img_url)
 
 if __name__ == '__main__':
