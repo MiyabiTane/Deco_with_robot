@@ -1,6 +1,7 @@
 console.log("Hello");
 main();
 
+var squareRotation = 0.0;
 function main() {
   // Initialize
   var c = document.getElementById('webgl');
@@ -52,7 +53,15 @@ function main() {
   const buffers = initBuffers(gl);
 
   // Draw the scene
-  drawScene(gl, programInfo, buffers);
+  var then = 0;
+  function render(now) {
+	now *= 0.001;  // convert to seconds
+	const deltaTime = now - then;
+	then = now;
+	drawScene(gl, programInfo, buffers, deltaTime);
+	requestAnimationFrame(render);
+  }
+  requestAnimationFrame(render);
 }
 
 //
@@ -74,7 +83,8 @@ function initBuffers(gl) {
 
   // Now create an array of positions for the square.
 
-  const rad = 0 * Math.pi / 180;
+
+  const rad = 0 * Math.PI / 180;
   const BLOW_LEN = 4;
   const BLOW_WID = 1.5;
   const ADD_LEN = 1;
@@ -88,12 +98,13 @@ function initBuffers(gl) {
   var pt4_y = pt1_y + (BLOW_LEN + ADD_LEN) * Math.sin(rad);
   var pt5_x = pt1_x;
   var pt5_y = pt1_y;
+  console.log(pt1_x, pt1_y, pt2_x, pt2_y, pt3_x, pt3_y, pt4_x, pt4_y);
   const positions = [
      pt1_x, pt1_y,
-	 pt2_x, pt2_y,
-	 pt3_x, pt3_y,
-	 pt4_x, pt4_y,
-	 pt5_x, pt5_y,
+     pt2_x, pt2_y,
+     pt3_x, pt3_y,
+     pt4_x, pt4_y,
+     pt5_x, pt5_y,
   ];
 
   // Now pass the list of positions into WebGL to build the
@@ -112,8 +123,8 @@ function initBuffers(gl) {
 //
 // Draw the scene.
 //
-function drawScene(gl, programInfo, buffers) {
-  // black: 0, white: 1
+function drawScene(gl, programInfo, buffers, deltaTime) {
+  // black:0, white:1
   gl.clearColor(0.9, 0.9, 0.9, 1.0);  // Clear to black, fully opaque
   gl.clearDepth(1.0);                 // Clear everything
   gl.enable(gl.DEPTH_TEST);           // Enable depth testing
@@ -136,7 +147,7 @@ function drawScene(gl, programInfo, buffers) {
   const zNear = 0.1;
   const zFar = 100.0;
   const projectionMatrix = mat4.create();
-
+  
   // note: glmatrix.js always has the first argument
   // as the destination to receive the result.
   mat4.perspective(projectionMatrix,
@@ -155,6 +166,10 @@ function drawScene(gl, programInfo, buffers) {
   mat4.translate(modelViewMatrix,     // destination matrix
                  modelViewMatrix,     // matrix to translate
                  [-0.0, 0.0, -6.0]);  // amount to translate
+  mat4.rotate(modelViewMatrix,        // destination matrix
+  	      modelViewMatrix,        // matrix to rotate
+   	      squareRotation,         // amount to rotate in radians
+   	      [0, 0, 1]);             // axis to rotate around
 
   // Tell WebGL how to pull out the positions from the position
   // buffer into the vertexPosition attribute.
@@ -196,6 +211,9 @@ function drawScene(gl, programInfo, buffers) {
     const vertexCount = 5;
     gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount);
   }
+
+  // Update the rotation for the next draw
+  squareRotation += deltaTime;
 }
 
 //
@@ -247,3 +265,4 @@ function loadShader(gl, type, source) {
 
   return shader;
 }
+
