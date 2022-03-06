@@ -2,6 +2,7 @@ console.log("Hello");
 main();
 
 var squareRotation = 0.0;
+var maxRotation = -20 * Math.PI / 180;
 function main() {
   // Initialize
   var c = document.getElementById('webgl');
@@ -88,8 +89,8 @@ function initBuffers(gl) {
   const BLOW_LEN = 4;
   const BLOW_WID = 1.5;
   const ADD_LEN = 1;
-  var pt1_x = 2.5;
-  var pt1_y = -0.75;
+  var pt1_x = 0.0;  //2.5;
+  var pt1_y = 0.0;  //-0.75;
   var pt2_x = pt1_x + BLOW_WID * Math.sin(rad);
   var pt2_y = pt1_y + BLOW_WID * Math.cos(rad);
   var pt3_x = pt2_x - BLOW_LEN * Math.cos(rad);
@@ -165,11 +166,11 @@ function drawScene(gl, programInfo, buffers, deltaTime) {
 
   mat4.translate(modelViewMatrix,     // destination matrix
                  modelViewMatrix,     // matrix to translate
-                 [-0.0, 0.0, -6.0]);  // amount to translate
+                 [2.5, -0.75, -6.0]);  // amount to translate
   mat4.rotate(modelViewMatrix,        // destination matrix
-  	      modelViewMatrix,        // matrix to rotate
+   	      modelViewMatrix,        // matrix to rotate
    	      squareRotation,         // amount to rotate in radians
-   	      [0, 0, 1]);             // axis to rotate around
+  	      [0, 0, 1]);             // axis to rotate around
 
   // Tell WebGL how to pull out the positions from the position
   // buffer into the vertexPosition attribute.
@@ -213,7 +214,9 @@ function drawScene(gl, programInfo, buffers, deltaTime) {
   }
 
   // Update the rotation for the next draw
-  squareRotation += deltaTime;
+  if (squareRotation > maxRotation) {
+  	squareRotation -= deltaTime * 0.5;
+  }
 }
 
 //
