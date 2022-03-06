@@ -4,8 +4,8 @@ main();
 function main() {
   // Initialize
   var c = document.getElementById('webgl');
-  c.width = 640;
-  c.height = 480;
+  c.width = window.innerWidth;
+  c.height = window.innerHeight;
   var gl = c.getContext('webgl');
 
   // Vertex shader program
@@ -25,7 +25,7 @@ function main() {
 
   const fsSource = `
     void main() {
-      gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+      gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
     }
   `;
 
@@ -74,11 +74,26 @@ function initBuffers(gl) {
 
   // Now create an array of positions for the square.
 
+  const rad = 0 * Math.pi / 180;
+  const BLOW_LEN = 4;
+  const BLOW_WID = 1.5;
+  const ADD_LEN = 1;
+  var pt1_x = 2.5;
+  var pt1_y = -0.75;
+  var pt2_x = pt1_x + BLOW_WID * Math.sin(rad);
+  var pt2_y = pt1_y + BLOW_WID * Math.cos(rad);
+  var pt3_x = pt2_x - BLOW_LEN * Math.cos(rad);
+  var pt3_y = pt2_y + BLOW_LEN * Math.sin(rad);
+  var pt4_x = pt1_x - (BLOW_LEN + ADD_LEN) * Math.cos(rad);
+  var pt4_y = pt1_y + (BLOW_LEN + ADD_LEN) * Math.sin(rad);
+  var pt5_x = pt1_x;
+  var pt5_y = pt1_y;
   const positions = [
-     1.0,  1.0,
-    -1.0,  1.0,
-     1.0, -1.0,
-    -1.0, -1.0,
+     pt1_x, pt1_y,
+	 pt2_x, pt2_y,
+	 pt3_x, pt3_y,
+	 pt4_x, pt4_y,
+	 pt5_x, pt5_y,
   ];
 
   // Now pass the list of positions into WebGL to build the
@@ -98,7 +113,8 @@ function initBuffers(gl) {
 // Draw the scene.
 //
 function drawScene(gl, programInfo, buffers) {
-  gl.clearColor(0.0, 0.0, 0.0, 1.0);  // Clear to black, fully opaque
+  // black: 0, white: 1
+  gl.clearColor(0.9, 0.9, 0.9, 1.0);  // Clear to black, fully opaque
   gl.clearDepth(1.0);                 // Clear everything
   gl.enable(gl.DEPTH_TEST);           // Enable depth testing
   gl.depthFunc(gl.LEQUAL);            // Near things obscure far things
@@ -177,7 +193,7 @@ function drawScene(gl, programInfo, buffers) {
 
   {
     const offset = 0;
-    const vertexCount = 4;
+    const vertexCount = 5;
     gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount);
   }
 }
