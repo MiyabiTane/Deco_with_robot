@@ -2,7 +2,8 @@ console.log("Hello");
 main();
 
 var squareRotation = 0.0;
-var maxRotation = -20 * Math.PI / 180;
+console.log("degree", degree);
+var maxRotation = degree * Math.PI / 180;
 function main() {
   // Initialize
   var c = document.getElementById('webgl');
