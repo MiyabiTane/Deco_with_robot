@@ -10,14 +10,11 @@ router.get('/', function(req, res, next) {
 
 /* MOVE right eyebrow */
 router.post('/', function(req, res, next) {
-	// var deg = req.body.degree;
-	// console.log("POSTED: ", deg);
-	// var degree = -20;
-	// res.render('rbrow', {degree: -20, reload: 1});
-	// res.render('rbrow', {degree: -20, reload: 1}, function (err, html) {
-	// 	res.send(html)
-	// })
-	res.redirect('https//www.google.com/?hl=ja');
+	var deg = req.body.degree;
+	console.log("POSTED: ", deg);
+	// res.render('index');
+	res.render('rbrow', {degree: deg, reload: 1});
+	// res.redirect('http://localhost:3000/index');
 });
 
 module.exports = router;
