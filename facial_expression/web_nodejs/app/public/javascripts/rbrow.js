@@ -2,8 +2,6 @@ console.log("Hello");
 main();
 
 var squareRotation = 0.0;
-console.log("degree", degree);
-var maxRotation = degree * Math.PI / 180;
 function main() {
   // Initialize
   var c = document.getElementById('webgl');
@@ -216,7 +214,20 @@ function drawScene(gl, programInfo, buffers, deltaTime) {
 
   // Update the rotation for the next draw
   if (squareRotation > maxRotation) {
-  	squareRotation -= deltaTime * 0.5;
+    squareRotation -= deltaTime * 0.5;
+  } else {
+    // document.querySelector("canvas")
+    //         .addEventListener("click", playerClick, false);
+    get_degree();
+    // console.log("GOT: ", maxRotation * 180 / Math.PI);
+  }
+
+  function playerClick (evt) {
+    var position = [
+      evt.pageX - evt.target.offsetLeft,
+      gl.drawingBufferHeight - (evt.pageY - evt.target.offsetTop),
+    ];
+    console.log(position);
   }
 }
 
