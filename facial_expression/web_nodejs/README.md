@@ -26,8 +26,12 @@ $ docker-compose up
 ```
 別端末で
 ```
-$ curl -X POST --data-urlencode 'degree=-40' http://localhost:3000/api/info
+$ curl -X POST --data-urlencode 'degree=20' http://localhost:3000/api/info
 ```
+http://localhost:3000/rbrow、
+http://localhost:3000/lbrow、
+http://localhost:3000/mouth、
+にアクセスする<br>
 `degree=`以下に任意の数字を指定すると画面の中の動きが変わる
 
 
