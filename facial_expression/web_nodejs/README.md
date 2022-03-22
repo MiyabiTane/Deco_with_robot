@@ -22,17 +22,17 @@ $ docker-compose run --rm app /bin/bash
 
 ### 動かし方
 ```
-$ docker-compose up
+$ pyhton run.py
 ```
 別端末で
 ```
-$ curl -X POST --data-urlencode 'degree=20' http://localhost:3000/api/info
+$ rostopic pub -1 /input std_msgs/Float64 "data: 20.0"
 ```
 http://localhost:3000/rbrow、
 http://localhost:3000/lbrow、
-http://localhost:3000/mouth、
+http://localhost:3000/mouth
 にアクセスする<br>
-`degree=`以下に任意の数字を指定すると画面の中の動きが変わる
+`data: `以下に任意の数字を指定すると画面の中の動きが変わる
 
 
 ### 参考記事
