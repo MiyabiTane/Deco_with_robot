@@ -34,6 +34,52 @@ http://localhost:3000/mouth
 にアクセスする<br>
 `data: `以下に任意の数字を指定すると画面の中の動きが変わる
 
+### ラズパイからサイトにアクセスする
+
+1. firefoxを開いてアドレスバーに`about:config`を入力。`webgl.force-enable`の項目を`true`にする。これをしないと画面が真っ白になってしまう
+
+2. PCとラズパイを同じネットワークに繋いでおく
+
+3. webを立ち上げているマシン(ノートPC)で`ifconfig`してIPアドレスを調べる
+
+4. ラズパイのfirefoxでhttp://<IPアドレス>:3000/rbrow、IPアドレス>:3000/lbrowにアクセスする
+
+### ラズパイでサーバーを立ち上げる
+
+1. [LOVOTディレクトリのREADME](https://github.com/MiyabiTane/LOVOT)を参照してUbuntu,ROSを入れた状態のラズパイを用意する
+
+2. rossetmasterしたいのでツールをインストールする
+```
+$ sudo apt-get install ros-melodic-jsk-topic-tools
+$ sudo apt-get install ros-melodic-jsk-common
+```
+
+もし404エラーが出た場合は以下のコマンドを実行してからsudo apt-get installし直す
+```
+$ curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
+```
+
+以下を実行して確認
+```
+$ source /opt/ros/melodic/setup.bash
+$ rossetmaster
+```
+
+3. dockerインストール
+```
+$  curl -fsSL https://get.docker.com -o get-docker.sh
+$ sudo sh get-docker.sh
+$ sudo apt install docker-compose
+```
+
+4. docker-composeたちあげ
+```
+$ sudo docker-compose run --rm app /bin/bash
+# npx express-generator
+# npm install
+# exit
+$ sudo docker-compose up
+```
 
 ### 参考記事
 [DockerでExpress](https://ishida-it.com/blog/post/2019-11-21-docker-nodejs/)<br>
