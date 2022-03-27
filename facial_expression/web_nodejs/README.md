@@ -20,7 +20,7 @@ $ docker-compose run --rm app /bin/bash
 ```
 プログラムの編集はvimを使ってDocker内部でやる(`vi hoge.fuga`)<br>
 
-### 動かし方
+### 動かし方：シンプルなプログラム（数値を送信して画面を動かす）
 ```
 $ pyhton run.py
 ```
@@ -33,6 +33,38 @@ http://localhost:3000/lbrow、
 http://localhost:3000/mouth
 にアクセスする<br>
 `data: `以下に任意の数字を指定すると画面の中の動きが変わる
+
+### 動かし方：実機の音声データを利用したプログラム
+
+1. [ros_google_cloud_language](https://github.com/k-okada/jsk_3rdparty/tree/google_nlp/ros_google_cloud_language)が使える環境を作る。
+
+    1. 初回セットアップ
+    ```
+    $ git clone https://github.com/k-okada/jsk_3rdparty.git
+    $ git fetch origin
+    $ git checkout google_nlp
+    $ catkin build ros_google_cloud_language
+    ```
+
+    2. demo.launchを書き換える
+    ```
+    <launch>
+        <arg name="google_cloud_credentials_json" default="" />
+    <include file="$(find ros_google_cloud_language)/launch/analyze_text.launch" >
+        <arg name="google_cloud_credentials_json" value="$(arg google_cloud_credentials_json)" />
+    </include>
+    <!-- node pkg="ros_google_cloud_language" type="client.l"
+            name="client" output="screen" / -->
+    </launch>
+    ```
+
+    3. [eternal-byte-236613-4bc6962824d1.json](https://drive.google.com/file/d/1VxniytpH9J12ii9jphtBylydY1_k5nXf/view)をダウンロードする。
+
+2. ros_google_cloud_languageの環境を作ったワークスペースをソースしてプログラム実行
+```
+$ source <your_ws>/devel/setup.bash
+$ python run.py --path ${HOME}/Downloads/eternal-byte-236613-4bc6962824d1.json
+```
 
 ### ラズパイからサイトにアクセスする
 
