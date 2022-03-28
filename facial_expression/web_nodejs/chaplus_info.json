@@ -1,0 +1,26 @@
+{
+    "utterance": "",
+    "username": "私",
+    "agentState":{
+        "agentName": "優しいロボット",
+        "tone": "normal",
+        "age": "20歳"
+    },
+    "addition": {
+        "options":[
+            "",
+            ""
+        ],
+        "ngwords": [
+            "",
+            ""
+        ],
+        "utterancePairs": [
+            {
+                "utterance": "こんにちは",
+                "response":"こんにちは。今日はちゃんと早起きしましたか？",
+                "options":""
+            }
+        ]
+    }
+}

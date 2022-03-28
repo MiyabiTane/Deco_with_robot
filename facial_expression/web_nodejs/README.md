@@ -66,6 +66,11 @@ $ source <your_ws>/devel/setup.bash
 $ python run.py --path ${HOME}/Downloads/eternal-byte-236613-4bc6962824d1.json
 ```
 
+3. 雑談機能を使う場合は[apikey.json](https://drive.google.com/file/d/1wh1_WX3l_qKbUG5wdgeQQBQCu6f9BSWF/view?usp=sharing)をダウンロードし、別ターミナルで以下のコマンドを実行してロボットに話しかける
+```
+$ python chat_node.py --path ${HOME}/Downloads/apikey.json
+```
+
 ### ラズパイからサイトにアクセスする
 
 1. firefoxを開いてアドレスバーに`about:config`を入力。`webgl.force-enable`の項目を`true`にする。これをしないと画面が真っ白になってしまう
