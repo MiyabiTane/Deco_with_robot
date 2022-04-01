@@ -21,55 +21,44 @@ $ docker-compose run --rm app /bin/bash
 プログラムの編集はvimを使ってDocker内部でやる(`vi hoge.fuga`)<br>
 
 ### 動かし方：シンプルなプログラム（数値を送信して画面を動かす）
-```
-$ pyhton run.py
-```
-別端末で
-```
-$ rostopic pub -1 /input std_msgs/Float64 "data: 20.0"
-```
-http://localhost:3000/rbrow、
-http://localhost:3000/lbrow、
-http://localhost:3000/mouth
-にアクセスする<br>
-`data: `以下に任意の数字を指定すると画面の中の動きが変わる
+0. アクセスするサイトは [右眉毛](http://localhost:3000/rbrow), [左眉毛](http://localhost:3000/lbrow)
 
-### 動かし方：実機の音声データを利用したプログラム
-
-1. [ros_google_cloud_language](https://github.com/k-okada/jsk_3rdparty/tree/google_nlp/ros_google_cloud_language)が使える環境を作る。
-
-    1. 初回セットアップ
+1. 数値を直接送信して画面の動きを変える
     ```
-    $ git clone https://github.com/k-okada/jsk_3rdparty.git
-    $ git fetch origin
-    $ git checkout google_nlp
-    $ catkin build ros_google_cloud_language
+    $ pyhton run.py --no-sound
+    ```
+    ```
+    $ rostopic pub -1 /degree std_msgs/Float64 "data: 20.0"
     ```
 
-    2. demo.launchを書き換える
-    ```
-    <launch>
-        <arg name="google_cloud_credentials_json" default="" />
-    <include file="$(find ros_google_cloud_language)/launch/analyze_text.launch" >
-        <arg name="google_cloud_credentials_json" value="$(arg google_cloud_credentials_json)" />
-    </include>
-    <!-- node pkg="ros_google_cloud_language" type="client.l"
-            name="client" output="screen" / -->
-    </launch>
-    ```
+    `data: `以下に任意の数字を指定すると画面の中の動きが変わる
 
-    3. [eternal-byte-236613-4bc6962824d1.json](https://drive.google.com/file/d/1VxniytpH9J12ii9jphtBylydY1_k5nXf/view)をダウンロードする。
+2. 実機の音声データを利用する
+    1. `pipenv`が使える環境にしておく
 
-2. ros_google_cloud_languageの環境を作ったワークスペースをソースしてプログラム実行
-```
-$ source <your_ws>/devel/setup.bash
-$ python run.py --path ${HOME}/Downloads/eternal-byte-236613-4bc6962824d1.json
-```
+    2. [eternal-byte-236613-4bc6962824d1.json](https://drive.google.com/file/d/1VxniytpH9J12ii9jphtBylydY1_k5nXf/view)をダウンロードする。
 
-3. 雑談機能を使う場合は[apikey.json](https://drive.google.com/file/d/1wh1_WX3l_qKbUG5wdgeQQBQCu6f9BSWF/view?usp=sharing)をダウンロードし、別ターミナルで以下のコマンドを実行してロボットに話しかける
-```
-$ python chat_node.py --path ${HOME}/Downloads/apikey.json
-```
+    3. 各端末で以下のコマンドを実行（端末を分けているのはログを見やすくするため）
+        ```
+        $ python run.py --nlp-path ${HOME}/Downloads/eternal-byte-236613-4bc6962824d1.json
+        ```
+        ```
+        $ docker-compose up
+        ```
+
+    ※`/robotsound_jp`トピックにデータがpublishされることを想定している
+
+3. 実機と雑談する
+    1. [apikey.json](https://drive.google.com/file/d/1wh1_WX3l_qKbUG5wdgeQQBQCu6f9BSWF/view?usp=sharing)をダウンロードする
+
+    2. 各端末で以下のコマンドを実行
+        ```
+        $ python run.py --with-chat --nlp-path ${HOME}/Downloads/eternal-byte-236613-4bc6962824d1.json --chat-path ${HOME}/Downloads/apikey.json
+        ```
+        ```
+        $ docker-compose up
+        ```
+    3. お話しする！コツはマイクに向かって話すこと...
 
 ### ラズパイからサイトにアクセスする
 
@@ -83,7 +72,18 @@ $ python chat_node.py --path ${HOME}/Downloads/apikey.json
 
 ### ラズパイでサーバーを立ち上げる
 
-1. [LOVOTディレクトリのREADME](https://github.com/MiyabiTane/LOVOT)を参照してUbuntu,ROSを入れた状態のラズパイを用意する
+1. [LOVOTディレクトリのREADME](https://github.com/MiyabiTane/LOVOT)を参照してUbuntu,ROSを入れた状態のラズパイ(3B)を用意する
+    1. Ubuntu18のイメージは[こちら](https://drive.google.com/file/d/1f7Y_gSQFexneSPZxi8n0niOyk-UK_Huh/view?usp=sharing)
+    2. ディスプレイがつかない時：HDMIをケーブルを先に差し込んでから電源を入れ直してみる
+    3. ROSパッケージが更新できなくなった時：以下のコマンドを実行
+        ```
+        $ curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
+        ```
+    4. SSH出来ない時：以下のコマンドを実行
+        ```
+        $ sudo rm /etc/ssh/ssh_host_*
+        $ sudo dpkg-reconfigure openssh-server
+        ```
 
 2. rossetmasterしたいのでツールをインストールする
 ```
@@ -117,6 +117,16 @@ $ sudo docker-compose run --rm app /bin/bash
 # exit
 $ sudo docker-compose up
 ```
+
+### [おまけ]ラズパイ4セットアップ
+1. [公式ページ](https://www.raspberrypi.com/software/)からアプリをダウンロード
+
+2. CHOOSE OSで`Other general purpose OS` ▷ `Ubuntu Desktop`を選択
+
+3. CHOOSE SD CARDで`:/D`を選択
+
+4. ラズパイに差し込んで立ち上げ（HDMI▷電源の順にする）
+
 
 ### 参考記事
 [DockerでExpress](https://ishida-it.com/blog/post/2019-11-21-docker-nodejs/)<br>

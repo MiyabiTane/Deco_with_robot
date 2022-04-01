@@ -11,22 +11,37 @@ def run_script():
 def run_server():
     subprocess.call(["docker-compose", "up"])
 
-def run_analyzer(json_path):
-    subprocess.call(["roslaunch", "ros_google_cloud_language", "demo.launch", "google_cloud_credentials_json:=" + json_path])
+def run_analyzer(nlp_path):
+    subprocess.call(["python", "sentiment_analysis_node.py", "--credentials-path", nlp_path])
 
-def run_analyzer_node():
-    subprocess.call(["python", "sentiment_analysis_node.py"])
+def run_chat(chat_path):
+    subprocess.call(["python", "chat_node.py", "--chat-path", chat_path])
+
+def run_dummy():
+    print("dummy thread")
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--path", required=True)
+parser.add_argument("--no-sound", action="store_true")
+parser.add_argument("--with-chat", action="store_true")
+parser.add_argument("--nlp-path", default="/home/tork/ros/json/eternal-byte-236613-4bc6962824d1.json")
+parser.add_argument("--chat-path", default="/home/tork/ros/json/apikey.json")
 args = parser.parse_args()
 
-# thread_1 = threading.Thread(target=run_roscore)
-thread_1 = threading.Thread(target=run_analyzer, args=(args.path,))
-thread_2 = threading.Thread(target=run_server)
-thread_3 = threading.Thread(target=run_script)
-thread_4 = threading.Thread(target=run_analyzer_node)
+if args.no_sound:
+    thread_1 = threading.Thread(target=run_roscore)
+    thread_2 = threading.Thread(target=run_server)
+    thread_3 = threading.Thread(target=run_script)
+elif args.with_chat:
+    thread_1 = threading.Thread(target=run_roscore)
+    # thread_2 = threading.Thread(target=run_server)
+    thread_2 = threading.Thread(target=run_analyzer, args=(args.nlp_path,))
+    thread_3 = threading.Thread(target=run_chat, args=(args.chat_path,))
+else:
+    thread_1 = threading.Thread(target=run_roscore)
+    # thread_2 = threading.Thread(target=run_server)
+    thread_2 = threading.Thread(target=run_analyzer, args=(args.nlp_path,))
+    thread_3 = threading.Thread(target=run_dummy)
+
 thread_1.start()
 thread_2.start()
 thread_3.start()
-thread_4.start()

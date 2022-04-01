@@ -10,7 +10,7 @@ import requests
 import actionlib
 
 from speech_recognition_msgs.msg import SpeechRecognitionCandidates
-from sound_play.msg import SoundRequestAction, SoundRequestGoal
+from sound_play.msg import SoundRequest
 
 if sys.version_info.major == 2:
     reload(sys)
@@ -20,11 +20,10 @@ class ChaplusRos(object):
 
     def __init__(self):
         parser = argparse.ArgumentParser()
-        parser.add_argument("--path", required=True)
+        parser.add_argument("--chat-path", required=True)
         args = parser.parse_args()
-        print(args.path)
         try:
-            with open(args.path) as j:
+            with open(args.chat_path) as j:
                 apikey_json = json.loads(j.read())
             with open("chaplus_info.json") as j:
                 self.data_json = json.loads(j.read())
@@ -39,8 +38,7 @@ class ChaplusRos(object):
         self.arg2 = 'ja'
 
         self.sub = rospy.Subscriber('/speech_to_text', SpeechRecognitionCandidates, self.chat_cb)
-        self.actionlib_client = actionlib.SimpleActionClient('/robotsound_jp', SoundRequestAction)
-        self.actionlib_client.wait_for_server()
+        self.pub = rospy.Publisher('/robotsound_jp', SoundRequest, queue_size=1)
 
     def chat_response(self, input_text):
         best_response = ""
@@ -70,13 +68,13 @@ class ChaplusRos(object):
             for char in msg.transcript:
                 listen_text += char
         response_text = self.chat_response(listen_text)
-        speak_msg = SoundRequestGoal()
-        speak_msg.sound_request.volume = self.volume
-        speak_msg.sound_request.command = self.command
-        speak_msg.sound_request.sound = self.sound
-        speak_msg.sound_request.arg = response_text
-        speak_msg.sound_request.arg2 = self.arg2
-        self.actionlib_client.send_goal(speak_msg)
+        speak_msg = SoundRequest()
+        speak_msg.volume = self.volume
+        speak_msg.command = self.command
+        speak_msg.sound = self.sound
+        speak_msg.arg = response_text
+        speak_msg.arg2 = self.arg2
+        self.pub.publish(speak_msg)
 
 
 if __name__ == '__main__':
