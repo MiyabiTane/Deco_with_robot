@@ -8,6 +8,7 @@ import argparse
 import json
 import requests
 import actionlib
+import subprocess
 
 from speech_recognition_msgs.msg import SpeechRecognitionCandidates
 from sound_play.msg import SoundRequest
@@ -38,7 +39,7 @@ class ChaplusRos(object):
         self.arg2 = 'ja'
 
         self.sub = rospy.Subscriber('/speech_to_text', SpeechRecognitionCandidates, self.chat_cb)
-        self.pub = rospy.Publisher('/robotsound_jp', SoundRequest, queue_size=1)
+        # self.pub = rospy.Publisher('/robotsound_jp', SoundRequest, queue_size=1)
 
     def chat_response(self, input_text):
         best_response = ""
@@ -68,13 +69,17 @@ class ChaplusRos(object):
             for char in msg.transcript:
                 listen_text += char
         response_text = self.chat_response(listen_text)
-        speak_msg = SoundRequest()
-        speak_msg.volume = self.volume
-        speak_msg.command = self.command
-        speak_msg.sound = self.sound
-        speak_msg.arg = response_text
-        speak_msg.arg2 = self.arg2
-        self.pub.publish(speak_msg)
+        #  2回目以降のpublishが反映されない
+        # speak_msg = SoundRequest()
+        # speak_msg.volume = self.volume
+        # speak_msg.command = self.command
+        # speak_msg.sound = self.sound
+        # speak_msg.arg = response_text
+        # speak_msg.arg2 = self.arg2
+        # self.pub.publish(speak_msg)
+        subprocess.call(["rostopic", "pub", "-1", "/robotsound_jp", "sound_play/SoundRequest",
+                         "{sound: " + str(self.sound) + ", " + "command: " + str(self.command) + ", " +
+                         "volume: " + str(self.volume) + ", " + "arg: " + response_text + ", " + "arg2: " + str(self.arg2) + "}"])
 
 
 if __name__ == '__main__':
