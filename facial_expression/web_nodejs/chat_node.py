@@ -11,7 +11,7 @@ import actionlib
 import subprocess
 
 from speech_recognition_msgs.msg import SpeechRecognitionCandidates
-from sound_play.msg import SoundRequest
+from sound_play.msg import SoundRequestAction, SoundRequestGoal
 
 if sys.version_info.major == 2:
     reload(sys)
@@ -39,7 +39,8 @@ class ChaplusRos(object):
         self.arg2 = 'ja'
 
         self.sub = rospy.Subscriber('/speech_to_text', SpeechRecognitionCandidates, self.chat_cb)
-        # self.pub = rospy.Publisher('/robotsound_jp', SoundRequest, queue_size=1)
+        self.actionlib_client = actionlib.SimpleActionClient('/robotsound_jp', SoundRequestAction)
+        self.actionlib_client.wait_for_server()
 
     def chat_response(self, input_text):
         best_response = ""
@@ -69,17 +70,15 @@ class ChaplusRos(object):
             for char in msg.transcript:
                 listen_text += char
         response_text = self.chat_response(listen_text)
-        #  2回目以降のpublishが反映されない
-        # speak_msg = SoundRequest()
-        # speak_msg.volume = self.volume
-        # speak_msg.command = self.command
-        # speak_msg.sound = self.sound
-        # speak_msg.arg = response_text
-        # speak_msg.arg2 = self.arg2
-        # self.pub.publish(speak_msg)
-        subprocess.call(["rostopic", "pub", "-1", "/robotsound_jp", "sound_play/SoundRequest",
-                         "{sound: " + str(self.sound) + ", " + "command: " + str(self.command) + ", " +
-                         "volume: " + str(self.volume) + ", " + "arg: " + response_text + ", " + "arg2: " + str(self.arg2) + "}"])
+        speak_msg = SoundRequestGoal()
+        speak_msg.sound_request.volume = self.volume
+        speak_msg.sound_request.command = self.command
+        speak_msg.sound_request.sound = self.sound
+        speak_msg.sound_request.arg = response_text
+        speak_msg.sound_request.arg2 = self.arg2
+        self.actionlib_client.send_goal(speak_msg)
+
+        subprocess.call(["rostopic", "pub", "-1", "/robotsound_text", "std_msgs/String", "data: " + response_text])
 
 
 if __name__ == '__main__':

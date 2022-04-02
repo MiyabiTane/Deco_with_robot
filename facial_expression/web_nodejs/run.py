@@ -32,12 +32,12 @@ if args.no_sound:
     thread_2 = threading.Thread(target=run_server)
     thread_3 = threading.Thread(target=run_script)
 elif args.with_chat:
-    thread_1 = threading.Thread(target=run_roscore)
+    thread_1 = threading.Thread(target=run_dummy)
     # thread_2 = threading.Thread(target=run_server)
     thread_2 = threading.Thread(target=run_analyzer, args=(args.nlp_path,))
     thread_3 = threading.Thread(target=run_chat, args=(args.chat_path,))
 else:
-    thread_1 = threading.Thread(target=run_roscore)
+    thread_1 = threading.Thread(target=run_dummy)
     # thread_2 = threading.Thread(target=run_server)
     thread_2 = threading.Thread(target=run_analyzer, args=(args.nlp_path,))
     thread_3 = threading.Thread(target=run_dummy)

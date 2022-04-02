@@ -7,7 +7,7 @@ import time
 import subprocess
 import argparse
 
-from sound_play.msg import SoundRequest
+from std_msgs.msg import String
 from std_msgs.msg import Float64, Bool
 
 class SentimentAnalysis:
@@ -16,11 +16,11 @@ class SentimentAnalysis:
         self.credentials_path = credentials_path
 
         self.pub = rospy.Publisher("/degree", Float64, queue_size=1)
-        rospy.Subscriber("/robotsound_jp", SoundRequest, self.sound_cb)
+        rospy.Subscriber("/robotsound_text", String, self.sound_cb)
 
     def sound_cb(self, msg):
         subprocess.call(["pipenv", "run", "python", "sentiment_analysis.py",
-                         "--credentials-path", self.credentials_path, "--voice-text", msg.arg])
+                         "--credentials-path", self.credentials_path, "--voice-text", msg.data])
 
 
 if __name__ == '__main__':
