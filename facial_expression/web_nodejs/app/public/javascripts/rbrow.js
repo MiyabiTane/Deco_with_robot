@@ -169,7 +169,7 @@ function drawScene(gl, programInfo, buffers, deltaTime) {
   mat4.rotate(modelViewMatrix,        // destination matrix
    	      modelViewMatrix,        // matrix to rotate
    	      squareRotation,         // amount to rotate in radians
-  	      [0, 0, 1]);             // axis to rotate around
+  	      [0, 0, -1]);             // axis to rotate around
 
   // Tell WebGL how to pull out the positions from the position
   // buffer into the vertexPosition attribute.
@@ -213,14 +213,16 @@ function drawScene(gl, programInfo, buffers, deltaTime) {
   }
 
   // Update the rotation for the next draw
-  if (squareRotation > maxRotation) {
-    squareRotation -= deltaTime * 0.5;
+  if (Math.abs(squareRotation - maxRotation) > 0.01) {
+    if (squareRotation < maxRotation) {
+      squareRotation += deltaTime * 0.5;
+    } else if (squareRotation > maxRotation) {
+      squareRotation -= deltaTime * 0.5;
+    }
   } else {
-    // document.querySelector("canvas")
-    //         .addEventListener("click", playerClick, false);
     get_degree();
-    // console.log("GOT: ", maxRotation * 180 / Math.PI);
   }
+  // console.log(squareRotation, maxRotation);
 
   function playerClick (evt) {
     var position = [
