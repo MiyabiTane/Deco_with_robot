@@ -23,8 +23,8 @@ def run_dummy():
 parser = argparse.ArgumentParser()
 parser.add_argument("--no-sound", action="store_true")
 parser.add_argument("--with-chat", action="store_true")
-parser.add_argument("--nlp-path", default="/home/tork/ros/json/eternal-byte-236613-4bc6962824d1.json")
-parser.add_argument("--chat-path", default="/home/tork/ros/json/apikey.json")
+parser.add_argument("--nlp-path", default="/home/pr2-tanemoto2/json/eternal-byte-236613-4bc6962824d1.json")
+parser.add_argument("--chat-path", default="/home/pr2-tanemoto2/json/apikey.json")
 args = parser.parse_args()
 
 if args.no_sound:

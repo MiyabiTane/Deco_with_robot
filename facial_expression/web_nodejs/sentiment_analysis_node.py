@@ -19,7 +19,7 @@ class SentimentAnalysis:
         rospy.Subscriber("/robotsound_text", String, self.sound_cb)
 
     def sound_cb(self, msg):
-        subprocess.call(["pipenv", "run", "python", "sentiment_analysis.py",
+        subprocess.call(["python3", "-m", "pipenv", "run", "python", "sentiment_analysis.py",
                          "--credentials-path", self.credentials_path, "--voice-text", msg.data])
 
 
