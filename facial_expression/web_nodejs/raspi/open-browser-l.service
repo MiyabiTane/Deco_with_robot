@@ -1,0 +1,11 @@
+[Unit]
+Description= Facial Expression LeftEyeBrow
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+WorkingDirectory= ${HOME}
+ExecStart=/bin/bash -c "rossetmaster pr1040 && rossetip && python open_browser.py --mode lbrow"
+
+[Install]
+WantedBy=multi-user.target

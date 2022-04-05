@@ -1,9 +1,5 @@
-doctype html
-html(lang='en')
-  head
-    title test
-    script.
-      console.log("Hello");
-  body
-    h1 Jade
-      p You are amazing
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}

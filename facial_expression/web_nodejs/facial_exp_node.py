@@ -9,7 +9,7 @@ from std_msgs.msg import Float64, Bool
 class FacialExpressionNode:
     def __init__(self):
         self.degree = 0
-        rospy.Subscriber('/degree', Float64, self.face_exp_cb)
+        rospy.Subscriber('/facial_expression/degree', Float64, self.face_exp_cb)
         subprocess.call(["curl", "-X", "POST", "--data-urlencode", "degree=0", "http://localhost:3000/api/info"])
 
     def face_exp_cb(self, msg):

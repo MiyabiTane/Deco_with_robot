@@ -1,4 +1,3 @@
-console.log("Hello");
 main();
 
 var squareRotation = 0.0;

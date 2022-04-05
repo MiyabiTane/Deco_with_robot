@@ -15,8 +15,7 @@ class SentimentAnalysis:
         self.score = 0
         self.credentials_path = credentials_path
 
-        self.pub = rospy.Publisher("/degree", Float64, queue_size=1)
-        rospy.Subscriber("/robotsound_text", String, self.sound_cb)
+        rospy.Subscriber("/facial_expression/robotsound_text", String, self.sound_cb)
 
     def sound_cb(self, msg):
         subprocess.call(["pipenv", "run", "python", "sentiment_analysis.py",

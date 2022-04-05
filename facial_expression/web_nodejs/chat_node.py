@@ -78,7 +78,7 @@ class ChaplusRos(object):
         speak_msg.sound_request.arg2 = self.arg2
         self.actionlib_client.send_goal(speak_msg)
 
-        subprocess.call(["rostopic", "pub", "-1", "/robotsound_text", "std_msgs/String", "data: " + response_text])
+        subprocess.call(["rostopic", "pub", "-1", "/facial_expression/robotsound_text", "std_msgs/String", "data: " + response_text])
 
 
 if __name__ == '__main__':
