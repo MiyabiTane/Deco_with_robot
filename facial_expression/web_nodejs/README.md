@@ -28,7 +28,43 @@ $ docker-compose up
 http://localhost:3000/rbrow, http://localhost:3000/lbrow
 にアクセスできればOK
 
-### 動かし方：シンプルなプログラム（数値を送信して画面を動かす）
+### ラズパイと実機を使った動かし方
+0. ノートPCとラズパイを133系ネットワークに繋いでおく
+
+1. [ラズパイで自動画面表示](#ラズパイで自動画面表示)に従ってラズパイを設定しておく
+
+2. ノートPCに[eternal-byte-236613-4bc6962824d1.json](https://drive.google.com/file/d/1VxniytpH9J12ii9jphtBylydY1_k5nXf/view)と[apikey.json](https://drive.google.com/file/d/1wh1_WX3l_qKbUG5wdgeQQBQCu6f9BSWF/view?usp=sharing)をダウンロードする。
+
+3. ノートPCでプログラム起動
+    ```
+    $ rossetmaster pr1040
+    $ rossetip
+    $ python run.py --with-chat --nlp-path ${HOME}/Downloads/eternal-byte-236613-4bc6962824d1.json --chat-path ${HOME}/Downloads/apikey.json
+    ```
+    別端末で
+    ```
+    $ docker-compose up
+    ```
+
+4. ラズパイ上の画面を開く
+    1. ノートPCのIPアドレスを調べる
+    ```
+    $ ifconfig
+    # 133系を探す
+    ```
+    2. 以下コマンドを打つ
+    ```
+    $ rossetmaster pr1040
+    $ rossetip
+    $ rostopic pub -1 /facial_expression/restart std_msgs/String data: ''
+    # 数秒待ってから
+    $ rostopic pub -1 /facial_expression/ip_info std_msgs/String data: <IPアドレス>
+    ```
+
+    3. 全画面表示が見切れていたらラズパイにキーボードを繋いで`shift + F5`でリロードする。ページを終了させる場合は`Alt + F4`
+
+
+### よりシンプルな動かし方
 0. アクセスするサイトは [右眉毛](http://localhost:3000/rbrow), [左眉毛](http://localhost:3000/lbrow)
 
 1. 数値を直接送信して画面の動きを変える
@@ -78,50 +114,53 @@ http://localhost:3000/rbrow, http://localhost:3000/lbrow
 
 ### ラズパイで自動画面表示
 
+#### 初期設定
 1. [READMEのRaspberry pi 3B Ubuntu18.04セットアップ](https://github.com/MiyabiTane/Deco_with_robot/tree/raspi-3b/facial_expression/web_nodejs)を参照してUbuntu18.04上で`rossetmaster`コマンドが使える状態のRaspberry pi 3Bを用意する
 
 2. 自動ログイン設定する
     左上のメニューバーから
     `システム管理▷ログイン画面▷Users▷Automatic login▷Username記入`
 
-3. Chromiumインストール
+#### Chromiumをいれる
+0. Firefoxでやっても良いが、現状kioskコマンドがうまく動作しなかった。Firefoxを使う場合は、アプリを開いてアドレスバーに`about:config`を入力。`webgl.force-enable`の項目を`true`にしておく
+
+1. インストール
     ```
     $ sudo apt-get update
     $ sudo apt-get upgrade -y
     $ sudo apt-get install chromium-browser
     ```
+2. パスワードを求められないようにする
+    1. 左上のメニューアイコンで"Passwords and Keys"を検索
+    2. 「パスワード」項目下のデフォルトのキーリングを右クリック▷パスワードの変更
+    3. 元のパスワードを入力し、パスワードを変更。新しいパスワードは空白にする
 
-4. 起動時の動作設定
-    1. `open-browser.py`をホームディレクトリ下に置く
-        ```
-        $ cp /raspi/open-browser.py ${HOME}/open-browser.py
-        ```
-    2. systemdの設定
-        左眉毛の場合はopen-browser-r.serviceをopen-browser-l.serviceに置き換える
-        ```
-        $ sudo cp /raspi/open-browser-r.service /etc/systemd/system/open-browser-r.service
-        $ sudo systemctl daemon-reload
-        $ sudo systemctl enable open-browser-r.service
-        ```
-        動作の確認
-        ```
-        $ sudo reboot now  # 再起動
-        $ sudo systemctl status open-browser-r.service
-        ```
-        丸が緑になっていてActiveになっていればOK
 
-5. 以下コマンドを打つとラズパイでweb画面が開く
+#### ユーザー権限のsystemd
+0. Chromiumをroot権限から開くのが難しそうだったのでユーザー権限のsystemdを使う
+1. `open-browser.py`をホームディレクトリ下に置く
     ```
-    $ rossetmaster
-    $ rossetip
-    $ rostopic pub -1 /facial_expression/ip_info std_msgs/String data: <IPアドレス>
+    $ cp /raspi/open-browser.py ${HOME}/open-browser.py
     ```
-    `<IPアドレス>`のところに`ifconfig`して調べたノートPCのIPアドレスをいれる
+2. systemdの設定
+    左眉毛の場合はopen-browser-r.serviceをopen-browser-l.serviceに置き換える
+    ```
+    $ cd ~/.config/systemd/user/
+    # ディレクトリが存在しなかったら作る
+    $ mkdir -p ~/.config/systemd/user
+    $ cp /raspi/open-browser-r.service ~/.config/systemd/user/open-browser-r.service
+    $ systemctl --user enable open-browser-r.service
+    $ systemctl --user daemon-reload
+    $ sudo loginctl enable-linger <username>  # サーバー起動時に自動起動するようにする
+    ```
 
+    動作の確認
+    ```
+    $ sudo reboot now  # 再起動
+    $ systemctl --user status open-browser-r.service
+    ```
+    丸が緑になっていてActiveになっていればOK
 
-※firefoxで表示する場合は、firefoxを開いてアドレスバーに`about:config`を入力。`webgl.force-enable`の項目を`true`にしておく
-
-※全画面表示中のブラウザを終了させる場合は`Alt + F4`
 
 ### 旧情報
 
@@ -150,3 +189,5 @@ $ docker-compose run --rm app /bin/bash
 [jadeの書き方](http://kfug.jp/handson/try_jade/)<br>
 [WebGLチュートリアル](https://developer.mozilla.org/ja/docs/Web/API/WebGL_API/Tutorial/Getting_started_with_WebGL)<br>
 [HTMLからGETリクエスト](https://stackoverflow.com/questions/6375461/get-html-code-using-javascript-with-a-url)<br>
+[ユーザー権限でsystemd](https://pyopyopyo.hatenablog.com/entry/2021/04/30/233755)<br>
+[Chromeがパスワードを求めないようにする](http://linuxlabo.labo.main.jp/?eid=4)<br>

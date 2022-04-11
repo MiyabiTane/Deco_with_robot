@@ -4,8 +4,11 @@ After=network-online.target
 Wants=network-online.target
 
 [Service]
-WorkingDirectory= ${HOME}
-ExecStart=/bin/bash -c "rossetmaster pr1040 && rossetip && python open_browser.py --mode rbrow"
+# User= pr2-tanemoto2
+# Group= pr2-tanemoto2
+Environment=PYTHONUNBUFFERED=1
+WorkingDirectory= /home/pr2-tanemoto2
+ExecStart=/bin/bash -c "source /opt/ros/melodic/setup.bash && rossetmaster pr1040 && rossetip && python open_browser.py --mode rbrow"
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target
