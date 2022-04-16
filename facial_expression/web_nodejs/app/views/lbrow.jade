@@ -3,7 +3,8 @@ html(lang='en')
   head
     title test
     script(src="https://cdn.jsdelivr.net/npm/gl-matrix@3/gl-matrix.js")
-    script. 
+    script.
+      var mode = 0;
       var maxRotation = #{degree} * Math.PI / 180;
       function makeHttpObject() {
         try {return new XMLHttpRequest();}
@@ -23,7 +24,8 @@ html(lang='en')
         request.onreadystatechange = function() {
           if (request.readyState == 4)
             // console.log("new deg", request.responseText);
-            maxRotation = request.responseText * Math.PI / 180;
+            mode = request.responseText.split(',')[0];
+            maxRotation = request.responseText.split(',')[1] * Math.PI / 180;
         };
       }
   body
