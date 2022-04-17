@@ -1,6 +1,7 @@
 main();
 
 var squareRotation = 0.0;
+var wait_flag = false;
 function main() {
   // Initialize
   var c = document.getElementById('webgl');
@@ -98,7 +99,7 @@ function initBuffers(gl) {
     var rad2 = -1 * squareRotation;
     var rad3 = squareRotation;
     var rad4 = squareRotation;
-    var BROW_WID = 1.5 - squareRotation / 2;
+    var BROW_WID = 1.5 - Math.abs(squareRotation / 2);
     var pt1_x = 0.0;
     var pt1_y = squareRotation;
   }
@@ -242,7 +243,19 @@ function drawScene(gl, programInfo, buffers, deltaTime) {
       squareRotation -= deltaTime * 0.5;
     }
   } else {
-    get_degree();
+    if (wait_flag) {
+      mode = new_mode;
+      maxRotation = new_maxRotation;
+      wait_flag = false;
+    } else {
+      get_degree();
+      if (new_mode == mode) {
+	maxRotation = new_maxRotation;
+      } else {
+        maxRotation = 0;
+        wait_flag = true;
+      }
+    }
   }
   // console.log(squareRotation, maxRotation);
 

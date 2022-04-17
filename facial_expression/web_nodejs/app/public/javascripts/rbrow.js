@@ -1,7 +1,7 @@
-console.log("Hello");
 main();
 
 var squareRotation = 0.0;
+var wait_flag = false;
 function main() {
   // Initialize
   var c = document.getElementById('webgl');
@@ -50,13 +50,14 @@ function main() {
 
   // Here's where we call the routine that builds all the
   // objects we'll be drawing.
-  const buffers = initBuffers(gl);
+  // const buffers = initBuffers(gl);
 
   // Draw the scene
   var then = 0;
   function render(now) {
 	now *= 0.001;  // convert to seconds
 	const deltaTime = now - then;
+        const buffers = initBuffers(gl);
 	then = now;
 	drawScene(gl, programInfo, buffers, deltaTime);
 	requestAnimationFrame(render);
@@ -83,28 +84,50 @@ function initBuffers(gl) {
 
   // Now create an array of positions for the square.
 
-
-  const rad = 0 * Math.PI / 180;
-  const BLOW_LEN = 4;
-  const BLOW_WID = 1.5;
-  const ADD_LEN = 1;
-  var pt1_x = 0.0;  //2.5;
-  var pt1_y = 0.0;  //-0.75;
-  var pt2_x = pt1_x + BLOW_WID * Math.sin(rad);
-  var pt2_y = pt1_y + BLOW_WID * Math.cos(rad);
-  var pt3_x = pt2_x - BLOW_LEN * Math.cos(rad);
-  var pt3_y = pt2_y + BLOW_LEN * Math.sin(rad);
-  var pt4_x = pt1_x - (BLOW_LEN + ADD_LEN) * Math.cos(rad);
-  var pt4_y = pt1_y + (BLOW_LEN + ADD_LEN) * Math.sin(rad);
-  var pt5_x = pt1_x;
-  var pt5_y = pt1_y;
-  console.log(pt1_x, pt1_y, pt2_x, pt2_y, pt3_x, pt3_y, pt4_x, pt4_y);
+  var rad1 = squareRotation;
+  var rad2 = squareRotation;
+  var rad3 = squareRotation;
+  var rad4 = squareRotation;
+  var BROW_LEN = 3;
+  var BROW_WID = 1.5;
+  var LEFT_LEN = 1;
+  var RIGHT_LEN = 1;
+  var pt1_x = 0.0;
+  var pt1_y = 0.0;
+  if (mode == 1) {
+    var rad1 = 0;
+    var rad2 = -1 * squareRotation;
+    var rad3 = squareRotation;
+    var rad4 = squareRotation;
+    var BROW_WID = 1.5 - Math.abs(squareRotation / 2);
+    var pt1_x = 0.0;
+    var pt1_y = squareRotation;
+  }
+  var pt2_x = pt1_x - BROW_LEN * Math.cos(rad1);
+  var pt2_y = pt1_y + BROW_LEN * Math.sin(rad1);
+  var pt3_x = pt2_x - LEFT_LEN * Math.cos(rad2);
+  var pt3_y = pt2_y + LEFT_LEN * Math.sin(rad2);
+  var pt5_x = pt1_x + BROW_WID * Math.sin(rad1);
+  var pt5_y = pt1_y + BROW_WID * Math.cos(rad1);
+  var pt4_x = pt5_x - BROW_LEN * Math.cos(rad1);
+  var pt4_y = pt5_y + BROW_LEN * Math.sin(rad1);
+  var pt6_x = pt5_x + RIGHT_LEN * Math.cos(rad3);
+  var pt6_y = pt5_y - RIGHT_LEN * Math.sin(rad3);
+  var pt7_x = pt1_x + RIGHT_LEN * Math.cos(rad4);
+  var pt7_y = pt1_y - RIGHT_LEN * Math.sin(rad4);
   const positions = [
-     pt1_x, pt1_y,
-     pt2_x, pt2_y,
-     pt3_x, pt3_y,
-     pt4_x, pt4_y,
-     pt5_x, pt5_y,
+      pt2_x, pt2_y,
+      pt3_x, pt3_y,
+      pt4_x, pt4_y,
+      pt2_x, pt2_y,
+      pt1_x, pt1_y,
+      pt5_x, pt5_y,
+      pt4_x, pt4_y,
+      pt1_x, pt1_y,
+      pt5_x, pt5_y,
+      pt6_x, pt6_y,
+      pt7_x, pt7_y,
+      pt1_x, pt1_y,
   ];
 
   // Now pass the list of positions into WebGL to build the
@@ -165,11 +188,11 @@ function drawScene(gl, programInfo, buffers, deltaTime) {
 
   mat4.translate(modelViewMatrix,     // destination matrix
                  modelViewMatrix,     // matrix to translate
-                 [2.5, -0.75, -6.0]);  // amount to translate
-  mat4.rotate(modelViewMatrix,        // destination matrix
-   	      modelViewMatrix,        // matrix to rotate
-   	      squareRotation,         // amount to rotate in radians
-  	      [0, 0, -1]);             // axis to rotate around
+                 [1.5, -0.5, -6.0]);  // amount to translate
+  // mat4.rotate(modelViewMatrix,        // destination matrix
+  //  	      modelViewMatrix,        // matrix to rotate
+  //  	      squareRotation,         // amount to rotate in radians
+  // 	      [0, 0, -1]);             // axis to rotate around
 
   // Tell WebGL how to pull out the positions from the position
   // buffer into the vertexPosition attribute.
@@ -208,7 +231,7 @@ function drawScene(gl, programInfo, buffers, deltaTime) {
 
   {
     const offset = 0;
-    const vertexCount = 5;
+    const vertexCount = 12;
     gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount);
   }
 
@@ -220,7 +243,19 @@ function drawScene(gl, programInfo, buffers, deltaTime) {
       squareRotation -= deltaTime * 0.5;
     }
   } else {
-    get_degree();
+    if (wait_flag) {
+      mode = new_mode;
+      maxRotation = new_maxRotation;
+      wait_flag = false;
+    } else {
+      get_degree();
+      if (new_mode == mode) {
+	maxRotation = new_maxRotation;
+      } else {
+        maxRotation = 0;
+        wait_flag = true;
+      }
+    }
   }
   // console.log(squareRotation, maxRotation);
 
@@ -282,4 +317,3 @@ function loadShader(gl, type, source) {
 
   return shader;
 }
-
