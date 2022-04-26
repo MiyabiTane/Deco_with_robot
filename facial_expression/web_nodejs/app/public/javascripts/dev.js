@@ -22,17 +22,37 @@ function main() {
     }
   `;
 
+  const vsSourceColor = `
+    attribute vec4 aVertexPosition;
+    attribute vec4 aVertexColor;
+    uniform mat4 uModelViewMatrix;
+    uniform mat4 uProjectionMatrix;
+    varying lowp vec4 vColor;
+    void main(void) {
+      gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
+      vColor = aVertexColor;
+    }
+  `;
+
   // Fragment shader program
 
   const fsSource = `
     void main() {
       gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
     }
-  `; 
+  `;
+
+  const fsSourceColor = `
+    varying lowp vec4 vColor;
+    void main(void) {
+      gl_FragColor = vColor;
+    }
+  `;
 
   // Initialize a shader program; this is where all the lighting
   // for the vertices and so forth is established.
   const shaderProgram = initShaderProgram(gl, vsSource, fsSource);
+  const shaderProgramColor = initShaderProgram(gl, vsSourceColor, fsSourceColor);
 
   // Collect all the info needed to use the shader program.
   // Look up which attribute our shader program is using
@@ -45,6 +65,18 @@ function main() {
     uniformLocations: {
       projectionMatrix: gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
       modelViewMatrix: gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'),
+    },
+  };
+  // Color object
+  const programInfoColor = {
+    program: shaderProgramColor,
+    attribLocations: {
+      vertexPosition: gl.getAttribLocation(shaderProgramColor, 'aVertexPosition'),
+      vertexColor: gl.getAttribLocation(shaderProgramColor, 'aVertexColor'),
+    },
+    uniformLocations: {
+      projectionMatrix: gl.getUniformLocation(shaderProgramColor, 'uProjectionMatrix'),
+      modelViewMatrix: gl.getUniformLocation(shaderProgramColor, 'uModelViewMatrix'),
     },
   };
 
@@ -60,7 +92,7 @@ function main() {
         const buffers = initBuffers(gl);
         const buffersAttach = initBuffersAttach(gl);
 	then = now;
-        drawScene(gl, programInfo, programInfo, buffers, buffersAttach, 12, 4);
+        drawScene(gl, programInfo, programInfoColor, buffers, buffersAttach, 12, 4);
         update(deltaTime);
 	requestAnimationFrame(render);
   }
@@ -172,15 +204,28 @@ function initBuffersAttach(gl) {
                 new Float32Array(positions),
                 gl.STATIC_DRAW);
 
+  // add color
+  var colors = [
+    1.0,  1.0,  1.0,  1.0,    // white
+    1.0,  0.0,  0.0,  1.0,    // red
+    0.0,  1.0,  0.0,  1.0,    // green
+    0.0,  0.0,  1.0,  1.0,    // blue
+  ];
+
+  const colorBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW); 
+
   return {
     position: positionBuffer,
+    color: colorBuffer,  
   };
 }
 
 //
 // Draw the scene.
 //
-function drawScene(gl, programInfo, programInfoAttach,buffers, buffersAttach, vertexCount, vertexCountAttach) {
+function drawScene(gl, programInfo, programInfoAttach, buffers, buffersAttach, vertexCount, vertexCountAttach) {
   // black:0, white:1
   gl.clearColor(0.9, 0.9, 0.9, 1.0);  // Clear to black, fully opaque
   gl.clearDepth(1.0);                 // Clear everything
@@ -287,9 +332,29 @@ function drawScene(gl, programInfo, programInfoAttach,buffers, buffersAttach, ve
         programInfoAttach.attribLocations.vertexPosition);
   }
 
+  // Tell WebGL how to pull out the colors from the color buffer
+  // into the vertexColor attribute.
+  {
+    const numComponents = 4;
+    const type = gl.FLOAT;
+    const normalize = false;
+    const stride = 0;
+    const offset = 0;
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffersAttach.color);
+    gl.vertexAttribPointer(
+        programInfoAttach.attribLocations.vertexColor,
+        numComponents,
+        type,
+        normalize,
+        stride,
+        offset);
+    gl.enableVertexAttribArray(
+        programInfoAttach.attribLocations.vertexColor);
+  }
+
   // Tell WebGL to use our program when drawing
 
-  gl.useProgram(programInfo.program);
+  gl.useProgram(programInfoAttach.program);
 
   // Set the shader uniforms
 
@@ -303,8 +368,8 @@ function drawScene(gl, programInfo, programInfoAttach,buffers, buffersAttach, ve
       modelViewMatrix);
   {
     const offset = 0;
-    const vertexCount = vertexCountAttach;
-    gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount);
+    // const vertexCount = vertexCountAttach;
+    gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCountAttach);
   }
 }
 

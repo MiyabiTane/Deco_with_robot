@@ -191,3 +191,4 @@ $ docker-compose run --rm app /bin/bash
 [HTMLからGETリクエスト](https://stackoverflow.com/questions/6375461/get-html-code-using-javascript-with-a-url)<br>
 [ユーザー権限でsystemd](https://pyopyopyo.hatenablog.com/entry/2021/04/30/233755)<br>
 [Chromeがパスワードを求めないようにする](http://linuxlabo.labo.main.jp/?eid=4)<br>
+[WebGLで複数物体表示](https://www.programmingmat.jp/webgl_lab/triangles.html)<br>
