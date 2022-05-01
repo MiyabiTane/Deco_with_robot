@@ -1,8 +1,25 @@
+// --- mode ---
+// 0 normal
+// 1 happy
+// 2 relief
+// 3 intrigue
+// 4 surprized
+// 5 sorrow
+// 6 anger
+// 7 embarrassed
+// 8 fear
+// 9 love
+// 10 wink
+// 11 boring
+// 12 confusion
+// -------------
+
 main();
 
 var squareRotation = 0.0;
 var pre_sweat_y = 0.0;
 var wait_flag = false;
+var tenRad = 10 * Math.PI / 180;
 function main() {
   // Initialize
   var c = document.getElementById('webgl');
@@ -93,9 +110,9 @@ function main() {
         const buffers = initBuffers(gl);
         const buffersSweat = initBuffersSweat(gl);
         then = now;
-        if (mode < 2) {
+        if (mode < 7) {
 	  drawScene(gl, programInfo, buffers, deltaTime, 12);
-        } else if (mode == 2) {
+        } else if (mode == 12) {
           drawSceneSome(gl, programInfo, programInfoColor, buffers, buffersSweat, 12, 12);
         }
         update(deltaTime);
@@ -141,11 +158,56 @@ function initBuffers(gl) {
     var BROW_WID = 1.5 - Math.abs(squareRotation / 2);
     var pt1_x = 0.0;
     var pt1_y = squareRotation;
-  } else if (mode == 2) {  // konran
-    var rad1 = -1 * squareRotation;
-    var rad2 = -1 * squareRotation;
-    var rad3 = -1 * squareRotation;
-    var rad4 = -1 * squareRotation;
+  } else if (mode == 2) {  // anshin
+    if (-1 * Math.abs(squareRotation) > -0.5 * tenRad) {
+      var rad1 = -1 * squareRotation;
+      var rad2 = -1 * squareRotation;
+      var rad3 = -1 * squareRotation;
+      var rad4 = -1 * squareRotation;
+    }
+    else {
+      var rad1 = -0.5 * tenRad;
+      var rad2 = -0.5 * tenRad;
+      var rad3 = -0.5 * tenRad;
+      var rad4 = -0.5 * tenRad;
+      var pt1_y = -1 * squareRotation + 0.5 * tenRad;
+    }
+  } else if (mode == 3) {  // warudakumi
+    var tmp_num = squareRotation / tenRad;
+    if (squareRotation < 2 * tenRad) {
+      var rad1 = 2 * squareRotation;
+      var rad2 = squareRotation;
+      var rad3 = 2 * squareRotation;
+      var rad4 = 2 * squareRotation;
+      var BROW_WID = 1.5 - 2 * Math.abs(squareRotation);
+    } else if (3 * tenRad < squareRotation &&
+	       Math.abs(maxRotation - squareRotation) > 0.1 && !wait_flag) {
+      if (Math.floor(tmp_num) % 2 == 1) {  // down
+        var rad1 = (4 + Math.floor(tmp_num)) * tenRad - squareRotation;
+        var rad2 = 2 * tenRad -  squareRotation * 0.2;
+        var rad3 = (4 + Math.floor(tmp_num)) * tenRad - squareRotation;
+        var rad4 = (4 + Math.floor(tmp_num)) * tenRad - squareRotation;
+        var BROW_WID = 1.5 - 4 * tenRad;
+      } else {  // up
+        var rad1 = (3 - Math.floor(tmp_num)) * tenRad + squareRotation;
+	var rad2 = 1.8 * tenRad + squareRotation * 0.2;
+	var rad3 = (3 - Math.floor(tmp_num)) * tenRad + squareRotation;
+	var rad4 = (3 - Math.floor(tmp_num)) * tenRad + squareRotation;
+	var BROW_WID = 1.5 - 4 * tenRad;
+      }
+    } else {
+      var rad1 = 4 * tenRad;
+      var rad2 = 2 * tenRad;
+      var rad3 = 4 * tenRad;
+      var rad4 = 4 * tenRad;
+      var BROW_WID = 1.5 - 4 * tenRad;
+    }
+  } else if (mode == 12) {  // konran
+    var rad1 = 0;
+    var rad2 = 0.2 * squareRotation;
+    var rad3 = -2 * squareRotation;
+    var rad4 = -2 * squareRotation;
+    var BROW_WID = 1.5 - Math.abs(squareRotation / 2);
   }
   var pt2_x = pt1_x + BROW_LEN * Math.cos(rad1);
   var pt2_y = pt1_y + BROW_LEN * Math.sin(rad1);
