@@ -109,9 +109,12 @@ function main() {
 	const deltaTime = now - then;
         const buffers = initBuffers(gl);
         const buffersSweat = initBuffersSweat(gl);
+        const buffersStar = initBuffersStar(gl);
         then = now;
         if (mode < 7) {
 	  drawScene(gl, programInfo, buffers, deltaTime, 12);
+	} else if (mode == 10) {
+	  drawSceneSome(gl, programInfo, programInfoColor, buffers, buffersStar, 12, 25);
         } else if (mode == 12) {
           drawSceneSome(gl, programInfo, programInfoColor, buffers, buffersSweat, 12, 12);
         }
@@ -176,31 +179,91 @@ function initBuffers(gl) {
     var tmp_num = squareRotation / tenRad;
     if (squareRotation < 2 * tenRad) {
       var rad1 = 2 * squareRotation;
-      var rad2 = squareRotation;
-      var rad3 = 2 * squareRotation;
-      var rad4 = 2 * squareRotation;
+      var rad2 = 2 * squareRotation;
+      var rad3 = 0;
+      var rad4 = 0;
       var BROW_WID = 1.5 - 2 * Math.abs(squareRotation);
+      var pt1_y = squareRotation * -1.5;
     } else if (3 * tenRad < squareRotation &&
 	       Math.abs(maxRotation - squareRotation) > 0.1 && !wait_flag) {
       if (Math.floor(tmp_num) % 2 == 1) {  // down
         var rad1 = (4 + Math.floor(tmp_num)) * tenRad - squareRotation;
-        var rad2 = 2 * tenRad -  squareRotation * 0.2;
-        var rad3 = (4 + Math.floor(tmp_num)) * tenRad - squareRotation;
-        var rad4 = (4 + Math.floor(tmp_num)) * tenRad - squareRotation;
+        var rad2 = (4 + Math.floor(tmp_num)) * tenRad - squareRotation;
+        var rad3 = 0;
+        var rad4 = 0;
         var BROW_WID = 1.5 - 4 * tenRad;
+        var pt1_y = tenRad * -3;
       } else {  // up
         var rad1 = (3 - Math.floor(tmp_num)) * tenRad + squareRotation;
-	var rad2 = 1.8 * tenRad + squareRotation * 0.2;
-	var rad3 = (3 - Math.floor(tmp_num)) * tenRad + squareRotation;
-	var rad4 = (3 - Math.floor(tmp_num)) * tenRad + squareRotation;
+	var rad2 = (3 - Math.floor(tmp_num)) * tenRad + squareRotation;
+	var rad3 = 0;
+	var rad4 = 0;
 	var BROW_WID = 1.5 - 4 * tenRad;
+        var pt1_y = tenRad * -3;
       }
     } else {
       var rad1 = 4 * tenRad;
-      var rad2 = 2 * tenRad;
-      var rad3 = 4 * tenRad;
-      var rad4 = 4 * tenRad;
+      var rad2 = 4 * tenRad;
+      var rad3 = 0;
+      var rad4 = 0;
       var BROW_WID = 1.5 - 4 * tenRad;
+      var pt1_y = tenRad * -3;
+    }
+  } else if (mode == 4) {  // odoroki
+    if (squareRotation < 2 * tenRad) {
+      var rad1 = 0;
+      var rad2 = -1 * squareRotation;
+      var rad3 = squareRotation;
+      var rad4 = squareRotation;
+      var BROW_WID = 1.5 - Math.abs(squareRotation * 1.5);
+      if (!wait_flag) var pt1_y = -2 * squareRotation;
+      else var pt1_y = -3 * (squareRotation * -1 + 2 * tenRad) + tenRad * 6;
+    } else if (wait_flag) {
+      var rad1 = 0;
+      var rad2 = tenRad * -2;
+      var rad3 = tenRad * 2;
+      var rad4 = tenRad * 2;
+      var BROW_WID = 1.5 - Math.abs(tenRad * 3);
+      var BROW_LEN = 2.5;
+      var pt1_y = tenRad * 5;
+    } else if (squareRotation < 3.5 * tenRad) {
+      var rad1 = 0;
+      var rad2 = tenRad * -2;
+      var rad3 = tenRad * 2;
+      var rad4 = tenRad * 2;
+      var BROW_WID = 1.5 - Math.abs(tenRad * 3);
+      var BROW_LEN = 3 - Math.abs(squareRotation);
+      var pt1_x = squareRotation / 2;
+      var pt1_y = squareRotation * 9 - 4 * tenRad;
+    } else if (squareRotation < 4.5 * tenRad) {
+      var tmp_num = squareRotation / tenRad - 3.5;
+      var rad1 = 0;
+      var rad2 = tenRad * -2;
+      var rad3 = tenRad * 2;
+      var rad4 = tenRad * 2;
+      var BROW_LEN = 2.5;
+      var BROW_WID = 1.5 - Math.abs(tenRad * 3);
+      var pt1_y = 8 * tenRad - tmp_num * tenRad * 2;
+    } else {
+      var rad1 = 0;
+      var rad2 = tenRad * -2;
+      var rad3 = tenRad * 2;
+      var rad4 = tenRad * 2;
+      var BROW_WID = 1.5 - Math.abs(tenRad * 3);
+      var BROW_LEN = 2.5;
+      var pt1_y = tenRad * 5;
+    }
+  } else if (mode == 10) {  // wink
+    var rad1 = 0;
+    var rad2 = 0;
+    var rad3 = 0;
+    var rad4 = 0;
+    if (squareRotation < tenRad) {
+      var pt1_y = squareRotation * 1.5;
+    } else if (squareRotation < 2.5 * tenRad) {
+      var pt1_y = 2 * tenRad - (squareRotation - tenRad) * 8;
+    } else {
+      var pt1_y = -6 * tenRad;
     }
   } else if (mode == 12) {  // konran
     var rad1 = 0;
@@ -319,6 +382,133 @@ function initBuffersSweat(gl) {
     0.0,  0.0,  1.0,  1.0,
     0.0,  0.0,  1.0,  1.0,
     0.0,  0.0,  1.0,  1.0,
+  ];
+
+  const colorBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
+
+  return {
+    position: positionBuffer,
+    color: colorBuffer,
+  };
+}
+
+function initBuffersStar(gl) {
+
+  // Create a buffer for the square's positions.
+
+  const positionBuffer = gl.createBuffer();
+
+  // Select the positionBuffer as the one to apply buffer
+  // operations to from here out.
+
+  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+
+  // Now create an array of positions for the square.
+  const CENTER_SCALE = 0.7;
+  const STAR_SCALE = 1.2;
+  if (!wait_flag && 2 * tenRad < squareRotation) {
+    if (squareRotation < 3 * tenRad) {
+      var center_x = 1.8 + squareRotation * 2;
+      var center_y = 1 - (squareRotation - 2 * tenRad) * 8;
+      var center_vec = squareRotation * 2;
+    } else {
+      var center_x = 1.8 + squareRotation * 4;
+      var center_y = squareRotation * 1.2;
+      var center_vec = squareRotation * 3;
+    }
+  } else {
+    var center_y = 5;  // out of screen
+  }
+  // center
+  var pt1_x = center_x + CENTER_SCALE * Math.cos(Math.PI * -0.5 + center_vec);
+  var pt1_y = center_y + CENTER_SCALE * Math.sin(Math.PI * -0.5 + center_vec);
+  var pt2_x = center_x + CENTER_SCALE * Math.cos(-1 * Math.PI / 10 + center_vec);
+  var pt2_y = center_y + CENTER_SCALE * Math.sin(-1 * Math.PI / 10 + center_vec);
+  var pt3_x = center_x + CENTER_SCALE * Math.cos(Math.PI * 3 / 10 + center_vec);
+  var pt3_y = center_y + CENTER_SCALE * Math.sin(Math.PI * 3 / 10 + center_vec);
+  var pt4_x = center_x + CENTER_SCALE * Math.cos(Math.PI * 7 / 10 + center_vec);
+  var pt4_y = center_y + CENTER_SCALE * Math.sin(Math.PI * 7 / 10 + center_vec);
+  var pt5_x = center_x + CENTER_SCALE * Math.cos(-9 * Math.PI / 10 + center_vec);
+  var pt5_y = center_y + CENTER_SCALE * Math.sin(-9 * Math.PI / 10 + center_vec);
+  // vertex
+  var pt6_x = center_x + STAR_SCALE * Math.cos(-3 * Math.PI / 10  + center_vec);
+  var pt6_y = center_y + STAR_SCALE * Math.sin(-3 * Math.PI / 10 + center_vec);
+  var pt7_x = center_x + STAR_SCALE * Math.cos(Math.PI / 10 + center_vec);
+  var pt7_y = center_y + STAR_SCALE * Math.sin(Math.PI / 10 + center_vec);
+  var pt8_x = center_x + STAR_SCALE * Math.cos(Math.PI / 2 + center_vec);
+  var pt8_y = center_y + STAR_SCALE * Math.sin(Math.PI / 2 + center_vec);
+  var pt9_x = center_x + STAR_SCALE * Math.cos(Math.PI * 9 / 10 + center_vec);
+  var pt9_y = center_y + STAR_SCALE * Math.sin(Math.PI * 9 / 10 + center_vec);
+  var pt10_x = center_x + STAR_SCALE * Math.cos(-7 * Math.PI / 10 + center_vec);
+  var pt10_y = center_y + STAR_SCALE * Math.sin(-7 * Math.PI / 10 + center_vec);
+  const positions = [
+      pt5_x,  pt5_y,
+      pt2_x,  pt2_y,
+      pt1_x,  pt1_y,
+      pt5_x,  pt5_y,
+      pt4_x,  pt4_y,
+      pt3_x,  pt3_y,
+      pt2_x,  pt2_y,
+      pt5_x,  pt5_y,
+      // vertex
+      pt6_x,  pt6_y,
+      pt1_x,  pt1_y,
+      pt5_x,  pt5_y,
+      pt10_x, pt10_y,
+      pt4_x,  pt4_y,
+      pt5_x,  pt5_y,
+      pt3_x,  pt3_y,
+      pt9_x,  pt9_y,
+      pt4_x,  pt4_y,
+      pt3_x,  pt3_y,
+      pt8_x,  pt8_y,
+      pt2_x,  pt2_y,
+      pt3_x,  pt3_y,
+      pt1_x,  pt1_y,
+      pt7_x,  pt7_y,
+      pt2_x,  pt2_y,
+      pt1_x,  pt1_y,
+  ];
+
+  // Now pass the list of positions into WebGL to build the
+  // shape. We do this by creating a Float32Array from the
+  // JavaScript array, then use it to fill the current buffer.
+
+  gl.bufferData(gl.ARRAY_BUFFER,
+                new Float32Array(positions),
+                gl.STATIC_DRAW);
+
+  // add color
+  var C = 0.9;
+  var colors = [  // yellow
+    C,  C,  0.0,  1.0,
+    C,  C,  0.0,  1.0,
+    C,  C,  0.0,  1.0,
+    C,  C,  0.0,  1.0,
+    C,  C,  0.0,  1.0,
+    C,  C,  0.0,  1.0,
+    C,  C,  0.0,  1.0,
+    C,  C,  0.0,  1.0,
+    // vertex
+    C,  C,  0.0,  1.0,
+    C,  C,  0.0,  1.0,
+    C,  C,  0.0,  1.0,
+    C,  C,  0.0,  1.0,
+    C,  C,  0.0,  1.0,
+    C,  C,  0.0,  1.0,
+    C,  C,  0.0,  1.0,
+    C,  C,  0.0,  1.0,
+    C,  C,  0.0,  1.0,
+    C,  C,  0.0,  1.0,
+    C,  C,  0.0,  1.0,
+    C,  C,  0.0,  1.0,
+    C,  C,  0.0,  1.0,
+    C,  C,  0.0,  1.0,
+    C,  C,  0.0,  1.0,
+    C,  C,  0.0,  1.0,
+    C,  C,  0.0,  1.0,
   ];
 
   const colorBuffer = gl.createBuffer();
