@@ -110,9 +110,12 @@ function main() {
         const buffers = initBuffers(gl);
         const buffersSweat = initBuffersSweat(gl);
         const buffersStar = initBuffersStar(gl);
+        const buffersColor = initBuffersColor(gl);
         then = now;
         if (mode < 7) {
 	  drawScene(gl, programInfo, buffers, deltaTime, 12);
+	} else if (mode == 7) {
+          drawSceneColor(gl, programInfoColor, buffersColor, 12);
 	} else if (mode == 10) {
 	  drawSceneSome(gl, programInfo, programInfoColor, buffers, buffersStar, 12, 25);
         } else if (mode == 12) {
@@ -162,17 +165,11 @@ function initBuffers(gl) {
     var pt1_x = 0.0;
     var pt1_y = squareRotation;
   } else if (mode == 2) {  // anshin
-    if (-1 * Math.abs(squareRotation) > -0.5 * tenRad) {
-      var rad1 = -1 * squareRotation;
-      var rad2 = -1 * squareRotation;
-      var rad3 = -1 * squareRotation;
-      var rad4 = -1 * squareRotation;
-    }
-    else {
-      var rad1 = -0.5 * tenRad;
-      var rad2 = -0.5 * tenRad;
-      var rad3 = -0.5 * tenRad;
-      var rad4 = -0.5 * tenRad;
+    var rad1 = 0;
+    var rad2 = 0;
+    var rad3 = 0;
+    var rad4 = 0;
+    if (Math.abs(squareRotation) > 0.5 * tenRad) {
       var pt1_y = -1 * squareRotation + 0.5 * tenRad;
     }
   } else if (mode == 3) {  // warudakumi
@@ -253,6 +250,21 @@ function initBuffers(gl) {
       var BROW_LEN = 2.5;
       var pt1_y = tenRad * 5;
     }
+  } else if (mode == 5) {
+    if (squareRotation < 2 * tenRad) {
+      var rad1 = squareRotation * -1;
+      var rad2 = squareRotation * -1;
+      var rad3 = squareRotation * -1;
+      var rad4 = squareRotation * -1;
+    }
+  } else if (mode == 6) {  // ikari
+    var rad1 = squareRotation;
+    var rad2 = squareRotation * 0.5;
+    var rad3 = squareRotation;
+    var rad4 = squareRotation;
+    // var BROW_WID = 1.5 - Math.abs(squareRotation * 0.5);
+    var BROW_LEN = 3 + squareRotation * 0.5;
+    var pt1_y = squareRotation * -1;
   } else if (mode == 10) {  // wink
     var rad1 = 0;
     var rad2 = 0;
@@ -309,6 +321,113 @@ function initBuffers(gl) {
 
   return {
     position: positionBuffer,
+  };
+}
+
+function initBuffersColor(gl) {
+
+  // Create a buffer for the square's positions.
+
+  const positionBuffer = gl.createBuffer();
+
+  // Select the positionBuffer as the one to apply buffer
+  // operations to from here out.
+
+  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+
+  // Now create an array of positions for the square.
+  var rad1 = squareRotation;
+  var rad2 = squareRotation;
+  var rad3 = squareRotation;
+  var rad4 = squareRotation;
+  var BROW_LEN = 3;
+  var BROW_WID = 1.5;
+  var LEFT_LEN = 1;
+  var RIGHT_LEN = 1;
+  var pt1_x = 0.0;
+  var pt1_y = 0.0;
+  if (mode == 7) {  // tere
+    // var rad1 = squareRotation * -0.5;
+    // var rad2 = squareRotation * -1.0;
+    // var rad3 = squareRotation * 0;
+    // var rad4 = squareRotation * 0;
+    var rad1 = 0;
+    var rad2 = 0;
+    var rad3 = 0;
+    var rad4 = 0;
+    if (Math.abs(squareRotation) > 0.5 * tenRad) {
+      var pt1_y = -1 * squareRotation + 0.5 * tenRad;
+    }
+  }
+  var pt2_x = pt1_x + BROW_LEN * Math.cos(rad1);
+  var pt2_y = pt1_y + BROW_LEN * Math.sin(rad1);
+  var pt3_x = pt2_x + RIGHT_LEN * Math.cos(rad2);
+  var pt3_y = pt2_y + RIGHT_LEN * Math.sin(rad2);
+  var pt5_x = pt1_x - BROW_WID * Math.sin(rad1);
+  var pt5_y = pt1_y + BROW_WID * Math.cos(rad1);
+  var pt4_x = pt5_x + BROW_LEN * Math.cos(rad1);
+  var pt4_y = pt5_y + BROW_LEN * Math.sin(rad1);
+  var pt6_x = pt5_x - LEFT_LEN * Math.cos(rad3);
+  var pt6_y = pt5_y - LEFT_LEN * Math.sin(rad3);
+  var pt7_x = pt1_x - LEFT_LEN * Math.cos(rad4);
+  var pt7_y = pt1_y - LEFT_LEN * Math.sin(rad4);
+  const positions = [
+      pt2_x, pt2_y,
+      pt3_x, pt3_y,
+      pt4_x, pt4_y,
+      pt2_x, pt2_y,
+      pt1_x, pt1_y,
+      pt5_x, pt5_y,
+      pt4_x, pt4_y,
+      pt1_x, pt1_y,
+      pt5_x, pt5_y,
+      pt6_x, pt6_y,
+      pt7_x, pt7_y,
+      pt1_x, pt1_y,
+  ];
+
+  // Now pass the list of positions into WebGL to build the
+  // shape. We do this by creating a Float32Array from the
+  // JavaScript array, then use it to fill the current buffer.
+
+  gl.bufferData(gl.ARRAY_BUFFER,
+                new Float32Array(positions),
+                gl.STATIC_DRAW);
+
+  // add color
+  var r = 0.0;
+  var g = 0.0;
+  var b = 0.0;
+  if (mode == 7) {  // tere
+    if (squareRotation > tenRad) {
+      var color_deg = squareRotation - tenRad * 0.5;
+      var r = Math.min(1.0, color_deg * 1.5);
+      var g = Math.min(1.0, color_deg * 0.8);
+      var b = Math.min(1.0, color_deg * 0.8);
+    }
+  }
+  var colors = [
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+  ];
+
+  const colorBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
+
+  return {
+    position: positionBuffer,
+    color: colorBuffer,
   };
 }
 
@@ -758,6 +877,114 @@ function drawSceneSome(gl, programInfo, programInfoAttach, buffers, buffersAttac
     const offset = 0;
     // const vertexCount = vertexCountAttach;
     gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCountAttach);
+  }
+}
+
+function drawSceneColor(gl, programInfoAttach, buffersAttach, vertexCount) {
+  // black:0, white:1
+  gl.clearColor(0.9, 0.9, 0.9, 1.0);  // Clear to black, fully opaque
+  gl.clearDepth(1.0);                 // Clear everything
+  gl.enable(gl.DEPTH_TEST);           // Enable depth testing
+  gl.depthFunc(gl.LEQUAL);            // Near things obscure far things
+
+  // Clear the canvas before we start drawing on it.
+
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+  // Create a perspective matrix, a special matrix that is
+  // used to simulate the distortion of perspective in a camera.
+  // Our field of view is 45 degrees, with a width/height
+  // ratio that matches the display size of the canvas
+  // and we only want to see objects between 0.1 units
+  // and 100 units away from the camera.
+  const mat4 = glMatrix.mat4
+
+  const fieldOfView = 45 * Math.PI / 180;   // in radians
+  const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+  const zNear = 0.1;
+  const zFar = 100.0;
+  const projectionMatrix = mat4.create();
+
+  // note: glmatrix.js always has the first argument
+  // as the destination to receive the result.
+  mat4.perspective(projectionMatrix,
+                   fieldOfView,
+                   aspect,
+                   zNear,
+                   zFar);
+
+  // Set the drawing position to the "identity" point, which is
+  // the center of the scene.
+  const modelViewMatrix = mat4.create();
+
+  // Now move the drawing position a bit to where we want to
+  // start drawing the square.
+
+  mat4.translate(modelViewMatrix,     // destination matrix
+                 modelViewMatrix,     // matrix to translate
+                 [-1.5, -0.5, -6.0]);  // amount to translate
+  // mat4.rotate(modelViewMatrix,        // destination matrix
+  //  	      modelViewMatrix,        // matrix to rotate
+  //  	      squareRotation,         // amount to rotate in radians
+  // 	      [0, 0, -1]);             // axis to rotate around
+
+  // Tell WebGL how to pull out the positions from the position
+  // buffer into the vertexPosition attribute.
+  {
+    const numComponents = 2;
+    const type = gl.FLOAT;
+    const normalize = false;
+    const stride = 0;
+    const offset = 0;
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffersAttach.position);
+    gl.vertexAttribPointer(
+        programInfoAttach.attribLocations.vertexPosition,
+        numComponents,
+        type,
+        normalize,
+        stride,
+        offset);
+    gl.enableVertexAttribArray(
+        programInfoAttach.attribLocations.vertexPosition);
+  }
+
+  // Tell WebGL how to pull out the colors from the color buffer
+  // into the vertexColor attribute.
+  {
+    const numComponents = 4;
+    const type = gl.FLOAT;
+    const normalize = false;
+    const stride = 0;
+    const offset = 0;
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffersAttach.color);
+    gl.vertexAttribPointer(
+        programInfoAttach.attribLocations.vertexColor,
+        numComponents,
+        type,
+        normalize,
+        stride,
+        offset);
+    gl.enableVertexAttribArray(
+        programInfoAttach.attribLocations.vertexColor);
+  }
+
+  // Tell WebGL to use our program when drawing
+
+  gl.useProgram(programInfoAttach.program);
+
+  // Set the shader uniforms
+
+  gl.uniformMatrix4fv(
+      programInfoAttach.uniformLocations.projectionMatrix,
+      false,
+      projectionMatrix);
+  gl.uniformMatrix4fv(
+      programInfoAttach.uniformLocations.modelViewMatrix,
+      false,
+      modelViewMatrix);
+  {
+    const offset = 0;
+    gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount);
   }
 }
 
