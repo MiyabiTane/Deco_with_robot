@@ -109,11 +109,14 @@ function main() {
 	const deltaTime = now - then;
         const buffers = initBuffers(gl);
         const buffersColor = initBuffersColor(gl);
+        const buffersHeart = initBuffersHeart(gl);
         then = now;
-        if (mode < 7 || mode > 8) {
+        if (mode < 7 || mode > 9) {
 	  drawScene(gl, programInfo, buffers, deltaTime, 12);
-        } else if (mode == 7) {
+        } else if (mode == 7 || mode == 8) {
 	  drawSceneColor(gl, programInfoColor, buffersColor, 12);
+	} else if (mode == 9) {
+	  drawSceneSome(gl, programInfo, programInfoColor, buffers, buffersHeart, 12, 17);
 	}
         update(deltaTime);
 	requestAnimationFrame(render);
@@ -352,6 +355,31 @@ function initBuffersColor(gl) {
     if (Math.abs(squareRotation) > 0.5 * tenRad) {
       var pt1_y = -1 * squareRotation + 0.5 * tenRad;
     }
+  } else if (mode == 8) {  // kyoufu
+    if (squareRotation < tenRad * 2) {
+      var rad1 = squareRotation * -0.5;
+      var rad2 = squareRotation * -0.5;
+      var rad3 = squareRotation * -1.0;
+      var rad4 = squareRotation * -1.0;
+      var pt1_x = squareRotation * -1.5;
+      var BROW_LEN = 3 - Math.abs(squareRotation * 0.5);
+    } else {
+      var rad1 = tenRad * -1;
+      var rad2 = tenRad * -1;
+      var rad3 = tenRad * -2;
+      var rad4 = tenRad * -2;
+      var pt1_x = tenRad * -3;
+      var BROW_LEN = 3 - tenRad;
+      if (squareRotation < 4 * tenRad) {
+        var pt1_y = Math.abs(squareRotation - tenRad) * -0.5;
+      } else if (squareRotation < 5 * tenRad) {
+	var diff_rot = Math.abs(squareRotation - 4 * tenRad);
+        var pt1_y = -2 * tenRad + diff_rot;
+      } else {
+	var diff_rot = Math.abs(squareRotation - 5 * tenRad);
+	var pt1_y = -1 * tenRad - diff_rot;
+      }
+    }
   }
   var pt2_x = pt1_x - BROW_LEN * Math.cos(rad1);
   var pt2_y = pt1_y + BROW_LEN * Math.sin(rad1);
@@ -399,6 +427,10 @@ function initBuffersColor(gl) {
       var g = Math.min(1.0, color_deg * 0.8);
       var b = Math.min(1.0, color_deg * 0.8);
     }
+  } else if (mode == 8) {  // kyoufu
+    var r = 0;
+    var g = Math.min(0.2, squareRotation * 0.2);
+    var b = Math.min(0.5, squareRotation * 0.7);
   }
   var colors = [
     r,  g,  b,  1.0,
@@ -413,6 +445,102 @@ function initBuffersColor(gl) {
     r,  g,  b,  1.0,
     r,  g,  b,  1.0,
     r,  g,  b,  1.0,
+  ];
+
+  const colorBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
+
+  return {
+    position: positionBuffer,
+    color: colorBuffer,
+  };
+}
+
+
+function initBuffersHeart(gl) {
+
+  // Create a buffer for the square's positions.
+
+  const positionBuffer = gl.createBuffer();
+
+  // Select the positionBuffer as the one to apply buffer
+  // operations to from here out.
+
+  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+
+  // Now create an array of positions for the square.
+  var HEART_WID = 2.2;
+  var HEART_HEI = 2.2;
+  // center
+  var pt1_x = 1.0;
+  var pt1_y = -1.0;
+  var pt2_x = pt1_x + HEART_WID / 2;
+  var pt2_y = pt1_y + HEART_HEI / 2;
+  var pt3_x = pt1_x + HEART_WID / 2;
+  var pt3_y = pt1_y + HEART_HEI * 3 / 4;
+  var pt4_x = pt1_x + HEART_WID * 2 / 5;
+  var pt4_y = pt1_y + HEART_HEI * 9 / 10;
+  var pt5_x = pt1_x + HEART_WID / 5;
+  var pt5_y = pt1_y + HEART_HEI
+  var pt6_x = pt1_x;
+  var pt6_y = pt1_y + HEART_HEI * 5 / 6;
+  var pt7_x = pt1_x - HEART_WID / 5;
+  var pt7_y = pt1_y + HEART_HEI;
+  var pt8_x = pt1_x - HEART_WID * 2 / 5;
+  var pt8_y = pt1_y + HEART_HEI * 9 / 10;
+  var pt9_x = pt1_x - HEART_WID / 2;
+  var pt9_y = pt1_y + HEART_HEI * 3 / 4;
+  var pt10_x = pt1_x - HEART_WID / 2;
+  var pt10_y = pt1_y + HEART_HEI / 2;
+  const positions = [
+      pt10_x, pt10_y,
+      pt2_x,  pt2_y,
+      pt1_x,  pt1_y,
+      pt10_x, pt10_y,
+      pt9_x,  pt9_y,
+      pt3_x,  pt3_y,
+      pt2_x,  pt2_y,
+      pt10_x, pt10_y,
+      pt6_x,  pt6_y,
+      pt7_x,  pt7_y,
+      pt8_x,  pt8_y,
+      pt9_x,  pt9_y,
+      pt6_x,  pt6_y,
+      pt3_x,  pt3_y,
+      pt4_x,  pt4_y,
+      pt5_x,  pt5_y,
+      pt6_x,  pt6_y,
+  ];
+
+  // Now pass the list of positions into WebGL to build the
+  // shape. We do this by creating a Float32Array from the
+  // JavaScript array, then use it to fill the current buffer.
+
+  gl.bufferData(gl.ARRAY_BUFFER,
+                new Float32Array(positions),
+                gl.STATIC_DRAW);
+
+  // add color
+  var C = 0.9;
+  var colors = [  // red
+    C,  0.0,  0.0,  1.0,
+    C,  0.0,  0.0,  1.0,
+    C,  0.0,  0.0,  1.0,
+    C,  0.0,  0.0,  1.0,
+    C,  0.0,  0.0,  1.0,
+    C,  0.0,  0.0,  1.0,
+    C,  0.0,  0.0,  1.0,
+    C,  0.0,  0.0,  1.0,
+    C,  0.0,  0.0,  1.0,
+    C,  0.0,  0.0,  1.0,
+    C,  0.0,  0.0,  1.0,
+    C,  0.0,  0.0,  1.0,
+    C,  0.0,  0.0,  1.0,
+    C,  0.0,  0.0,  1.0,
+    C,  0.0,  0.0,  1.0,
+    C,  0.0,  0.0,  1.0,
+    C,  0.0,  0.0,  1.0,
   ];
 
   const colorBuffer = gl.createBuffer();
@@ -559,7 +687,7 @@ function drawSceneSome(gl, programInfo, programInfoAttach, buffers, buffersAttac
 
   mat4.translate(modelViewMatrix,     // destination matrix
                  modelViewMatrix,     // matrix to translate
-                 [-1.5, -0.5, -6.0]);  // amount to translate
+                 [1.5, -0.5, -6.0]);  // amount to translate
   // mat4.rotate(modelViewMatrix,        // destination matrix
   //  	      modelViewMatrix,        // matrix to rotate
   //  	      squareRotation,         // amount to rotate in radians
