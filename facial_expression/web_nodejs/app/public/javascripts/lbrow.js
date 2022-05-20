@@ -113,7 +113,7 @@ function main() {
         const buffersHeart = initBuffersHeart(gl);
         const buffersColor = initBuffersColor(gl);
         then = now;
-        if (mode < 7) {
+        if (mode < 7 || mode == 11) {
 	  drawScene(gl, programInfo, buffers, deltaTime, 12);
 	} else if (mode == 7 || mode == 8) {
           drawSceneColor(gl, programInfoColor, buffersColor, 12);
@@ -121,7 +121,7 @@ function main() {
 	  drawSceneSome(gl, programInfo, programInfoColor, buffers, buffersHeart, 12, 17);
         } else if (mode == 10) {
 	  drawSceneSome(gl, programInfo, programInfoColor, buffers, buffersStar, 12, 25);
-        } else if (mode == 12) {
+	} else if (mode == 12) {
           drawSceneSome(gl, programInfo, programInfoColor, buffers, buffersSweat, 12, 12);
         }
         update(deltaTime);
@@ -167,13 +167,16 @@ function initBuffers(gl) {
     var BROW_WID = 1.5 - Math.abs(squareRotation / 2);
     var pt1_x = 0.0;
     var pt1_y = squareRotation;
-  } else if (mode == 2) {  // anshin
+  } else if (mode == 2 || mode == 11) {  // anshin || taikutsu
     var rad1 = 0;
     var rad2 = 0;
     var rad3 = 0;
     var rad4 = 0;
     if (Math.abs(squareRotation) > 0.5 * tenRad) {
       var pt1_y = -1 * squareRotation + 0.5 * tenRad;
+    }
+    if (squareRotation > 3 * tenRad) {
+      var pt1_y = -2.5 * tenRad;
     }
   } else if (mode == 3) {  // warudakumi
     var tmp_num = squareRotation / tenRad;
@@ -253,12 +256,17 @@ function initBuffers(gl) {
       var BROW_LEN = 2.5;
       var pt1_y = tenRad * 5;
     }
-  } else if (mode == 5) {
+  } else if (mode == 5) {  // kanashimi
     if (squareRotation < 2 * tenRad) {
       var rad1 = squareRotation * -1;
       var rad2 = squareRotation * -1;
       var rad3 = squareRotation * -1;
       var rad4 = squareRotation * -1;
+    } else {
+      var rad1 = -2 * tenRad;
+      var rad2 = -2 * tenRad;
+      var rad3 = -2 * tenRad;
+      var rad4 = -2 * tenRad;
     }
   } else if (mode == 6) {  // ikari
     var rad1 = squareRotation;
@@ -268,6 +276,20 @@ function initBuffers(gl) {
     // var BROW_WID = 1.5 - Math.abs(squareRotation * 0.5);
     var BROW_LEN = 3 + squareRotation * 0.5;
     var pt1_y = squareRotation * -1;
+  } else if (mode == 9) {  // suki
+    if (squareRotation < tenRad * 2) {
+      var rad1 = squareRotation * -0.25;
+      var rad2 = squareRotation * -0.25;
+      var rad3 = squareRotation * -0.25;
+      var rad4 = squareRotation * -0.25;
+      var pt1_y = squareRotation * -1.5;
+    } else {
+      var rad1 = tenRad * -0.5;
+      var rad2 = tenRad * -0.5;
+      var rad3 = tenRad * -0.5;
+      var rad4 = tenRad * -0.5;
+      var pt1_y = tenRad * -3;
+    }
   } else if (mode == 10) {  // wink
     var rad1 = 0;
     var rad2 = 0;
@@ -632,34 +654,36 @@ function initBuffersStar(gl) {
                 gl.STATIC_DRAW);
 
   // add color
-  var C = 0.9;
+  var r = 1.0;
+  var g = 0.9;
+  var b = 0.0;
   var colors = [  // yellow
-    C,  C,  0.0,  1.0,
-    C,  C,  0.0,  1.0,
-    C,  C,  0.0,  1.0,
-    C,  C,  0.0,  1.0,
-    C,  C,  0.0,  1.0,
-    C,  C,  0.0,  1.0,
-    C,  C,  0.0,  1.0,
-    C,  C,  0.0,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
     // vertex
-    C,  C,  0.0,  1.0,
-    C,  C,  0.0,  1.0,
-    C,  C,  0.0,  1.0,
-    C,  C,  0.0,  1.0,
-    C,  C,  0.0,  1.0,
-    C,  C,  0.0,  1.0,
-    C,  C,  0.0,  1.0,
-    C,  C,  0.0,  1.0,
-    C,  C,  0.0,  1.0,
-    C,  C,  0.0,  1.0,
-    C,  C,  0.0,  1.0,
-    C,  C,  0.0,  1.0,
-    C,  C,  0.0,  1.0,
-    C,  C,  0.0,  1.0,
-    C,  C,  0.0,  1.0,
-    C,  C,  0.0,  1.0,
-    C,  C,  0.0,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
   ];
 
   const colorBuffer = gl.createBuffer();
@@ -684,11 +708,30 @@ function initBuffersHeart(gl) {
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
   // Now create an array of positions for the square.
-  var HEART_WID = 1.8;
-  var HEART_HEI = 1.8;
+  var HEART_WID = 2.0;
+  var HEART_HEI = 2.0;
   // center
   var pt1_x = 1.0;
-  var pt1_y = -1.0;
+  var pt1_y = 5.0;
+  if (!wait_flag && squareRotation > 2 * tenRad) {
+    var diff_rad = squareRotation - 2 * tenRad;
+    var HEART_WID = 1.2 + diff_rad * 0.9;
+    var HEART_HEI = 1.2 + diff_rad * 0.9;
+    var pt1_y = squareRotation * 1.6 - 0.3;
+    if (squareRotation < 5 * tenRad) {
+      var diff_rad = squareRotation - 2 * tenRad;
+      var pt1_x = diff_rad * 2 + 1.5;
+    } else if (squareRotation < 8 * tenRad) {
+      var diff_rad = squareRotation - 5 * tenRad;
+      var pt1_x = 6 * tenRad - diff_rad * 2.5 + 1.5;
+    } else if (squareRotation < 11 * tenRad) {
+      var diff_rad = squareRotation - 8 * tenRad;
+      var pt1_x = -1.5 * tenRad + diff_rad * 3 + 1.5;
+    } else {
+      var diff_rad = squareRotation - 11 * tenRad;
+      var pt1_x = 7.5 * tenRad - diff_rad * 2.5 + 1.5;
+    }
+  }
   var pt2_x = pt1_x + HEART_WID / 2;
   var pt2_y = pt1_y + HEART_HEI / 2;
   var pt3_x = pt1_x + HEART_WID / 2;
