@@ -391,6 +391,17 @@ function initBuffersColor(gl) {
       var rad4 = squareRotation * -1.0;
       var pt1_x = squareRotation * 1.5;
       var BROW_LEN = 3 - Math.abs(squareRotation * 0.5);
+    } else if (wait_flag) {
+      var rad1 = tenRad * -1;
+      var rad2 = tenRad * -1;
+      var rad3 = tenRad * -2;
+      var rad4 = tenRad * -2;
+      var pt1_x = tenRad * 3;
+      var BROW_LEN = 3 - tenRad;
+      var pt1_y = Math.abs(squareRotation - tenRad) * -0.5;
+      if (squareRotation > 4 * tenRad) {
+	  var pt1_y = tenRad * -3;
+      }
     } else {
       var rad1 = tenRad * -1;
       var rad2 = tenRad * -1;
