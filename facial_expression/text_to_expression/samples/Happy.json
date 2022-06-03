@@ -1,0 +1,75 @@
+{
+  "id": "d076a1de-c638-4435-8f25-80aa26a6f28a",
+  "name": "Happy",
+  "auto": true,
+  "condition": "",
+  "conditionalFollowupEvents": [],
+  "conditionalResponses": [],
+  "context": [],
+  "contexts": [],
+  "endInteraction": false,
+  "events": [],
+  "fallbackIntent": false,
+  "liveAgentHandoff": false,
+  "parentId": null,
+  "followUpIntents": [],
+  "priority": 500000,
+  "responses": [
+    {
+      "action": "",
+      "affectedContexts": [],
+      "parameters": [],
+      "defaultResponsePlatforms": {},
+      "messages": [
+        {
+          "type": "message",
+          "condition": "",
+          "speech": []
+        }
+      ],
+      "resetContexts": false
+    }
+  ],
+  "rootParentId": null,
+  "templates": [],
+  "userSays": [
+    {
+      "isTemplate": false,
+      "data": [
+        {
+          "text": "嬉しいです",
+          "userDefined": false
+        }
+      ],
+      "count": 0,
+      "id": "8a92bb2b-6065-4133-8886-42e6f3a8144f",
+      "updated": null
+    },
+    {
+      "isTemplate": false,
+      "data": [
+        {
+          "text": "楽しみです",
+          "userDefined": false
+        }
+      ],
+      "count": 0,
+      "id": "2ce0b0ae-e113-4ca9-952c-5b54d37225cf",
+      "updated": null
+    },
+    {
+      "isTemplate": false,
+      "data": [
+        {
+          "text": "素敵なものができましたね",
+          "userDefined": false
+        }
+      ],
+      "count": 0,
+      "id": "93fb7953-86aa-4fa9-b469-d7a335e0db37",
+      "updated": null
+    }
+  ],
+  "webhookForSlotFilling": false,
+  "webhookUsed": false
+}

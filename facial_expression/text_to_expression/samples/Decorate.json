@@ -1,0 +1,393 @@
+{
+  "id": "6d3f1ed4-8056-41c4-8f6f-d642283a6b38",
+  "name": "Decorate",
+  "auto": true,
+  "condition": "",
+  "conditionalFollowupEvents": [],
+  "conditionalResponses": [],
+  "context": [],
+  "contexts": [],
+  "endInteraction": false,
+  "events": [],
+  "fallbackIntent": false,
+  "liveAgentHandoff": false,
+  "parentId": null,
+  "followUpIntents": [],
+  "priority": 500000,
+  "responses": [
+    {
+      "action": "",
+      "affectedContexts": [],
+      "parameters": [
+        {
+          "noInputPromptMessages": [],
+          "noMatchPromptMessages": [],
+          "promptMessages": [],
+          "defaultValue": "",
+          "name": "direction",
+          "dataType": "@direction",
+          "isList": false,
+          "required": false,
+          "prompts": [],
+          "value": "$direction",
+          "outputDialogContexts": []
+        },
+        {
+          "noInputPromptMessages": [],
+          "noMatchPromptMessages": [],
+          "promptMessages": [],
+          "defaultValue": "",
+          "name": "decoration",
+          "dataType": "@decoration",
+          "isList": false,
+          "required": false,
+          "prompts": [],
+          "value": "$decoration",
+          "outputDialogContexts": []
+        },
+        {
+          "noInputPromptMessages": [],
+          "noMatchPromptMessages": [],
+          "promptMessages": [],
+          "defaultValue": "",
+          "name": "degree",
+          "dataType": "@degree",
+          "isList": false,
+          "required": false,
+          "prompts": [],
+          "value": "$degree",
+          "outputDialogContexts": []
+        },
+        {
+          "noInputPromptMessages": [],
+          "noMatchPromptMessages": [],
+          "promptMessages": [],
+          "defaultValue": "",
+          "name": "amb_direction",
+          "dataType": "@amb_direction",
+          "isList": false,
+          "required": false,
+          "prompts": [],
+          "value": "$amb_direction",
+          "outputDialogContexts": []
+        },
+        {
+          "noInputPromptMessages": [],
+          "noMatchPromptMessages": [],
+          "promptMessages": [],
+          "defaultValue": "",
+          "name": "mood",
+          "dataType": "@mood",
+          "isList": false,
+          "required": false,
+          "prompts": [],
+          "value": "$mood",
+          "outputDialogContexts": []
+        }
+      ],
+      "defaultResponsePlatforms": {},
+      "messages": [
+        {
+          "type": "message",
+          "condition": "",
+          "speech": []
+        }
+      ],
+      "resetContexts": false
+    }
+  ],
+  "rootParentId": null,
+  "templates": [],
+  "userSays": [
+    {
+      "isTemplate": false,
+      "data": [
+        {
+          "text": "旗",
+          "userDefined": false,
+          "alias": "decoration",
+          "meta": "@decoration"
+        },
+        {
+          "text": "は",
+          "userDefined": false
+        },
+        {
+          "text": "ちょっと",
+          "userDefined": true,
+          "alias": "degree",
+          "meta": "@degree"
+        },
+        {
+          "text": "上",
+          "userDefined": false,
+          "alias": "direction",
+          "meta": "@direction"
+        },
+        {
+          "text": "に置こう",
+          "userDefined": false
+        }
+      ],
+      "count": 0,
+      "id": "eab3ec66-556f-40d5-89df-e99502405777",
+      "updated": null
+    },
+    {
+      "isTemplate": false,
+      "data": [
+        {
+          "text": "ピンクの",
+          "userDefined": false
+        },
+        {
+          "text": "風船",
+          "userDefined": true,
+          "alias": "decoration",
+          "meta": "@decoration"
+        },
+        {
+          "text": "は",
+          "userDefined": false
+        },
+        {
+          "text": "あそこ",
+          "userDefined": true,
+          "alias": "amb_direction",
+          "meta": "@amb_direction"
+        },
+        {
+          "text": "に飾ろう",
+          "userDefined": false
+        }
+      ],
+      "count": 0,
+      "id": "029e1326-1b75-41e2-9703-ddc94d6f3e06",
+      "updated": null
+    },
+    {
+      "isTemplate": false,
+      "data": [
+        {
+          "text": "お花",
+          "userDefined": true,
+          "alias": "decoration",
+          "meta": "@decoration"
+        },
+        {
+          "text": "は",
+          "userDefined": false
+        },
+        {
+          "text": "もう少し",
+          "userDefined": true,
+          "alias": "degree",
+          "meta": "@degree"
+        },
+        {
+          "text": "左",
+          "userDefined": true,
+          "alias": "direction",
+          "meta": "@direction"
+        },
+        {
+          "text": "のほうがいいと思う",
+          "userDefined": false
+        }
+      ],
+      "count": 0,
+      "id": "63fa7813-4d2f-4f64-a153-40535c8de0ce",
+      "updated": null
+    },
+    {
+      "isTemplate": false,
+      "data": [
+        {
+          "text": "その",
+          "userDefined": false
+        },
+        {
+          "text": "風船",
+          "userDefined": false,
+          "alias": "decoration",
+          "meta": "@decoration"
+        },
+        {
+          "text": "は",
+          "userDefined": false
+        },
+        {
+          "text": "こっち",
+          "userDefined": true,
+          "alias": "amb_direction",
+          "meta": "@amb_direction"
+        },
+        {
+          "text": "に置いたほうがいいんじゃない？",
+          "userDefined": false
+        }
+      ],
+      "count": 0,
+      "id": "fd91db31-4ac8-4051-a1f0-316bc88dd997",
+      "updated": null
+    },
+    {
+      "isTemplate": false,
+      "data": [
+        {
+          "text": "その",
+          "userDefined": false
+        },
+        {
+          "text": "飾り",
+          "userDefined": false,
+          "alias": "decoration",
+          "meta": "@decoration"
+        },
+        {
+          "text": "を",
+          "userDefined": false
+        },
+        {
+          "text": "ちょっと",
+          "userDefined": true,
+          "alias": "degree",
+          "meta": "@degree"
+        },
+        {
+          "text": "左",
+          "userDefined": false,
+          "alias": "direction",
+          "meta": "@direction"
+        },
+        {
+          "text": "に置いて",
+          "userDefined": false
+        }
+      ],
+      "count": 0,
+      "id": "3ec28361-05af-4bd4-91c0-b52e6403303d",
+      "updated": null
+    },
+    {
+      "isTemplate": false,
+      "data": [
+        {
+          "text": "その",
+          "userDefined": false
+        },
+        {
+          "text": "風船",
+          "userDefined": false,
+          "alias": "decoration",
+          "meta": "@decoration"
+        },
+        {
+          "text": "は",
+          "userDefined": false
+        },
+        {
+          "text": "もっと",
+          "userDefined": true,
+          "alias": "degree",
+          "meta": "@degree"
+        },
+        {
+          "text": "明るい",
+          "userDefined": true,
+          "alias": "mood",
+          "meta": "@mood"
+        },
+        {
+          "text": "色に変えたほうが良いと思うな",
+          "userDefined": false
+        }
+      ],
+      "count": 0,
+      "id": "ae5f8fb0-90c3-47ad-8e95-db732861af4b",
+      "updated": null
+    },
+    {
+      "isTemplate": false,
+      "data": [
+        {
+          "text": "もっと",
+          "userDefined": true,
+          "alias": "degree",
+          "meta": "@degree"
+        },
+        {
+          "text": "右",
+          "userDefined": true,
+          "alias": "direction",
+          "meta": "@direction"
+        },
+        {
+          "text": "に置いてほしいな",
+          "userDefined": false
+        }
+      ],
+      "count": 0,
+      "id": "5962fb6f-c5a7-4296-bf7d-f0768f7f7180",
+      "updated": null
+    },
+    {
+      "isTemplate": false,
+      "data": [
+        {
+          "text": "お花",
+          "userDefined": true,
+          "alias": "decoration",
+          "meta": "@decoration"
+        },
+        {
+          "text": "を",
+          "userDefined": false
+        },
+        {
+          "text": "上",
+          "userDefined": true,
+          "alias": "direction",
+          "meta": "@direction"
+        },
+        {
+          "text": "に飾って",
+          "userDefined": false
+        }
+      ],
+      "count": 0,
+      "id": "f46d5b7c-16b6-4cf1-87de-7107b1d17569",
+      "updated": null
+    },
+    {
+      "isTemplate": false,
+      "data": [
+        {
+          "text": "風船",
+          "userDefined": true,
+          "alias": "decoration",
+          "meta": "@decoration"
+        },
+        {
+          "text": "を",
+          "userDefined": false
+        },
+        {
+          "text": "下",
+          "userDefined": true,
+          "alias": "direction",
+          "meta": "@direction"
+        },
+        {
+          "text": "に",
+          "userDefined": false
+        }
+      ],
+      "count": 0,
+      "id": "90a667af-40bd-40f9-98fa-0953685c781a",
+      "updated": null
+    }
+  ],
+  "webhookForSlotFilling": false,
+  "webhookUsed": false
+}
