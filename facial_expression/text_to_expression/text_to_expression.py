@@ -21,11 +21,12 @@ class DialogflowSample(object):
         print("speech_score: ", msg.speech_score)
         print("intent_score: ", msg.intent_score)
         # publish to eyebrows
+        mode = msg.action
         pub_msg = Int32()
         action_to_int_dic = {"Happy": 1, "Relived": 2, "Smirking": 3, "Astonished": 4, "Cry": 5, "Fearful": 6,
                              "Flushed": 7, "Fearful": 8, "Love": 9, "Squinting": 10, "Boring": 11, "Cold_Sweat": 12}
-        if msg.action in action_to_int_dic:
-            pub_msg = action_to_int_dic[msg.action]
+        if mode in action_to_int_dic:
+            pub_msg = action_to_int_dic[mode]
         else:
             pub_msg.data = 0
         self.pub.publish(pub_msg)

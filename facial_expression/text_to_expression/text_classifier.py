@@ -150,11 +150,11 @@ class MakeExpressionJson:
                     self.res_smirking.append(sentence) 
                 if emoji_ in "😮😯😲":  # astonished
                     self.res_astonished.append(sentence)
-                if emoji_ in "😢😭😂":  # Cry
+                if emoji_ in "😢😭":  # Cry（😂）
                     self.res_crying.append(sentence)
                 if emoji_ in "😡😠🤬":  # angry
                     self.res_enraged.append(sentence)
-                if emoji_ in "😳🥺":  # flushed
+                if emoji_ in "😳":  # flushed
                     self.res_flushed.append(sentence)
                 if emoji_ in "😱😨":  # fearful
                     self.res_fearful.append(sentence)

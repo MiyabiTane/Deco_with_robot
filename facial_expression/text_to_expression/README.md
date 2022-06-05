@@ -8,13 +8,13 @@
 
 2. `results`フォルダに生成されたjsonファイルを[Dialogflow](https://dialogflow.cloud.google.com/?authuser=1#/agent/facialexpression-rpwe/intents)のインテントにアップロードして登録する<br>以下の12感情が生成されたことを確認する(Normal表情はどれにも当てはまらない場合の表情なので登録しない)<br>Happy, Relived, Smirking, Astonished, Cry, Angry, Flushed, Fearful, Love, Squinting, Boring, Cold_Sweat
 
-3. [dialogflowのjsonファイル(リンクToDo)]()をダウンロードし、`<json_path>`の場所に置く<br>以下のコマンドを実行
+3. [dialogflowのjsonファイル](https://drive.google.com/file/d/1NFO6SFLls1CN3fH5byAIk1W5ntGoHhyE/view?usp=sharing)をダウンロードし、`<json_path>`の場所に置く<br>以下のコマンドを実行<br>眉毛デバイスがあればそこにトピックが送られる
     ```
     $ python dialogflow_run.py --json-path <json_path>
     ```
     ※ただし、[dialogflow_task_executive](https://github.com/jsk-ros-pkg/jsk_3rdparty/tree/master/dialogflow_task_executive)がbuildされていて実行できることを前提とする
 
-4. 別ターミナルで以下を実行することで眉毛デバイスににトピックを送ることができる
+4. さらに別の例文を試したい場合は以下のようにして試すことができる
     ```
     $ rostopic pub -1 /text std_msgs/String "data: '<words like 感動しました>'"
     ```
