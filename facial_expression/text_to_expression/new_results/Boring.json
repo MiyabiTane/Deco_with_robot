@@ -1,0 +1,181 @@
+{
+    "id": "",
+    "name": "Boring",
+    "auto": true,
+    "condition": "",
+    "conditionalFollowupEvents": [],
+    "conditionalResponses": [],
+    "context": [],
+    "contexts": [],
+    "endInteraction": false,
+    "events": [],
+    "fallbackIntent": false,
+    "liveAgentHandoff": false,
+    "parentId": null,
+    "followUpIntents": [],
+    "priority": 500000,
+    "responses": {
+        "action": "",
+        "affectedContexts": [],
+        "parameters": [],
+        "defaultResponsePlatforms": {},
+        "messages": [
+            {
+                "type": "message",
+                "condition": "",
+                "speech": []
+            }
+        ],
+        "resetContexts": false
+    },
+    "rootParentId": null,
+    "templates": [],
+    "userSays": [
+        {
+            "isTemplate": false,
+            "data": [
+                {
+                    "text": "みんなかっこいいのに",
+                    "userDefined": false
+                }
+            ],
+            "count": 0,
+            "id": "",
+            "updated": null
+        },
+        {
+            "isTemplate": false,
+            "data": [
+                {
+                    "text": "あっ、ふーん",
+                    "userDefined": false
+                }
+            ],
+            "count": 0,
+            "id": "",
+            "updated": null
+        },
+        {
+            "isTemplate": false,
+            "data": [
+                {
+                    "text": "１つや２つのコメントじゃないんですよね",
+                    "userDefined": false
+                }
+            ],
+            "count": 0,
+            "id": "",
+            "updated": null
+        },
+        {
+            "isTemplate": false,
+            "data": [
+                {
+                    "text": "おれもここいきてーーー",
+                    "userDefined": false
+                }
+            ],
+            "count": 0,
+            "id": "",
+            "updated": null
+        },
+        {
+            "isTemplate": false,
+            "data": [
+                {
+                    "text": "いいなー",
+                    "userDefined": false
+                }
+            ],
+            "count": 0,
+            "id": "",
+            "updated": null
+        },
+        {
+            "isTemplate": false,
+            "data": [
+                {
+                    "text": "明日から頑張ろう",
+                    "userDefined": false
+                }
+            ],
+            "count": 0,
+            "id": "",
+            "updated": null
+        },
+        {
+            "isTemplate": false,
+            "data": [
+                {
+                    "text": "めっちや気になるこの曲",
+                    "userDefined": false
+                }
+            ],
+            "count": 0,
+            "id": "",
+            "updated": null
+        },
+        {
+            "isTemplate": false,
+            "data": [
+                {
+                    "text": "お休みなさい️チラッと",
+                    "userDefined": false
+                }
+            ],
+            "count": 0,
+            "id": "",
+            "updated": null
+        },
+        {
+            "isTemplate": false,
+            "data": [
+                {
+                    "text": "おやすみなさい",
+                    "userDefined": false
+                }
+            ],
+            "count": 0,
+            "id": "",
+            "updated": null
+        },
+        {
+            "isTemplate": false,
+            "data": [
+                {
+                    "text": "心地いい〜",
+                    "userDefined": false
+                }
+            ],
+            "count": 0,
+            "id": "",
+            "updated": null
+        },
+        {
+            "isTemplate": false,
+            "data": [
+                {
+                    "text": "おやすみなさい",
+                    "userDefined": false
+                }
+            ],
+            "count": 0,
+            "id": "",
+            "updated": null
+        },
+        {
+            "isTemplate": false,
+            "data": [
+                {
+                    "text": "ほんとこれしか再生しないわ～",
+                    "userDefined": false
+                }
+            ],
+            "count": 0,
+            "id": "",
+            "updated": null
+        }
+    ],
+    "webhookForSlotFilling": false,
+    "webhookUsed": false
+}
