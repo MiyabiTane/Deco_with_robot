@@ -95,31 +95,7 @@
             "isTemplate": false,
             "data": [
                 {
-                    "text": "え～",
-                    "userDefined": false
-                }
-            ],
-            "count": 0,
-            "id": "",
-            "updated": null
-        },
-        {
-            "isTemplate": false,
-            "data": [
-                {
                     "text": "歌うまくね",
-                    "userDefined": false
-                }
-            ],
-            "count": 0,
-            "id": "",
-            "updated": null
-        },
-        {
-            "isTemplate": false,
-            "data": [
-                {
-                    "text": "やば",
                     "userDefined": false
                 }
             ],
@@ -168,18 +144,6 @@
             "data": [
                 {
                     "text": "そんなこと言うなんて怖いよ",
-                    "userDefined": false
-                }
-            ],
-            "count": 0,
-            "id": "",
-            "updated": null
-        },
-        {
-            "isTemplate": false,
-            "data": [
-                {
-                    "text": "️ヤバ",
                     "userDefined": false
                 }
             ],
@@ -251,6 +215,18 @@
             "isTemplate": false,
             "data": [
                 {
+                    "text": "全部自己責任怖い",
+                    "userDefined": false
+                }
+            ],
+            "count": 0,
+            "id": "",
+            "updated": null
+        },
+        {
+            "isTemplate": false,
+            "data": [
+                {
                     "text": "見てるこっちもめちゃくちゃ怖い",
                     "userDefined": false
                 }
@@ -264,6 +240,18 @@
             "data": [
                 {
                     "text": "しぬー",
+                    "userDefined": false
+                }
+            ],
+            "count": 0,
+            "id": "",
+            "updated": null
+        },
+        {
+            "isTemplate": false,
+            "data": [
+                {
+                    "text": "笑！ふーちゃんが一番いいのかなと思うけど！",
                     "userDefined": false
                 }
             ],
@@ -311,18 +299,6 @@
             "isTemplate": false,
             "data": [
                 {
-                    "text": "怖い",
-                    "userDefined": false
-                }
-            ],
-            "count": 0,
-            "id": "",
-            "updated": null
-        },
-        {
-            "isTemplate": false,
-            "data": [
-                {
                     "text": "お食事中の方とかは見ない方がいいかもね気持ち悪️",
                     "userDefined": false
                 }
@@ -348,18 +324,6 @@
             "data": [
                 {
                     "text": "ヘビは怖すぎる",
-                    "userDefined": false
-                }
-            ],
-            "count": 0,
-            "id": "",
-            "updated": null
-        },
-        {
-            "isTemplate": false,
-            "data": [
-                {
-                    "text": "パネェ",
                     "userDefined": false
                 }
             ],
@@ -527,18 +491,6 @@
             "isTemplate": false,
             "data": [
                 {
-                    "text": "今日!!!!!",
-                    "userDefined": false
-                }
-            ],
-            "count": 0,
-            "id": "",
-            "updated": null
-        },
-        {
-            "isTemplate": false,
-            "data": [
-                {
                     "text": "呼んでる。",
                     "userDefined": false
                 }
@@ -575,18 +527,6 @@
             "isTemplate": false,
             "data": [
                 {
-                    "text": "えー",
-                    "userDefined": false
-                }
-            ],
-            "count": 0,
-            "id": "",
-            "updated": null
-        },
-        {
-            "isTemplate": false,
-            "data": [
-                {
                     "text": "頭をガーン",
                     "userDefined": false
                 }
@@ -599,7 +539,7 @@
             "isTemplate": false,
             "data": [
                 {
-                    "text": "早くコメ消さないと何十万ん",
+                    "text": "再生回数が偉いことになってる",
                     "userDefined": false
                 }
             ],
@@ -611,7 +551,7 @@
             "isTemplate": false,
             "data": [
                 {
-                    "text": "再生回数が偉いことになってる",
+                    "text": "あっちがった？？",
                     "userDefined": false
                 }
             ],

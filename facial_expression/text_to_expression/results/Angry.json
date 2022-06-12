@@ -155,18 +155,6 @@
             "isTemplate": false,
             "data": [
                 {
-                    "text": "プー",
-                    "userDefined": false
-                }
-            ],
-            "count": 0,
-            "id": "",
-            "updated": null
-        },
-        {
-            "isTemplate": false,
-            "data": [
-                {
                     "text": "彼らを馬鹿にするな",
                     "userDefined": false
                 }
@@ -287,18 +275,6 @@
             "isTemplate": false,
             "data": [
                 {
-                    "text": "ﾝﾀﾎ",
-                    "userDefined": false
-                }
-            ],
-            "count": 0,
-            "id": "",
-            "updated": null
-        },
-        {
-            "isTemplate": false,
-            "data": [
-                {
                     "text": "へたくそ",
                     "userDefined": false
                 }
@@ -395,7 +371,7 @@
             "isTemplate": false,
             "data": [
                 {
-                    "text": "　トイレ　臭い️",
+                    "text": "トイレ　臭い️",
                     "userDefined": false
                 }
             ],

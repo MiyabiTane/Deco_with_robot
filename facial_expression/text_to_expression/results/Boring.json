@@ -47,18 +47,6 @@
             "isTemplate": false,
             "data": [
                 {
-                    "text": "ホント嫌",
-                    "userDefined": false
-                }
-            ],
-            "count": 0,
-            "id": "",
-            "updated": null
-        },
-        {
-            "isTemplate": false,
-            "data": [
-                {
                     "text": "あっ、ふーん",
                     "userDefined": false
                 }
@@ -84,30 +72,6 @@
             "data": [
                 {
                     "text": "おれもここいきてーーー",
-                    "userDefined": false
-                }
-            ],
-            "count": 0,
-            "id": "",
-            "updated": null
-        },
-        {
-            "isTemplate": false,
-            "data": [
-                {
-                    "text": "再生回数ヤベー",
-                    "userDefined": false
-                }
-            ],
-            "count": 0,
-            "id": "",
-            "updated": null
-        },
-        {
-            "isTemplate": false,
-            "data": [
-                {
-                    "text": "何県に、あるんですか",
                     "userDefined": false
                 }
             ],
@@ -155,31 +119,7 @@
             "isTemplate": false,
             "data": [
                 {
-                    "text": "眠い",
-                    "userDefined": false
-                }
-            ],
-            "count": 0,
-            "id": "",
-            "updated": null
-        },
-        {
-            "isTemplate": false,
-            "data": [
-                {
                     "text": "めっちや気になるこの曲",
-                    "userDefined": false
-                }
-            ],
-            "count": 0,
-            "id": "",
-            "updated": null
-        },
-        {
-            "isTemplate": false,
-            "data": [
-                {
-                    "text": "眠い",
                     "userDefined": false
                 }
             ],

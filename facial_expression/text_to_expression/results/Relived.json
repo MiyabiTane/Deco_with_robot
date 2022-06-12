@@ -35,18 +35,6 @@
             "isTemplate": false,
             "data": [
                 {
-                    "text": "スゲナー",
-                    "userDefined": false
-                }
-            ],
-            "count": 0,
-            "id": "",
-            "updated": null
-        },
-        {
-            "isTemplate": false,
-            "data": [
-                {
                     "text": "みんな恋",
                     "userDefined": false
                 }
@@ -383,7 +371,7 @@
             "isTemplate": false,
             "data": [
                 {
-                    "text": "      わざわざありがとうございます",
+                    "text": "わざわざありがとうございます",
                     "userDefined": false
                 }
             ],
@@ -396,6 +384,18 @@
             "data": [
                 {
                     "text": "ポチ。私も好き",
+                    "userDefined": false
+                }
+            ],
+            "count": 0,
+            "id": "",
+            "updated": null
+        },
+        {
+            "isTemplate": false,
+            "data": [
+                {
+                    "text": "彼らの動画好き",
                     "userDefined": false
                 }
             ],
@@ -539,18 +539,6 @@
             "isTemplate": false,
             "data": [
                 {
-                    "text": "わー",
-                    "userDefined": false
-                }
-            ],
-            "count": 0,
-            "id": "",
-            "updated": null
-        },
-        {
-            "isTemplate": false,
-            "data": [
-                {
                     "text": "奥様への愛情伝わってきました",
                     "userDefined": false
                 }
@@ -575,7 +563,7 @@
             "isTemplate": false,
             "data": [
                 {
-                    "text": "好き",
+                    "text": "風邪ひくよ",
                     "userDefined": false
                 }
             ],
@@ -587,7 +575,7 @@
             "isTemplate": false,
             "data": [
                 {
-                    "text": "風邪ひくよ",
+                    "text": "私もそれ大好き",
                     "userDefined": false
                 }
             ],
@@ -624,18 +612,6 @@
             "data": [
                 {
                     "text": "きっとみんな聞き入ってるから",
-                    "userDefined": false
-                }
-            ],
-            "count": 0,
-            "id": "",
-            "updated": null
-        },
-        {
-            "isTemplate": false,
-            "data": [
-                {
-                    "text": "今　５０歳、",
                     "userDefined": false
                 }
             ],
@@ -1007,18 +983,6 @@
             "isTemplate": false,
             "data": [
                 {
-                    "text": "はい",
-                    "userDefined": false
-                }
-            ],
-            "count": 0,
-            "id": "",
-            "updated": null
-        },
-        {
-            "isTemplate": false,
-            "data": [
-                {
                     "text": "あなたの恋が実りますように",
                     "userDefined": false
                 }
@@ -1367,7 +1331,7 @@
             "isTemplate": false,
             "data": [
                 {
-                    "text": "　今の若い人素晴らし恋してください",
+                    "text": "今の若い人素晴らし恋してください",
                     "userDefined": false
                 }
             ],

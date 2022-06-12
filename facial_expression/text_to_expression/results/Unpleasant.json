@@ -1,6 +1,6 @@
 {
     "id": "",
-    "name": "Cold_Sweat",
+    "name": "Unpleasant",
     "auto": true,
     "condition": "",
     "conditionalFollowupEvents": [],
@@ -299,18 +299,6 @@
             "isTemplate": false,
             "data": [
                 {
-                    "text": "ば、バレたか",
-                    "userDefined": false
-                }
-            ],
-            "count": 0,
-            "id": "",
-            "updated": null
-        },
-        {
-            "isTemplate": false,
-            "data": [
-                {
                     "text": "一体何を見たんですか",
                     "userDefined": false
                 }
@@ -407,18 +395,6 @@
             "isTemplate": false,
             "data": [
                 {
-                    "text": "えー",
-                    "userDefined": false
-                }
-            ],
-            "count": 0,
-            "id": "",
-            "updated": null
-        },
-        {
-            "isTemplate": false,
-            "data": [
-                {
                     "text": "耳をつんざくような感じがなー",
                     "userDefined": false
                 }
@@ -444,6 +420,30 @@
             "data": [
                 {
                     "text": "気もわり",
+                    "userDefined": false
+                }
+            ],
+            "count": 0,
+            "id": "",
+            "updated": null
+        },
+        {
+            "isTemplate": false,
+            "data": [
+                {
+                    "text": "それ以外全部怖い",
+                    "userDefined": false
+                }
+            ],
+            "count": 0,
+            "id": "",
+            "updated": null
+        },
+        {
+            "isTemplate": false,
+            "data": [
+                {
+                    "text": "それ可愛すぎるぅ",
                     "userDefined": false
                 }
             ],
@@ -575,18 +575,6 @@
             "isTemplate": false,
             "data": [
                 {
-                    "text": "えー",
-                    "userDefined": false
-                }
-            ],
-            "count": 0,
-            "id": "",
-            "updated": null
-        },
-        {
-            "isTemplate": false,
-            "data": [
-                {
                     "text": "嘘ですよ笑なんかこっちが重たくしてしまってごめんなさい",
                     "userDefined": false
                 }
@@ -672,6 +660,18 @@
             "data": [
                 {
                     "text": "いいなーーー",
+                    "userDefined": false
+                }
+            ],
+            "count": 0,
+            "id": "",
+            "updated": null
+        },
+        {
+            "isTemplate": false,
+            "data": [
+                {
+                    "text": "何県に、あるんですか",
                     "userDefined": false
                 }
             ],
@@ -1007,7 +1007,7 @@
             "isTemplate": false,
             "data": [
                 {
-                    "text": "　　　　　　　難しいよね",
+                    "text": "難しいよね",
                     "userDefined": false
                 }
             ],
@@ -1019,7 +1019,7 @@
             "isTemplate": false,
             "data": [
                 {
-                    "text": "　　　　　　　私、嘔吐下痢で１時間に６回も吐いたことあるよょ",
+                    "text": "私、嘔吐下痢で１時間に６回も吐いたことあるよょ",
                     "userDefined": false
                 }
             ],
@@ -1091,7 +1091,7 @@
             "isTemplate": false,
             "data": [
                 {
-                    "text": "痛い",
+                    "text": "またお前か",
                     "userDefined": false
                 }
             ],

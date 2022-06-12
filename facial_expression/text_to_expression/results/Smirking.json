@@ -191,6 +191,18 @@
             "isTemplate": false,
             "data": [
                 {
+                    "text": "これからもそれ聞き続けよう",
+                    "userDefined": false
+                }
+            ],
+            "count": 0,
+            "id": "",
+            "updated": null
+        },
+        {
+            "isTemplate": false,
+            "data": [
+                {
                     "text": "わたしも嬉しい",
                     "userDefined": false
                 }
@@ -203,7 +215,7 @@
             "isTemplate": false,
             "data": [
                 {
-                    "text": "　　　　　　　　気をつけるね",
+                    "text": "気をつけるね",
                     "userDefined": false
                 }
             ],

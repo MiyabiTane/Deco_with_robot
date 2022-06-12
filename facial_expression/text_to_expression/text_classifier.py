@@ -51,16 +51,32 @@ class MakeExpressionJson:
         with open('emoji_sentence.json', 'w') as f:
             json.dump(dic_, f, indent=4, ensure_ascii=False)
 
+    def arrange_sentence(self, sentence):
+        # 文字の置き換え
+        replace_team = ["フィッシャーズ", "Fischer's", "ふぃっしゃーず", "ふぃしゃーず", "ふぁっしゃーず", "フィシャーズ", "フイッシャーズ", "フッシャーズ", "ひぃっしゃーず", "フィっシューズ"]
+        replace_obj = ["キンカジュー", "メダロット", "きんかじゅー", "マリーゴールド", "裸の心"]
+        for team in replace_team:
+            sentence = sentence.replace(team, "彼ら")
+        for obj in replace_obj:
+            sentence = sentence.replace(obj, "それ")
+        # @hogeを取り除く
+        if '@' in sentence:
+            where_at = sentence.find('@')
+            cur_c = "@"
+            replace_words = ""
+            while (not cur_c in [" ", "　"]):
+                cur_c = sentence[where_at]
+                replace_words += cur_c
+                where_at += 1
+                if where_at == len(sentence):
+                    break
+            sentence = sentence.replace(replace_words, "")
+        return sentence
+
     def extract_sentence(self, emoji, content):
         where_emoji = content.find(emoji)
         content = content[:where_emoji]
-        content = content.replace("フィッシャーズ", "彼ら")
-        content = content.replace("Fischer's", "彼ら")
-        content = content.replace("ふぃっしゃーず", "彼ら")
-        content = content.replace("ふぃしゃーず", "彼ら")
-        content = content.replace("ふぁっしゃーず", "彼ら")
-        content = content.replace("フィシャーズ", "彼ら")
-        content = content.replace("フイッシャーズ", "彼ら")
+        content = self.arrange_sentence(content)
         where_n = content.rfind('\n')
         if where_n <= 0:
             where_n = content.rfind(' ')
@@ -92,7 +108,8 @@ class MakeExpressionJson:
             json.dump(intent_dic, f, indent=4, ensure_ascii=False)
     
     def is_ignore(self, sentence):
-        ignore_words = re.findall('『|垢|さん|シルク|マサイ|モトキ|ダーマ|ぺけたん|ンダホ|ザカオ|あいみ|裸|クロード|ﾝﾀﾞﾎ|まさい|メダロット|キンカジュー|@|ゴールド|くん|宇多田|関ジャム|フィっシューズ|んだほ|もとき|あかさたな|ペケタン|「|もっきゅん|みぃーーみ', sentence)
+        ignore_words = re.findall('『|垢|さん|シルク|マサイ|モトキ|ダーマ|ぺけたん|ンダホ|ザカオ|あいみ|裸|ハダカ|クロード|くろーど|ﾝﾀﾞﾎ|まさい|@|ゴールド|くん|んだほ|もとき|あかさたな|ペケタン|「|もっきゅん|みぃーーみ|ﾝ', sentence)
+        # ゴールド：マリーゴールド、裸：裸の心　曲名を"それ"に置き換えたうえで残っているものを消している
         if len(ignore_words) > 0:
             return True
         p = re.compile('[a-z]+')
@@ -101,17 +118,22 @@ class MakeExpressionJson:
         p = re.compile('[A-Z]+')
         if len(''.join(p.findall(sentence))) > 0:
             return True
-        if "(" in sentence:
+        if "(" in sentence:  # 顔文字
             return True
-        if ":" in sentence:
+        if ")" in sentence:
             return True
+        # if ":" in sentence:
+        #     return True
         p = regex.compile(r'\p{Script=Han}+')
         if len(''.join(p.findall(sentence))) == len(sentence):  # 全部漢字（中国語）
             return True
         p = re.compile('[\u30A1-\u30FF]+')
         if len(''.join(p.findall(sentence))) > 4:  # カタカナ言葉
             return True
-        p = regex.compile(r'\p{Emoji=Yes}+')
+        p = re.compile('[\u3041-\u309F]+')
+        if len(''.join(p.findall(sentence))) == 0:  # ひらがななし
+            return True
+        p = regex.compile(r'\p{Emoji=Yes}+')  # 顔文字以外の絵文字
         if len(''.join(p.findall(sentence))) > 0:
             return True
         if "ဒီ" in sentence:
@@ -125,6 +147,9 @@ class MakeExpressionJson:
         return False
 
     def extract_and_append(self, emojis_str):
+        debug = False
+        # if "hoge" in emojis_str:
+        #     debug = True
         p = regex.compile(r'\p{Emoji=Yes}+')
         emojis = ''.join(p.findall(emojis_str))
         # print("== ", emojis_str)
@@ -136,11 +161,18 @@ class MakeExpressionJson:
                     where_emoji = emojis_str.find(emoji_)
                     emojis_str = emojis_str[:where_emoji] + emojis_str[where_emoji+1:]
                     continue
+            else:  # 絵文字が連続で使われていて先頭に顔絵文字が来てしまう時
+                where_emoji = emojis_str.find(emoji_)
+                if where_emoji == 0:
+                    emojis_str = emojis_str[1:]
+                    continue
+            if debug:
+                print(emojis_str)
             sentence, where_n = self.extract_sentence(emoji_, emojis_str)
             if self.is_ignore(sentence):
                 continue
-            sentence = sentence.replace("\n", "")
-            if len(sentence) > 1:
+            sentence = sentence.strip()
+            if len(sentence) > 2:
                 # print(emoji_, sentence, where_n)
                 if emoji_ in "😀😃😄😁😆😊":  # happy
                     self.res_happy.append(sentence)
@@ -160,11 +192,11 @@ class MakeExpressionJson:
                     self.res_fearful.append(sentence)
                 if emoji_ in "🥰😍😘":  # love
                     self.res_love.append(sentence)
-                if emoji_ in "🤣🤩😉😜🤪😝🙄":  # squinting
+                if emoji_ in "🤩😉😜🤪😝🙄":  # squinting（🤣）
                     self.res_squinting.append(sentence)
-                if emoji_ in "😪😒😴🙁":  # boring (sleepy)
+                if emoji_ in "😪😒😴":  # boring (sleepy)
                     self.res_sleepy.append(sentence)
-                if emoji_ in "😖😞😓😥😟😰😦":  # cold sweat（😔はホッと間違える人が多そうだから除いた）
+                if emoji_ in "😖😞😓😥😟😰😦🙁":  # unpleasant（😔はホッと間違える人が多そうだから除いた）
                     self.res_anxious.append(sentence)
             emojis_str = emojis_str[where_n + 1 :]
 
@@ -185,7 +217,7 @@ class MakeExpressionJson:
         self.make_json(self.res_love, "Love")
         self.make_json(self.res_squinting, "Squinting")
         self.make_json(self.res_sleepy, "Boring")
-        self.make_json(self.res_anxious, "Cold_Sweat")
+        self.make_json(self.res_anxious, "Unpleasant")
 
 YOUTUBE_IDS = ["0xI4J9CwMuY", "Na_WJPK26Oc", "28jAR_LDNJE", "uxk_qap7pwA", "VadBq-_234g", "0xSiBpUdW4E", "yOAwvRmVIyo", "pfGI91CFtRg", "9qRCARM_LfE", "ARwVe1MYAUA"]
 makeExpressionJson = MakeExpressionJson()
