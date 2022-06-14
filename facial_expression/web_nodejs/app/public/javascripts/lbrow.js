@@ -20,11 +20,20 @@ var squareRotation = 0.0;
 var pre_sweat_y = 0.0;
 var wait_flag = false;
 var tenRad = 10 * Math.PI / 180;
+var back_color = 1.0;
+var PT1_X = -0.7;
+var PT1_Y = -0.6;
+var BROW_LEN = 3;
+var BROW_WID = 1.5;
+var LEFT_LEN = 1.2;
+var RIGHT_LEN = 1;
+
 function main() {
   // Initialize
   var c = document.getElementById('webgl');
   c.width = window.innerWidth;
-  c.height = window.innerHeight;
+  c.height = window.innerWidth * 4 / 7;  // For Rakuten mini
+  // c.height = window.innerHeight;
   var gl = c.getContext('webgl');
 
   // Vertex shader program
@@ -108,7 +117,7 @@ function main() {
 	now *= 0.001;  // convert to seconds
 	const deltaTime = now - then;
         const buffers = initBuffers(gl);
-        const buffersSweat = initBuffersSweat(gl);
+        const buffersTear = initBuffersTear(gl);
         const buffersStar = initBuffersStar(gl);
         const buffersHeart = initBuffersHeart(gl);
         const buffersColor = initBuffersColor(gl);
@@ -122,7 +131,7 @@ function main() {
         } else if (mode == 10) {
 	  drawSceneSome(gl, programInfo, programInfoColor, buffers, buffersStar, 12, 25);
 	} else if (mode == 12) {
-          drawSceneSome(gl, programInfo, programInfoColor, buffers, buffersSweat, 12, 12);
+          drawSceneSome(gl, programInfo, programInfoColor, buffers, buffersTear, 12, 12);
         }
         update(deltaTime);
 	requestAnimationFrame(render);
@@ -153,30 +162,39 @@ function initBuffers(gl) {
   var rad2 = squareRotation;
   var rad3 = squareRotation;
   var rad4 = squareRotation;
-  var BROW_LEN = 3;
-  var BROW_WID = 1.5;
-  var LEFT_LEN = 1;
-  var RIGHT_LEN = 1;
-  var pt1_x = 0.0;
-  var pt1_y = 0.0;
+  var brow_len = BROW_LEN;
+  var brow_wid = BROW_WID;
+  var left_len = LEFT_LEN;
+  var right_len = RIGHT_LEN;
+  var pt1_x = PT1_X;
+  var pt1_y = PT1_Y;
   if (mode == 1) {  // yorokobi
     var rad1 = 0;
     var rad2 = -1 * squareRotation;
     var rad3 = squareRotation;
     var rad4 = squareRotation;
-    var BROW_WID = 1.5 - Math.abs(squareRotation / 2);
-    var pt1_x = 0.0;
-    var pt1_y = squareRotation;
+    var brow_len = BROW_LEN + squareRotation;
+    var brow_wid = BROW_WID - Math.abs(squareRotation / 2);
+    var pt1_x = PT1_X;
+    var pt1_y = PT1_Y + squareRotation * 2;
   } else if (mode == 2 || mode == 11) {  // anshin || taikutsu
-    var rad1 = 0;
-    var rad2 = 0;
-    var rad3 = 0;
-    var rad4 = 0;
-    if (Math.abs(squareRotation) > 0.5 * tenRad) {
-      var pt1_y = -1 * squareRotation + 0.5 * tenRad;
+    if (Math.abs(squareRotation) < tenRad * 2) {
+      var rad1 = squareRotation * -0.25;
+      var rad2 = squareRotation * -0.25;
+      var rad3 = squareRotation * -0.25;
+      var rad4 = squareRotation * -0.25;
+      var pt1_x = PT1_X + squareRotation * 1.5;
+      var pt1_y = PT1_Y + squareRotation * 4;
+    } else {
+      var rad1 = tenRad * -0.5;
+      var rad2 = tenRad * -0.5;
+      var rad3 = tenRad * -0.5;
+      var rad4 = tenRad * -0.5;
+      var pt1_x = PT1_X + tenRad * 3;
+      var pt1_y = PT1_Y + tenRad * 6 - (squareRotation - 2 * tenRad) * 1.5;
     }
-    if (squareRotation > 3 * tenRad) {
-      var pt1_y = -2.5 * tenRad;
+    if (squareRotation > 7 * tenRad) {
+      var pt1_y = PT1_Y - 1.5 * tenRad;
     }
   } else if (mode == 3) {  // warudakumi
     var tmp_num = squareRotation / tenRad;
@@ -185,8 +203,10 @@ function initBuffers(gl) {
       var rad2 = 2 * squareRotation;
       var rad3 = 0;
       var rad4 = 0;
-      var BROW_WID = 1.5 - 2 * Math.abs(squareRotation);
-      var pt1_y = squareRotation * -1.5;
+      var brow_len = BROW_LEN + squareRotation * 0.5;
+      var brow_wid = BROW_WID - 1.5 * Math.abs(squareRotation);
+      var pt1_x = PT1_X + squareRotation * 0.5;
+      var pt1_y = PT1_Y - squareRotation;
     } else if (3 * tenRad < squareRotation &&
 	       Math.abs(maxRotation - squareRotation) > 0.1 && !wait_flag) {
       if (Math.floor(tmp_num) % 2 == 1) {  // down
@@ -194,133 +214,136 @@ function initBuffers(gl) {
         var rad2 = (4 + Math.floor(tmp_num)) * tenRad - squareRotation;
         var rad3 = 0;
         var rad4 = 0;
-        var BROW_WID = 1.5 - 4 * tenRad;
-        var pt1_y = tenRad * -3;
+	var brow_len = BROW_LEN + tenRad;
+        var brow_wid = BROW_WID - 3 * tenRad;
+	var pt1_x = PT1_X + tenRad;
+        var pt1_y = PT1_Y - tenRad * 2;
       } else {  // up
         var rad1 = (3 - Math.floor(tmp_num)) * tenRad + squareRotation;
 	var rad2 = (3 - Math.floor(tmp_num)) * tenRad + squareRotation;
 	var rad3 = 0;
 	var rad4 = 0;
-	var BROW_WID = 1.5 - 4 * tenRad;
-        var pt1_y = tenRad * -3;
+	var brow_len = BROW_LEN + tenRad;
+        var brow_wid = BROW_WID - 3 * tenRad;
+        var pt1_x = PT1_X + tenRad;
+        var pt1_y = PT1_Y - tenRad * 2;
       }
     } else {
       var rad1 = 4 * tenRad;
       var rad2 = 4 * tenRad;
       var rad3 = 0;
       var rad4 = 0;
-      var BROW_WID = 1.5 - 4 * tenRad;
-      var pt1_y = tenRad * -3;
+      var brow_len = BROW_LEN + tenRad;
+      var brow_wid = BROW_WID - 3 * tenRad;
+      var pt1_x = PT1_X + tenRad;
+      var pt1_y = PT1_Y - tenRad * 2;
     }
-  } else if (mode == 4) {  // odoroki
-    if (squareRotation < 2 * tenRad) {
-      var rad1 = 0;
-      var rad2 = -1 * squareRotation;
-      var rad3 = squareRotation;
-      var rad4 = squareRotation;
-      var BROW_WID = 1.5 - Math.abs(squareRotation * 1.5);
-      if (!wait_flag) var pt1_y = -2 * squareRotation;
-      else var pt1_y = -3 * (squareRotation * -1 + 2 * tenRad) + tenRad * 6;
-    } else if (wait_flag) {
-      var rad1 = 0;
-      var rad2 = tenRad * -2;
-      var rad3 = tenRad * 2;
-      var rad4 = tenRad * 2;
-      var BROW_WID = 1.5 - Math.abs(tenRad * 3);
-      var BROW_LEN = 2.5;
-      var pt1_y = tenRad * 5;
-    } else if (squareRotation < 3.5 * tenRad) {
-      var rad1 = 0;
-      var rad2 = tenRad * -2;
-      var rad3 = tenRad * 2;
-      var rad4 = tenRad * 2;
-      var BROW_WID = 1.5 - Math.abs(tenRad * 3);
-      var BROW_LEN = 3 - Math.abs(squareRotation);
-      var pt1_x = squareRotation / 2;
-      var pt1_y = squareRotation * 9 - 4 * tenRad;
-    } else if (squareRotation < 4.5 * tenRad) {
-      var tmp_num = squareRotation / tenRad - 3.5;
-      var rad1 = 0;
-      var rad2 = tenRad * -2;
-      var rad3 = tenRad * 2;
-      var rad4 = tenRad * 2;
-      var BROW_LEN = 2.5;
-      var BROW_WID = 1.5 - Math.abs(tenRad * 3);
-      var pt1_y = 8 * tenRad - tmp_num * tenRad * 2;
+  } else if (mode == 4) {  // odoroki || tere
+    if (Math.abs(squareRotation) < tenRad * 2) {
+      var rad1 = squareRotation * -0.5;
+      var rad2 = squareRotation * -0.5;
+      var rad3 = squareRotation * -0.5;
+      var rad4 = squareRotation * -0.5;
+      var brow_len = BROW_LEN - squareRotation * 1.5;
+      var pt1_x = PT1_X + squareRotation * 3;
+      var pt1_y = PT1_Y + squareRotation * 3;
     } else {
-      var rad1 = 0;
-      var rad2 = tenRad * -2;
-      var rad3 = tenRad * 2;
-      var rad4 = tenRad * 2;
-      var BROW_WID = 1.5 - Math.abs(tenRad * 3);
-      var BROW_LEN = 2.5;
-      var pt1_y = tenRad * 5;
+      var rad1 = tenRad * -1;
+      var rad2 = tenRad * -1;
+      var rad3 = tenRad * -1;
+      var rad4 = tenRad * -1;
+      var brow_len = BROW_LEN - tenRad * 3;
+      if (wait_flag) {
+        var pt1_x = PT1_X + tenRad * 6;
+        var pt1_y = PT1_Y + tenRad * 6;
+      } else if (2.5 * tenRad < Math.abs(squareRotation)) {
+        if (Math.abs(squareRotation) < tenRad * 3.5) {
+	  var pt1_x = PT1_X + tenRad * 6 + (squareRotation - 2.5 * tenRad) * 2;
+	  var pt1_y = PT1_Y + tenRad * 6 + squareRotation * 6;
+	} else if (Math.abs(squareRotation) < tenRad * 4.5) {
+	  var pt1_x = PT1_X + tenRad * 8 - (squareRotation - 3.5 * tenRad) * 2;
+	  var pt1_y = PT1_Y + tenRad * 27 - (squareRotation - tenRad) * 6;
+	} else {
+          var pt1_x = PT1_X + tenRad * 6;
+          var pt1_y = PT1_Y + tenRad * 6;
+	}
+      } else {
+        var pt1_x = PT1_X + tenRad * 6;
+        var pt1_y = PT1_Y + tenRad * 8;
+      }
     }
-  } else if (mode == 5) {  // kanashimi
+  } else if (mode == 12) {  // kanashimi
     if (squareRotation < 2 * tenRad) {
-      var rad1 = squareRotation * -1;
-      var rad2 = squareRotation * -1;
-      var rad3 = squareRotation * -1;
-      var rad4 = squareRotation * -1;
+      var rad1 = squareRotation * -0.75;
+      var rad2 = squareRotation * -0.75;
+      var rad3 = squareRotation * -0.75;
+      var rad4 = squareRotation * -0.75;
+      var brow_len = BROW_LEN + squareRotation;
+      // var pt1_x = PT1_X + squareRotation * 0.5;
+      var pt1_y = PT1_Y + squareRotation * 2.5;
     } else {
-      var rad1 = -2 * tenRad;
-      var rad2 = -2 * tenRad;
-      var rad3 = -2 * tenRad;
-      var rad4 = -2 * tenRad;
+      var rad1 = tenRad * -1.5;
+      var rad2 = tenRad * -1.5;
+      var rad3 = tenRad * -1.5;
+      var rad4 = tenRad * -1.5;
+      var brow_len = BROW_LEN + tenRad * 2;
+      // var pt1_x = PT1_X + squareRotation;
+      var pt1_y = PT1_Y + tenRad * 5;
     }
   } else if (mode == 6) {  // ikari
-    var rad1 = squareRotation;
-    var rad2 = squareRotation * 0.5;
-    var rad3 = squareRotation;
-    var rad4 = squareRotation;
-    // var BROW_WID = 1.5 - Math.abs(squareRotation * 0.5);
-    var BROW_LEN = 3 + squareRotation * 0.5;
-    var pt1_y = squareRotation * -1;
+    var rad1 = squareRotation * 2;
+    var rad2 = squareRotation * 1.5;
+    var rad3 = squareRotation * 2;
+    var rad4 = squareRotation * 2;
+    var brow_len = BROW_LEN + squareRotation;
+    var pt1_x = PT1_X + squareRotation;
+    var pt1_y = PT1_Y - squareRotation;
   } else if (mode == 9) {  // suki
     if (squareRotation < tenRad * 2) {
       var rad1 = squareRotation * -0.25;
       var rad2 = squareRotation * -0.25;
       var rad3 = squareRotation * -0.25;
       var rad4 = squareRotation * -0.25;
-      var pt1_y = squareRotation * -1.5;
+      var pt1_y = PT1_Y - squareRotation * 1.5;
     } else {
       var rad1 = tenRad * -0.5;
       var rad2 = tenRad * -0.5;
       var rad3 = tenRad * -0.5;
       var rad4 = tenRad * -0.5;
-      var pt1_y = tenRad * -3;
+      var pt1_y = PT1_Y - tenRad * 3;
     }
   } else if (mode == 10) {  // wink
     var rad1 = 0;
     var rad2 = 0;
     var rad3 = 0;
     var rad4 = 0;
-    if (squareRotation < tenRad) {
-      var pt1_y = squareRotation * 1.5;
-    } else if (squareRotation < 2.5 * tenRad) {
-      var pt1_y = 2 * tenRad - (squareRotation - tenRad) * 8;
+    if (squareRotation < tenRad * 2) {
+      var pt1_y = PT1_Y + squareRotation * 3;
+    } else if (squareRotation < 3.5 * tenRad) {
+      var pt1_y = PT1_Y + 6 * tenRad - (squareRotation - 2 * tenRad) * 8;
     } else {
-      var pt1_y = -6 * tenRad;
+      var pt1_y = PT1_Y -6 * tenRad;
     }
-  } else if (mode == 12) {  // konran
+  } else if (mode == 5) {  // konran
     var rad1 = 0;
     var rad2 = 0.2 * squareRotation;
-    var rad3 = -2 * squareRotation;
-    var rad4 = -2 * squareRotation;
-    var BROW_WID = 1.5 - Math.abs(squareRotation / 2);
+    var rad3 = -1.5 * squareRotation;
+    var rad4 = -1.5 * squareRotation;
+    var brow_wid = BROW_WID - Math.abs(squareRotation / 2);
+    var brow_len = BROW_LEN + squareRotation * 0.5;
   }
-  var pt2_x = pt1_x + BROW_LEN * Math.cos(rad1);
-  var pt2_y = pt1_y + BROW_LEN * Math.sin(rad1);
-  var pt3_x = pt2_x + RIGHT_LEN * Math.cos(rad2);
-  var pt3_y = pt2_y + RIGHT_LEN * Math.sin(rad2);
-  var pt5_x = pt1_x - BROW_WID * Math.sin(rad1);
-  var pt5_y = pt1_y + BROW_WID * Math.cos(rad1);
-  var pt4_x = pt5_x + BROW_LEN * Math.cos(rad1);
-  var pt4_y = pt5_y + BROW_LEN * Math.sin(rad1);
-  var pt6_x = pt5_x - LEFT_LEN * Math.cos(rad3);
-  var pt6_y = pt5_y - LEFT_LEN * Math.sin(rad3);
-  var pt7_x = pt1_x - LEFT_LEN * Math.cos(rad4);
-  var pt7_y = pt1_y - LEFT_LEN * Math.sin(rad4);
+  var pt2_x = pt1_x + brow_len * Math.cos(rad1);
+  var pt2_y = pt1_y + brow_len * Math.sin(rad1);
+  var pt3_x = pt2_x + right_len * Math.cos(rad2);
+  var pt3_y = pt2_y + right_len * Math.sin(rad2);
+  var pt5_x = pt1_x - brow_wid * Math.sin(rad1);
+  var pt5_y = pt1_y + brow_wid * Math.cos(rad1);
+  var pt4_x = pt5_x + brow_len * Math.cos(rad1);
+  var pt4_y = pt5_y + brow_len * Math.sin(rad1);
+  var pt6_x = pt5_x - left_len * Math.cos(rad3);
+  var pt6_y = pt5_y - left_len * Math.sin(rad3);
+  var pt7_x = pt1_x - left_len * Math.cos(rad4);
+  var pt7_y = pt1_y - left_len * Math.sin(rad4);
   const positions = [
       pt2_x, pt2_y,
       pt3_x, pt3_y,
@@ -365,23 +388,45 @@ function initBuffersColor(gl) {
   var rad2 = squareRotation;
   var rad3 = squareRotation;
   var rad4 = squareRotation;
-  var BROW_LEN = 3;
-  var BROW_WID = 1.5;
-  var LEFT_LEN = 1;
-  var RIGHT_LEN = 1;
-  var pt1_x = 0.0;
-  var pt1_y = 0.0;
+  var brow_len = BROW_LEN;
+  var brow_wid = BROW_WID;
+  var left_len = LEFT_LEN;
+  var right_len = RIGHT_LEN;
+  var pt1_x = PT1_X;
+  var pt1_y = PT1_Y;
   if (mode == 7) {  // tere
-    // var rad1 = squareRotation * -0.5;
-    // var rad2 = squareRotation * -1.0;
-    // var rad3 = squareRotation * 0;
-    // var rad4 = squareRotation * 0;
-    var rad1 = 0;
-    var rad2 = 0;
-    var rad3 = 0;
-    var rad4 = 0;
-    if (Math.abs(squareRotation) > 0.5 * tenRad) {
-      var pt1_y = -1 * squareRotation + 0.5 * tenRad;
+    if (Math.abs(squareRotation) < tenRad * 2) {
+      var rad1 = squareRotation * -0.5;
+      var rad2 = squareRotation * -0.5;
+      var rad3 = squareRotation * -0.5;
+      var rad4 = squareRotation * -0.5;
+      var brow_len = BROW_LEN - squareRotation * 1.5;
+      var pt1_x = PT1_X + squareRotation * 3;
+      var pt1_y = PT1_Y + squareRotation * 3;
+    } else {
+      var rad1 = tenRad * -1;
+      var rad2 = tenRad * -1;
+      var rad3 = tenRad * -1;
+      var rad4 = tenRad * -1;
+      var brow_len = BROW_LEN - tenRad * 3;
+      if (wait_flag) {
+        var pt1_x = PT1_X + tenRad * 6;
+        var pt1_y = PT1_Y + tenRad * 6;
+      } else if (2.5 * tenRad < Math.abs(squareRotation)) {
+        if (Math.abs(squareRotation) < tenRad * 3.5) {
+	  var pt1_x = PT1_X + tenRad * 6 + (squareRotation - 2.5 * tenRad) * 2;
+	  var pt1_y = PT1_Y + tenRad * 6 + squareRotation * 6;
+	} else if (Math.abs(squareRotation) < tenRad * 4.5) {
+	  var pt1_x = PT1_X + tenRad * 8 - (squareRotation - 3.5 * tenRad) * 2;
+	  var pt1_y = PT1_Y + tenRad * 27 - (squareRotation - tenRad) * 6;
+	} else {
+	  var pt1_x = PT1_X + tenRad * 6;
+          var pt1_y = PT1_Y + tenRad * 6;
+	}
+      } else {
+        var pt1_x = PT1_X + tenRad * 6;
+        var pt1_y = PT1_Y + tenRad * 8;
+      }
     }
   } else if (mode == 8) {  // kyoufu
     if (squareRotation < tenRad * 2) {
@@ -389,49 +434,46 @@ function initBuffersColor(gl) {
       var rad2 = squareRotation * -0.5;
       var rad3 = squareRotation * -1.0;
       var rad4 = squareRotation * -1.0;
-      var pt1_x = squareRotation * 1.5;
-      var BROW_LEN = 3 - Math.abs(squareRotation * 0.5);
+      var pt1_x = PT1_X + squareRotation * 1.5;
+      var pt1_y = PT1_Y + squareRotation;
+      var brow_len = BROW_LEN - Math.abs(squareRotation * 0.5);
     } else if (wait_flag) {
       var rad1 = tenRad * -1;
       var rad2 = tenRad * -1;
       var rad3 = tenRad * -2;
       var rad4 = tenRad * -2;
-      var pt1_x = tenRad * 3;
-      var BROW_LEN = 3 - tenRad;
-      var pt1_y = Math.abs(squareRotation - tenRad) * -0.5;
-      if (squareRotation > 4 * tenRad) {
-	  var pt1_y = tenRad * -3;
-      }
+      var pt1_x = PT1_X + tenRad * 3;
+      var pt1_y = PT1_Y + tenRad * 2;
+      var brow_len = BROW_LEN - tenRad;
     } else {
       var rad1 = tenRad * -1;
       var rad2 = tenRad * -1;
       var rad3 = tenRad * -2;
       var rad4 = tenRad * -2;
-      var pt1_x = tenRad * 3;
-      var BROW_LEN = 3 - tenRad;
-      if (squareRotation < 4 * tenRad) {
-        var pt1_y = Math.abs(squareRotation - tenRad) * -0.5;
-      } else if (squareRotation < 5 * tenRad) {
-	var diff_rot = Math.abs(squareRotation - 4 * tenRad);
-        var pt1_y = -2 * tenRad + diff_rot;
+      var pt1_x = PT1_X + tenRad * 3;
+      var brow_len = BROW_LEN - tenRad;
+      if (squareRotation < 3 * tenRad) {
+        var pt1_y = PT1_Y + tenRad * 2 + Math.abs(squareRotation - 2 * tenRad) * -0.5;
+      } else if (squareRotation < 4 * tenRad) {
+	var diff_rot = Math.abs(squareRotation - 3 * tenRad);
+        var pt1_y = PT1_Y + tenRad * 2 - 0.5 * tenRad + diff_rot * 0.5;
       } else {
-	var diff_rot = Math.abs(squareRotation - 5 * tenRad);
-	var pt1_y = -1 * tenRad - diff_rot;
+	var pt1_y = PT1_Y + tenRad * 2;
       }
     }
   }
-  var pt2_x = pt1_x + BROW_LEN * Math.cos(rad1);
-  var pt2_y = pt1_y + BROW_LEN * Math.sin(rad1);
-  var pt3_x = pt2_x + RIGHT_LEN * Math.cos(rad2);
-  var pt3_y = pt2_y + RIGHT_LEN * Math.sin(rad2);
-  var pt5_x = pt1_x - BROW_WID * Math.sin(rad1);
-  var pt5_y = pt1_y + BROW_WID * Math.cos(rad1);
-  var pt4_x = pt5_x + BROW_LEN * Math.cos(rad1);
-  var pt4_y = pt5_y + BROW_LEN * Math.sin(rad1);
-  var pt6_x = pt5_x - LEFT_LEN * Math.cos(rad3);
-  var pt6_y = pt5_y - LEFT_LEN * Math.sin(rad3);
-  var pt7_x = pt1_x - LEFT_LEN * Math.cos(rad4);
-  var pt7_y = pt1_y - LEFT_LEN * Math.sin(rad4);
+  var pt2_x = pt1_x + brow_len * Math.cos(rad1);
+  var pt2_y = pt1_y + brow_len * Math.sin(rad1);
+  var pt3_x = pt2_x + right_len * Math.cos(rad2);
+  var pt3_y = pt2_y + right_len * Math.sin(rad2);
+  var pt5_x = pt1_x - brow_wid * Math.sin(rad1);
+  var pt5_y = pt1_y + brow_wid * Math.cos(rad1);
+  var pt4_x = pt5_x + brow_len * Math.cos(rad1);
+  var pt4_y = pt5_y + brow_len * Math.sin(rad1);
+  var pt6_x = pt5_x - left_len * Math.cos(rad3);
+  var pt6_y = pt5_y - left_len * Math.sin(rad3);
+  var pt7_x = pt1_x - left_len * Math.cos(rad4);
+  var pt7_y = pt1_y - left_len * Math.sin(rad4);
   const positions = [
       pt2_x, pt2_y,
       pt3_x, pt3_y,
@@ -460,11 +502,20 @@ function initBuffersColor(gl) {
   var g = 0.0;
   var b = 0.0;
   if (mode == 7) {  // tere
-    if (squareRotation > tenRad) {
+    if (squareRotation < 2.5 * tenRad) {
       var color_deg = squareRotation - tenRad * 0.5;
       var r = Math.min(1.0, color_deg * 1.5);
       var g = Math.min(1.0, color_deg * 0.8);
       var b = Math.min(1.0, color_deg * 0.8);
+    } else if (squareRotation < 4.5 * tenRad) {
+      var r = 3 * tenRad;
+      var g = 1.6 * tenRad;
+      var b = 1.6 * tenRad;
+    } else if (4.5 * tenRad < squareRotation){
+      var color_deg = squareRotation - tenRad * 4.5;
+      var r = Math.min(1.0, 3 * tenRad + color_deg * 1.5);
+      var g = Math.min(1.0, 1.6 * tenRad + color_deg * 0.8);
+      var b = Math.min(1.0, 1.6 * tenRad + color_deg * 0.8);
     }
   } else if (mode == 8) {  // kyoufu
     var r = 0;
@@ -496,7 +547,7 @@ function initBuffersColor(gl) {
   };
 }
 
-function initBuffersSweat(gl) {
+function initBuffersTear(gl) {  // -> tears
 
   // Create a buffer for the square's positions.
 
@@ -508,27 +559,33 @@ function initBuffersSweat(gl) {
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
   // Now create an array of positions for the square.
-  const SWEAT_LEN = 2.1;
-  const SWEAT_WID = 1.5;
-  var pt1_x = 2.3;
-  if (Math.abs(maxRotation) - Math.abs(squareRotation) > 0.01) {
-    var pt1_y = 3.0 - Math.abs(squareRotation) * 5;
+  const TEAR_LEN = 1.5;
+  const TEAR_WID = 1.0;
+  var tear_len = TEAR_LEN;
+  var tear_wid = TEAR_WID;
+  var pt1_x = PT1_X + BROW_LEN + RIGHT_LEN + 0.1;
+  if (squareRotation < 2 * tenRad && !wait_flag) {
+    var tear_len = squareRotation * TEAR_LEN / (2 * tenRad);
+    var tear_wid = squareRotation * TEAR_WID / (1.8 * tenRad);
+    var pt1_y = PT1_Y;
+  } else if (squareRotation < 2.5 * tenRad && !wait_flag) {
+    var pt1_y = PT1_Y;
   } else {
-    var pt1_y = pre_sweat_y - 0.02;
+    var pt1_y = pre_tear_y - 0.02;
   }
-  pre_sweat_y = pt1_y;
-  var pt2_x = pt1_x - SWEAT_WID / 2;
-  var pt2_y = pt1_y - SWEAT_LEN / 2;
-  var pt3_x = pt1_x - SWEAT_WID / 2;
-  var pt3_y = pt1_y - SWEAT_LEN * 3 / 4;
-  var pt4_x = pt1_x - SWEAT_WID / 4;
-  var pt4_y = pt1_y - SWEAT_LEN;
-  var pt5_x = pt1_x + SWEAT_WID / 4;
-  var pt5_y = pt1_y - SWEAT_LEN;
-  var pt6_x = pt1_x + SWEAT_WID / 2;
-  var pt6_y = pt1_y - SWEAT_LEN * 3 / 4;
-  var pt7_x = pt1_x + SWEAT_WID / 2;
-  var pt7_y = pt1_y - SWEAT_LEN / 2;
+  pre_tear_y = pt1_y;
+  var pt2_x = pt1_x - tear_wid / 2;
+  var pt2_y = pt1_y - tear_len / 2;
+  var pt3_x = pt1_x - tear_wid / 2;
+  var pt3_y = pt1_y - tear_len * 3 / 4;
+  var pt4_x = pt1_x - tear_wid / 4;
+  var pt4_y = pt1_y - tear_len;
+  var pt5_x = pt1_x + tear_wid / 4;
+  var pt5_y = pt1_y - tear_len;
+  var pt6_x = pt1_x + tear_wid / 2;
+  var pt6_y = pt1_y - tear_len * 3 / 4;
+  var pt7_x = pt1_x + tear_wid / 2;
+  var pt7_y = pt1_y - tear_len / 2;
   const positions = [
       pt2_x, pt2_y,
       pt1_x, pt1_y,
@@ -553,19 +610,22 @@ function initBuffersSweat(gl) {
                 gl.STATIC_DRAW);
 
   // add color
+  var r = 0.3;
+  var g = 0.3;
+  var b = 1.0;
   var colors = [  // blue
-    0.0,  0.0,  1.0,  1.0,
-    0.0,  0.0,  1.0,  1.0,
-    0.0,  0.0,  1.0,  1.0,
-    0.0,  0.0,  1.0,  1.0,
-    0.0,  0.0,  1.0,  1.0,
-    0.0,  0.0,  1.0,  1.0,
-    0.0,  0.0,  1.0,  1.0,
-    0.0,  0.0,  1.0,  1.0,
-    0.0,  0.0,  1.0,  1.0,
-    0.0,  0.0,  1.0,  1.0,
-    0.0,  0.0,  1.0,  1.0,
-    0.0,  0.0,  1.0,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
+    r,  g,  b,  1.0,
   ];
 
   const colorBuffer = gl.createBuffer();
@@ -598,7 +658,7 @@ function initBuffersStar(gl) {
       var center_y = 1 - (squareRotation - 2 * tenRad) * 8;
       var center_vec = squareRotation * 2;
     } else {
-      var center_x = 1.8 + squareRotation * 4;
+      var center_x = 1.8 + squareRotation * 4.2;
       var center_y = squareRotation * 1.2;
       var center_vec = squareRotation * 3;
     }
@@ -666,7 +726,7 @@ function initBuffersStar(gl) {
 
   // add color
   var r = 1.0;
-  var g = 0.9;
+  var g = 0.8;
   var b = 0.0;
   var colors = [  // yellow
     r,  g,  b,  1.0,
@@ -719,16 +779,16 @@ function initBuffersHeart(gl) {
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
   // Now create an array of positions for the square.
-  var HEART_WID = 2.0;
-  var HEART_HEI = 2.0;
+  var HEART_WID = 2.5;
+  var HEART_HEI = 2.5;
   // center
   var pt1_x = 1.0;
   var pt1_y = 5.0;
   if (!wait_flag && squareRotation > 2 * tenRad) {
     var diff_rad = squareRotation - 2 * tenRad;
-    var HEART_WID = 1.2 + diff_rad * 0.9;
-    var HEART_HEI = 1.2 + diff_rad * 0.9;
-    var pt1_y = squareRotation * 1.6 - 0.3;
+    var HEART_WID = 1.5 + diff_rad * 0.5;
+    var HEART_HEI = 1.5 + diff_rad * 0.5;
+    var pt1_y = squareRotation * 2.0 - 1.5;
     if (squareRotation < 5 * tenRad) {
       var diff_rad = squareRotation - 2 * tenRad;
       var pt1_x = diff_rad * 2 + 1.5;
@@ -826,7 +886,7 @@ function initBuffersHeart(gl) {
 //
 function drawScene(gl, programInfo, buffers, deltaTime, vertexCount) {
   // black:0, white:1
-  gl.clearColor(0.9, 0.9, 0.9, 1.0);  // Clear to black, fully opaque
+  gl.clearColor(back_color, back_color, back_color, 1.0);  // Clear to black, fully opaque
   gl.clearDepth(1.0);                 // Clear everything
   gl.enable(gl.DEPTH_TEST);           // Enable depth testing
   gl.depthFunc(gl.LEQUAL);            // Near things obscure far things
@@ -915,7 +975,7 @@ function drawScene(gl, programInfo, buffers, deltaTime, vertexCount) {
 
 function drawSceneSome(gl, programInfo, programInfoAttach, buffers, buffersAttach, vertexCount, vertexCountAttach) {
   // black:0, white:1
-  gl.clearColor(0.9, 0.9, 0.9, 1.0);  // Clear to black, fully opaque
+  gl.clearColor(back_color, back_color, back_color, 1.0);  // Clear to black, fully opaque
   gl.clearDepth(1.0);                 // Clear everything
   gl.enable(gl.DEPTH_TEST);           // Enable depth testing
   gl.depthFunc(gl.LEQUAL);            // Near things obscure far things
@@ -1063,7 +1123,7 @@ function drawSceneSome(gl, programInfo, programInfoAttach, buffers, buffersAttac
 
 function drawSceneColor(gl, programInfoAttach, buffersAttach, vertexCount) {
   // black:0, white:1
-  gl.clearColor(0.9, 0.9, 0.9, 1.0);  // Clear to black, fully opaque
+  gl.clearColor(back_color, back_color, back_color, 1.0);  // Clear to black, fully opaque
   gl.clearDepth(1.0);                 // Clear everything
   gl.enable(gl.DEPTH_TEST);           // Enable depth testing
   gl.depthFunc(gl.LEQUAL);            // Near things obscure far things
