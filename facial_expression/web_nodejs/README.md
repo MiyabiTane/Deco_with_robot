@@ -1,6 +1,6 @@
-## DockerでWebページ作成
+## Webページによる眉毛表現
 
-※ラズパイでサーバーを立ち上げると重たいのでノートPCで立ち上げてラズパイでwebページを開く仕組みにしています。ラズパイでサーバーも立てる場合は[raspi-3bブランチのREADME](https://github.com/MiyabiTane/Deco_with_robot/tree/raspi-3b/facial_expression/web_nodejs)参照
+※ラズパイでサーバーを立ち上げると重たいのでノートPCで立ち上げてラズパイ等のデバイスでwebページを開く仕組みにしています。ラズパイでサーバーも立てる場合は[raspi-3bブランチのREADME](https://github.com/MiyabiTane/Deco_with_robot/tree/raspi-3b/facial_expression/web_nodejs)参照
 
 ### 初回設定
 
@@ -27,6 +27,45 @@ $ docker-compose up
 して
 http://localhost:3000/rbrow, http://localhost:3000/lbrow
 にアクセスできればOK
+
+### スマホ等、Webが繋がるデバイスに表示する（最新）
+0. ノートPCとデバイスを同じネットワークに繋いでおく
+
+1. ノートPCで以下コマンドを実行してIPアドレスを調べる
+    ```
+    $ ifconfig
+    ```
+    `wlp1s0:`の欄の`inet`の後ろの数字が<IPアドレス>
+
+2. ノートPCで眉毛のサーバーを立ち上げる
+    ```
+    $ cd ver_13types
+    $ python run.py  # 既にroscoreが立ち上がっている状況下では`--no-roscore`オプションを追加する
+    ```
+
+3. デバイスでWebページを開き、以下ページにアクセスする。横長向きにして全画面表示することをオススメする。<br>
+    AndroidであればFirefoxを使うとタブを非表示にすることができる。<br>
+    左眉毛▷http://<IPアドレス>:3000/lbrow<br>
+    右眉毛▷http://<IPアドレス>:3000/rbrow<br>
+
+4. ノートPCから以下コマンドで`/eyebrows/input_type`トピックに0~12の数字を送信して眉毛の動きを変えることができる。
+    ```
+    $ rostopic pub -1 /eyebrows/input_type std_msgs/Int32 "data: <num>"
+    ```
+    ```
+    Happy😀▷'yorokobi': ['嬉しい']
+    Relieved😌▷'yasu': ['安心']
+    Astonished😲▷'odoroki': ['びっくり']
+    Cry😭▷'aware': ['悲しい']
+    Angry😠▷'ikari': ['怒る']
+    Flushed😳▷'haji': ['恥ずかしい']
+    Fearful😱▷'kowa': ['怖い']
+    Love😍▷'suki': ['好き']
+    unpleasant😓▷'iya': ['嫌い']
+    Smirking😏▷感情対応なし
+    Squinting😝▷感情対応なし
+    Boring😪▷感情対応なし
+    ```
 
 ### ラズパイと実機を使った動かし方
 0. ノートPCとラズパイを133系ネットワークに繋いでおく
@@ -192,3 +231,4 @@ $ docker-compose run --rm app /bin/bash
 [ユーザー権限でsystemd](https://pyopyopyo.hatenablog.com/entry/2021/04/30/233755)<br>
 [Chromeがパスワードを求めないようにする](http://linuxlabo.labo.main.jp/?eid=4)<br>
 [WebGLで複数物体表示](https://www.programmingmat.jp/webgl_lab/triangles.html)<br>
+[WebGL多角形の書き方](https://qiita.com/ienaga/items/d9b92d6722aee6465d6c)<br>

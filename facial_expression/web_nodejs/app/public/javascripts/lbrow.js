@@ -274,18 +274,18 @@ function initBuffers(gl) {
     }
   } else if (mode == 12) {  // kanashimi
     if (squareRotation < 2 * tenRad) {
-      var rad1 = squareRotation * -0.75;
-      var rad2 = squareRotation * -0.75;
-      var rad3 = squareRotation * -0.75;
-      var rad4 = squareRotation * -0.75;
+      var rad1 = squareRotation * -0.6;
+      var rad2 = squareRotation * -0.6;
+      var rad3 = squareRotation * -0.6;
+      var rad4 = squareRotation * -0.6;
       var brow_len = BROW_LEN + squareRotation;
       // var pt1_x = PT1_X + squareRotation * 0.5;
       var pt1_y = PT1_Y + squareRotation * 2.5;
     } else {
-      var rad1 = tenRad * -1.5;
-      var rad2 = tenRad * -1.5;
-      var rad3 = tenRad * -1.5;
-      var rad4 = tenRad * -1.5;
+      var rad1 = tenRad * -1.2;
+      var rad2 = tenRad * -1.2;
+      var rad3 = tenRad * -1.2;
+      var rad4 = tenRad * -1.2;
       var brow_len = BROW_LEN + tenRad * 2;
       // var pt1_x = PT1_X + squareRotation;
       var pt1_y = PT1_Y + tenRad * 5;
@@ -563,13 +563,14 @@ function initBuffersTear(gl) {  // -> tears
   const TEAR_WID = 1.0;
   var tear_len = TEAR_LEN;
   var tear_wid = TEAR_WID;
-  var pt1_x = PT1_X + BROW_LEN + RIGHT_LEN + 0.1;
-  if (squareRotation < 2 * tenRad && !wait_flag) {
-    var tear_len = squareRotation * TEAR_LEN / (2 * tenRad);
-    var tear_wid = squareRotation * TEAR_WID / (1.8 * tenRad);
-    var pt1_y = PT1_Y;
+  var pt1_x = PT1_X + BROW_LEN + RIGHT_LEN + 0.12;
+  if (squareRotation < 1.5 * tenRad && !wait_flag) {
+    var tear_len = squareRotation * TEAR_LEN / (1.5 * tenRad);
+    var tear_wid = squareRotation * TEAR_WID / (1.0 * tenRad);
+    var pt1_x = PT1_X + BROW_LEN + RIGHT_LEN + squareRotation / 2.5
+    var pt1_y = PT1_Y + 0.15;
   } else if (squareRotation < 2.5 * tenRad && !wait_flag) {
-    var pt1_y = PT1_Y;
+    var pt1_y = PT1_Y + 0.15;
   } else {
     var pt1_y = pre_tear_y - 0.02;
   }
@@ -786,9 +787,9 @@ function initBuffersHeart(gl) {
   var pt1_y = 5.0;
   if (!wait_flag && squareRotation > 2 * tenRad) {
     var diff_rad = squareRotation - 2 * tenRad;
-    var HEART_WID = 1.5 + diff_rad * 0.5;
-    var HEART_HEI = 1.5 + diff_rad * 0.5;
-    var pt1_y = squareRotation * 2.0 - 1.5;
+    var HEART_WID = 1.5 + diff_rad * 1;
+    var HEART_HEI = 1.5 + diff_rad * 1;
+    var pt1_y = squareRotation * 2.5 - 1.5;
     if (squareRotation < 5 * tenRad) {
       var diff_rad = squareRotation - 2 * tenRad;
       var pt1_x = diff_rad * 2 + 1.5;

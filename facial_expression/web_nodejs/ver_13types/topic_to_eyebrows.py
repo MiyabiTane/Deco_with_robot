@@ -11,7 +11,22 @@ class TopicToEyebrows(object):
         rospy.Subscriber("/eyebrows/input_type", Int32, self.eyebrows_cb)
     
     def eyebrows_cb(self, msg):
-        degrees = [0, 20, 30, 70, 60, 20, 30, 30, 70, 120, 70, 140, 20]
+        """
+        0. Normal
+        1. Happy😀
+        2. Relieved😌
+        3. Smirking😏
+        4. Astonished😲
+        5. Unpleasant😓
+        6. Angry😠
+        7. Flushed😳
+        8. Fearful😱
+        9. Love😍
+        10. Squinting😝
+        11. Boring😪
+        12. Cry😭
+        """
+        degrees = [0, 20, 60, 70, 50, 30, 20, 60, 70, 120, 70, 130, 50]
         subprocess.call(["curl", "-X", "POST", "--data-urlencode", "mode=" + str(msg.data),
                          "--data-urlencode", "degree=" + str(degrees[msg.data]), "http://localhost:3000/api/info"])
 
