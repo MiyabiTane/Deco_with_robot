@@ -8,9 +8,9 @@
 
 2. Google Driveに`Colab Notebook`というフォルダを作成し、そこに生成された`results`フォルダと`re_classifier.ipynb`をアップロードする。同じ階層に`check`フォルダと`new_results`フォルダを作成し、`re_classifier.ipynb`Google Colabで実行する。
 
-3. `new_results`フォルダに生成されたjsonファイルをダウンロードし、[Dialogflow](https://dialogflow.cloud.google.com/?authuser=1#/agent/facialexpression-rpwe/intents)のインテントにアップロードして登録する<br>以下の12感情が生成されたことを確認する(Normal表情はどれにも当てはまらない場合の表情なので登録しない)<br>Happy, Relived, Smirking, Astonished, Cry, Angry, Flushed, Fearful, Love, Squinting, Boring, Cold_Sweat
+3. `new_results`フォルダに生成されたjsonファイルをダウンロードし、[Dialogflow](https://dialogflow.cloud.google.com/?authuser=1#/agent/facialexpressionoriginal-cphs/intents)のインテントにアップロードして登録する<br>以下の12感情が生成されたことを確認する(Normal表情はどれにも当てはまらない場合の表情なので登録しない)<br>Happy, Relived, Smirking, Astonished, Cry, Angry, Flushed, Fearful, Love, Squinting, Boring, Cold_Sweat
 
-4. [dialogflowのjsonファイル](https://drive.google.com/file/d/1NFO6SFLls1CN3fH5byAIk1W5ntGoHhyE/view?usp=sharing)をダウンロードし、`<json_path>`の場所に置く<br>以下のコマンドを実行<br>[眉毛デバイス](https://github.com/MiyabiTane/Deco_with_robot/tree/main/facial_expression/web_nodejs)があればそこにトピックが送られる
+4. [dialogflowのjsonファイル](https://drive.google.com/file/d/1_nvnwLta4yW7vOffhXcGwdUL6wudqood/view?usp=sharing)をダウンロードし、`<json_path>`の場所に置く<br>以下のコマンドを実行<br>[眉毛デバイス](https://github.com/MiyabiTane/Deco_with_robot/tree/main/facial_expression/web_nodejs)があればそこにトピックが送られる
     ```
     $ python dialogflow_run.py --json-path <json_path>
     ```

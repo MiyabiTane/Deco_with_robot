@@ -3,6 +3,7 @@
 
 import rospy
 import time
+import subprocess
 from std_msgs.msg import Int32
 from dialogflow_task_executive.msg import DialogResponse
 
@@ -22,14 +23,19 @@ class DialogflowSample(object):
         print("intent_score: ", msg.intent_score)
         # publish to eyebrows
         mode = msg.action
-        pub_msg = Int32()
-        action_to_int_dic = {"Happy": 1, "Relived": 2, "Smirking": 3, "Astonished": 4, "Cry": 5, "Fearful": 6,
-                             "Flushed": 7, "Fearful": 8, "Love": 9, "Squinting": 10, "Boring": 11, "Cold_Sweat": 12}
+        # pub_msg = Int32()
+        pub_str_int = ""
+        action_to_int_dic = {"Happy": 1, "Relived": 2, "Smirking": 3, "Astonished": 4, "Unpleasant": 5, "Angry": 6,
+                             "Flushed": 7, "Fearful": 8, "Love": 9, "Squinting": 10, "Boring": 11, "Cry": 12}
         if mode in action_to_int_dic:
-            pub_msg = action_to_int_dic[mode]
+            if msg.intent_score > 0.65:
+                pub_str_int = str(action_to_int_dic[mode])
+                # pub_msg = action_to_int_dic[mode]
         else:
-            pub_msg.data = 0
-        self.pub.publish(pub_msg)
+            pub_str_int = "0"
+            # pub_msg.data = 0
+        subprocess.call(["rostopic", "pub", "-1", "/eyebrows/input_type", "std_msgs/Int32", "data: " + pub_str_int])
+        # self.pub.publish(pub_msg)
 
 
 if __name__ == '__main__':

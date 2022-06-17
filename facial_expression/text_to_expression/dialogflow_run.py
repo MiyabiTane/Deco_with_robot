@@ -17,14 +17,21 @@ def run_sub_script():
 def run_pub_script():
     subprocess.call(["python", "sample_publisher.py"])
 
+def run_dummy():
+    print("dummy run")
+
 parser = argparse.ArgumentParser()
-parser.add_argument("--json-path", default="/home/tork/ros/json/facialexpression-rpwe-01533d0109c5.json")
-parser.add_argument("--project-id", default="facialexpression-rpwe")
+parser.add_argument("--json-path", default="/home/tork/ros/json/facialexpressionoriginal-cphs-377bf1229657.json")
+parser.add_argument("--project-id", default="facialexpressionoriginal-cphs")
+parser.add_argument("--no-sample", action="store_true")
 args = parser.parse_args()
 
 thread_1 = threading.Thread(target=run_launch, args=(args.json_path, args.project_id,))
 thread_2 = threading.Thread(target=run_sub_script)
-thread_3 = threading.Thread(target=run_pub_script)
+if args.no_sample:
+    thread_3 = threading.Thread(target=run_dummy)
+else:
+    thread_3 = threading.Thread(target=run_pub_script)
 thread_1.start()
 thread_2.start()
 time.sleep(5)

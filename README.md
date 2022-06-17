@@ -8,6 +8,43 @@
 
 [pix2pixディレクトリ](https://github.com/MiyabiTane/Deco_with_robot/tree/main/pix2pix)参照
 
+### 眉毛デバイス
+
+詳細は以下2つのリポジトリ<br>
+Dialogflowを用いてテキストから13種の表情を割り当てる▷[facial_expression/text_to_expression](https://github.com/MiyabiTane/Deco_with_robot/tree/main/facial_expression/text_to_expression)<br>
+Webページで眉毛を作る▷[facial_expression/web_nodejs](https://github.com/MiyabiTane/Deco_with_robot/tree/main/facial_expression/web_nodejs)
+
+#### 試し方
+ノートPC内で全て試せる簡単な試し方。<br>
+
+0. `dialogflow_task_executive`をビルドしていなければビルドする
+  ```
+  $ mkdir -p eyebrows_ws/src
+  $ cd eyebrows_ws/src
+  $ git pull https://github.com/jsk-ros-pkg/jsk_3rdparty.git
+  $ cd ../
+  $ catkin b dialogflow_task_executive
+  $ source ~/eyebrows_ws/devel/setup.bash
+  ```
+
+1. それぞれのコマンドを別ターミナルで実行する
+  ```
+  $ cd facial_expression/text_to_expression
+  $ python dialogflow_run.py --no-sample
+  ```
+  ```
+  $ cd facial_expression/web_nodejs/ver_13types
+  $ python run.py --no-roscore
+  ```
+2. 2つのWebページにアクセスする▷ http://localhost:3000/lbrow, http://localhost:3000/rbrow
+
+3. 任意のテキストをPublishする。以下は"嬉しい"を送る例。Webページ上の眉毛の動きが変化する。
+  ```
+  $ rostopic pub -1 /text std_msgs/String "data: '嬉しい'"
+  ```
+  ※文章の内容によっては動きが変化しない場合がある。
+
+
 ### 対話部分
 
 Chaplusの雑談APIを使用。

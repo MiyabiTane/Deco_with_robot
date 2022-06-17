@@ -1,0 +1,153 @@
+{
+  "id": "d08c053a-7e9b-41d5-92e7-2211b9cab2d9",
+  "name": "Default Welcome Intent",
+  "auto": true,
+  "condition": "",
+  "conditionalFollowupEvents": [],
+  "conditionalResponses": [],
+  "context": [],
+  "contexts": [],
+  "endInteraction": false,
+  "events": [
+    {
+      "name": "WELCOME"
+    }
+  ],
+  "fallbackIntent": false,
+  "liveAgentHandoff": false,
+  "parentId": null,
+  "followUpIntents": [],
+  "priority": 500000,
+  "responses": [
+    {
+      "action": "input.welcome",
+      "affectedContexts": [],
+      "parameters": [],
+      "defaultResponsePlatforms": {},
+      "messages": [
+        {
+          "type": "message",
+          "condition": "",
+          "speech": [
+            "こんにちは！"
+          ]
+        }
+      ],
+      "resetContexts": false
+    }
+  ],
+  "rootParentId": null,
+  "templates": [],
+  "userSays": [
+    {
+      "isTemplate": false,
+      "data": [
+        {
+          "text": "久しぶり",
+          "userDefined": false
+        }
+      ],
+      "count": 0,
+      "id": "63c09b7c-4e9d-4806-a275-a2ffb4f5ec73",
+      "updated": null
+    },
+    {
+      "isTemplate": false,
+      "data": [
+        {
+          "text": "今日は",
+          "userDefined": false
+        }
+      ],
+      "count": 0,
+      "id": "0f8bb1eb-1928-4ee9-9952-4d61aaa5ad3c",
+      "updated": null
+    },
+    {
+      "isTemplate": false,
+      "data": [
+        {
+          "text": "こんにちは",
+          "userDefined": false
+        }
+      ],
+      "count": 0,
+      "id": "e40077e8-f985-4f60-96b2-0e608f441060",
+      "updated": null
+    },
+    {
+      "isTemplate": false,
+      "data": [
+        {
+          "text": "どうも",
+          "userDefined": false
+        }
+      ],
+      "count": 0,
+      "id": "9441f592-dd44-44e9-adf1-4933ad0a7710",
+      "updated": null
+    },
+    {
+      "isTemplate": false,
+      "data": [
+        {
+          "text": "やあ、君",
+          "userDefined": false
+        }
+      ],
+      "count": 0,
+      "id": "ec77b1b7-9f08-49b9-8424-e134e5cbd411",
+      "updated": null
+    },
+    {
+      "isTemplate": false,
+      "data": [
+        {
+          "text": "やあ",
+          "userDefined": false
+        }
+      ],
+      "count": 0,
+      "id": "1cef291d-8d08-4403-a1ee-3125eab86fbf",
+      "updated": null
+    },
+    {
+      "isTemplate": false,
+      "data": [
+        {
+          "text": "ご挨拶します",
+          "userDefined": false
+        }
+      ],
+      "count": 0,
+      "id": "66e7cab1-5d0e-404b-8f4c-64b381880d65",
+      "updated": null
+    },
+    {
+      "isTemplate": false,
+      "data": [
+        {
+          "text": "はい、こんにちは",
+          "userDefined": false
+        }
+      ],
+      "count": 0,
+      "id": "450429db-ed1d-4130-a090-840dbdf1d85e",
+      "updated": null
+    },
+    {
+      "isTemplate": false,
+      "data": [
+        {
+          "text": "皆さん、こんにちは",
+          "userDefined": false
+        }
+      ],
+      "count": 0,
+      "id": "303c6ca2-e814-48e1-b4c0-032a63e0b1bd",
+      "updated": null
+    }
+  ],
+  "webhookForSlotFilling": false,
+  "webhookUsed": false
+}

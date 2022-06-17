@@ -1,0 +1,45 @@
+{
+  "id": "e52af096-7656-4f46-93fc-063ed8bddaa9",
+  "name": "Default Fallback Intent",
+  "auto": true,
+  "condition": "",
+  "conditionalFollowupEvents": [],
+  "conditionalResponses": [],
+  "context": [],
+  "contexts": [],
+  "endInteraction": false,
+  "events": [],
+  "fallbackIntent": true,
+  "liveAgentHandoff": false,
+  "parentId": null,
+  "followUpIntents": [],
+  "priority": 500000,
+  "responses": [
+    {
+      "action": "input.unknown",
+      "affectedContexts": [],
+      "parameters": [],
+      "defaultResponsePlatforms": {},
+      "messages": [
+        {
+          "type": "message",
+          "condition": "",
+          "speech": [
+            "すみません。よく分かりませんでした。",
+            "今のは少しわかりにくかったです。",
+            "少し言い換えていただけませんか。",
+            "失礼ですが、もう一度おねがいします。",
+            "ちょっと分かりませんでした。",
+            "今、なんておっしゃいましたか？"
+          ]
+        }
+      ],
+      "resetContexts": false
+    }
+  ],
+  "rootParentId": null,
+  "templates": [],
+  "userSays": [],
+  "webhookForSlotFilling": false,
+  "webhookUsed": false
+}
