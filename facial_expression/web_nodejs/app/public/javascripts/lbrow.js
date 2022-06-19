@@ -21,7 +21,7 @@ var pre_sweat_y = 0.0;
 var wait_flag = false;
 var tenRad = 10 * Math.PI / 180;
 var back_color = 1.0;
-var PT1_X = -0.7;
+var PT1_X = -0.5;
 var PT1_Y = -0.6;
 var BROW_LEN = 3;
 var BROW_WID = 1.5;
@@ -122,9 +122,9 @@ function main() {
         const buffersHeart = initBuffersHeart(gl);
         const buffersColor = initBuffersColor(gl);
         then = now;
-        if (mode < 7 || mode == 11) {
+        if (mode < 6 || mode == 11) {
 	  drawScene(gl, programInfo, buffers, deltaTime, 12);
-	} else if (mode == 7 || mode == 8) {
+	} else if (mode == 6 || mode == 7 || mode == 8) {
           drawSceneColor(gl, programInfoColor, buffersColor, 12);
 	} else if (mode == 9) {
 	  drawSceneSome(gl, programInfo, programInfoColor, buffers, buffersHeart, 12, 17);
@@ -170,31 +170,40 @@ function initBuffers(gl) {
   var pt1_y = PT1_Y;
   if (mode == 1) {  // yorokobi
     var rad1 = 0;
-    var rad2 = -1 * squareRotation;
-    var rad3 = squareRotation;
-    var rad4 = squareRotation;
-    var brow_len = BROW_LEN + squareRotation;
+    var rad2 = -1 * squareRotation * 1.5;
+    var rad3 = squareRotation * 1.5;
+    var rad4 = squareRotation * 1.5;
+    // var brow_len = BROW_LEN + squareRotation;
     var brow_wid = BROW_WID - Math.abs(squareRotation / 2);
     var pt1_x = PT1_X;
     var pt1_y = PT1_Y + squareRotation * 2;
+    var left_len = LEFT_LEN + squareRotation;
+    var right_len = RIGHT_LEN + squareRotation;
   } else if (mode == 2 || mode == 11) {  // anshin || taikutsu
-    if (Math.abs(squareRotation) < tenRad * 2) {
-      var rad1 = squareRotation * -0.25;
-      var rad2 = squareRotation * -0.25;
-      var rad3 = squareRotation * -0.25;
-      var rad4 = squareRotation * -0.25;
-      var pt1_x = PT1_X + squareRotation * 1.5;
-      var pt1_y = PT1_Y + squareRotation * 4;
+    if (Math.abs(squareRotation) < tenRad * 3) {
+      var rad1 = squareRotation * -0.125;
+      var rad2 = squareRotation * -0.125;
+      var rad3 = squareRotation * -0.125;
+      var rad4 = squareRotation * -0.125;
+      var pt1_x = PT1_X + squareRotation * 0.75;
+      var pt1_y = PT1_Y + squareRotation * 1.5;
+    } else if (Math.abs(squareRotation) < tenRad * 4) {
+      var rad1 = tenRad * -0.125 * 3;
+      var rad2 = tenRad * -0.125 * 3;
+      var rad3 = tenRad * -0.125 * 3;
+      var rad4 = tenRad * -0.125 * 3;
+      var pt1_x = PT1_X + tenRad * 0.75 * 3;
+      var pt1_y = PT1_Y + tenRad * 1.5 * 3;
     } else {
-      var rad1 = tenRad * -0.5;
-      var rad2 = tenRad * -0.5;
-      var rad3 = tenRad * -0.5;
-      var rad4 = tenRad * -0.5;
-      var pt1_x = PT1_X + tenRad * 3;
-      var pt1_y = PT1_Y + tenRad * 6 - (squareRotation - 2 * tenRad) * 1.5;
+      var rad1 = tenRad * -0.125 * 3;
+      var rad2 = tenRad * -0.125 * 3;
+      var rad3 = tenRad * -0.125 * 3;
+      var rad4 = tenRad * -0.125 * 3;
+      var pt1_x = PT1_X + tenRad * 0.75 * 3;
+      var pt1_y = PT1_Y + tenRad * 1.5 * 3 - (squareRotation - 4 * tenRad) * 1.5;
     }
-    if (squareRotation > 7 * tenRad) {
-      var pt1_y = PT1_Y - 1.5 * tenRad;
+    if (squareRotation > 9 * tenRad) {
+      var pt1_y = PT1_Y + tenRad * 1.5 * 3 - 5 * tenRad * 1.5;
     }
   } else if (mode == 3) {  // warudakumi
     var tmp_num = squareRotation / tenRad;
@@ -256,6 +265,9 @@ function initBuffers(gl) {
       if (wait_flag) {
         var pt1_x = PT1_X + tenRad * 6;
         var pt1_y = PT1_Y + tenRad * 6;
+      } else if (Math.abs(squareRotation) < 2.5 * tenRad) {
+        var pt1_x = PT1_X + tenRad * 2;
+        var pt1_y = PT1_Y + tenRad * 2;
       } else if (2.5 * tenRad < Math.abs(squareRotation)) {
         if (Math.abs(squareRotation) < tenRad * 3.5) {
 	  var pt1_x = PT1_X + tenRad * 6 + (squareRotation - 2.5 * tenRad) * 2;
@@ -290,27 +302,19 @@ function initBuffers(gl) {
       // var pt1_x = PT1_X + squareRotation;
       var pt1_y = PT1_Y + tenRad * 5;
     }
-  } else if (mode == 6) {  // ikari
-    var rad1 = squareRotation * 2;
-    var rad2 = squareRotation * 1.5;
-    var rad3 = squareRotation * 2;
-    var rad4 = squareRotation * 2;
-    var brow_len = BROW_LEN + squareRotation;
-    var pt1_x = PT1_X + squareRotation;
-    var pt1_y = PT1_Y - squareRotation;
   } else if (mode == 9) {  // suki
     if (squareRotation < tenRad * 2) {
       var rad1 = squareRotation * -0.25;
       var rad2 = squareRotation * -0.25;
       var rad3 = squareRotation * -0.25;
       var rad4 = squareRotation * -0.25;
-      var pt1_y = PT1_Y - squareRotation * 1.5;
+      var pt1_y = PT1_Y - squareRotation * 1.0;
     } else {
       var rad1 = tenRad * -0.5;
       var rad2 = tenRad * -0.5;
       var rad3 = tenRad * -0.5;
       var rad4 = tenRad * -0.5;
-      var pt1_y = PT1_Y - tenRad * 3;
+      var pt1_y = PT1_Y - tenRad * 2;
     }
   } else if (mode == 10) {  // wink
     var rad1 = 0;
@@ -329,8 +333,11 @@ function initBuffers(gl) {
     var rad2 = 0.2 * squareRotation;
     var rad3 = -1.5 * squareRotation;
     var rad4 = -1.5 * squareRotation;
-    var brow_wid = BROW_WID - Math.abs(squareRotation / 2);
-    var brow_len = BROW_LEN + squareRotation * 0.5;
+    // var brow_wid = BROW_WID - Math.abs(squareRotation / 2);
+    // var brow_len = BROW_LEN + squareRotation * 0.5;
+    // var left_len = LEFT_LEN + squareRotation;
+    var pt1_x = PT1_X - squareRotation;
+    var pt1_y = PT1_Y - squareRotation;
   }
   var pt2_x = pt1_x + brow_len * Math.cos(rad1);
   var pt2_y = pt1_y + brow_len * Math.sin(rad1);
@@ -394,7 +401,18 @@ function initBuffersColor(gl) {
   var right_len = RIGHT_LEN;
   var pt1_x = PT1_X;
   var pt1_y = PT1_Y;
-  if (mode == 7) {  // tere
+  if (mode == 6) {  // ikari
+    var rad1 = squareRotation * 2.0;
+    var rad2 = squareRotation * 1.5;
+    var rad3 = squareRotation * 0.0;
+    var rad4 = squareRotation * 0.0;
+    // var brow_len = BROW_LEN + squareRotation;
+    var right_len = RIGHT_LEN + squareRotation;
+    var left_len = LEFT_LEN - squareRotation / 2;
+    // var brow_wid = BROW_WID + squareRotation;
+    var pt1_x = PT1_X + squareRotation;
+    var pt1_y = PT1_Y - squareRotation;
+  } else if (mode == 7) {  // tere
     if (Math.abs(squareRotation) < tenRad * 2) {
       var rad1 = squareRotation * -0.5;
       var rad2 = squareRotation * -0.5;
@@ -501,7 +519,9 @@ function initBuffersColor(gl) {
   var r = 0.0;
   var g = 0.0;
   var b = 0.0;
-  if (mode == 7) {  // tere
+  if (mode == 6) {  // ikari
+    var r = Math.min(1.0, squareRotation * 3);
+  } else if (mode == 7) {  // tere
     if (squareRotation < 2.5 * tenRad) {
       var color_deg = squareRotation - tenRad * 0.5;
       var r = Math.min(1.0, color_deg * 1.5);
