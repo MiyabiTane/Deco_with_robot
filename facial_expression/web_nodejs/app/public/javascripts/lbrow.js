@@ -17,7 +17,7 @@
 main();
 
 var squareRotation = 0.0;
-var pre_sweat_y = 0.0;
+var pre_tear_y = 0.0;
 var wait_flag = false;
 var tenRad = 10 * Math.PI / 180;
 var back_color = 1.0;
@@ -114,27 +114,30 @@ function main() {
   // Draw the scene
   var then = 0;
   function render(now) {
-	now *= 0.001;  // convert to seconds
-	const deltaTime = now - then;
+      now *= 0.001;  // convert to seconds
+      const deltaTime = now - then;
+      then = now;
+      if (mode < 6 || mode == 11) {
         const buffers = initBuffers(gl);
-        const buffersTear = initBuffersTear(gl);
-        const buffersStar = initBuffersStar(gl);
-        const buffersHeart = initBuffersHeart(gl);
+        drawScene(gl, programInfo, buffers, deltaTime, 12);
+      } else if (mode == 6 || mode == 7 || mode == 8) {
         const buffersColor = initBuffersColor(gl);
-        then = now;
-        if (mode < 6 || mode == 11) {
-	  drawScene(gl, programInfo, buffers, deltaTime, 12);
-	} else if (mode == 6 || mode == 7 || mode == 8) {
-          drawSceneColor(gl, programInfoColor, buffersColor, 12);
-	} else if (mode == 9) {
-	  drawSceneSome(gl, programInfo, programInfoColor, buffers, buffersHeart, 12, 17);
-        } else if (mode == 10) {
-	  drawSceneSome(gl, programInfo, programInfoColor, buffers, buffersStar, 12, 25);
-	} else if (mode == 12) {
-          drawSceneSome(gl, programInfo, programInfoColor, buffers, buffersTear, 12, 12);
-        }
-        update(deltaTime);
-	requestAnimationFrame(render);
+        drawSceneColor(gl, programInfoColor, buffersColor, 12);
+      } else if (mode == 9) {
+        const buffers = initBuffers(gl);
+        const buffersHeart = initBuffersHeart(gl);
+        drawSceneSome(gl, programInfo, programInfoColor, buffers, buffersHeart, 12, 17);
+      } else if (mode == 10) {
+	const buffers = initBuffers(gl);
+	const buffersStar = initBuffersStar(gl);
+	drawSceneSome(gl, programInfo, programInfoColor, buffers, buffersStar, 12, 25);
+      } else if (mode == 12) {
+	const buffers = initBuffers(gl);
+	const buffersTear = initBuffersTear(gl);
+        drawSceneSome(gl, programInfo, programInfoColor, buffers, buffersTear, 12, 12);
+      }
+      update(deltaTime);
+      requestAnimationFrame(render);
   }
   requestAnimationFrame(render);
 }
@@ -266,8 +269,8 @@ function initBuffers(gl) {
         var pt1_x = PT1_X + tenRad * 6;
         var pt1_y = PT1_Y + tenRad * 6;
       } else if (Math.abs(squareRotation) < 2.5 * tenRad) {
-        var pt1_x = PT1_X + tenRad * 2;
-        var pt1_y = PT1_Y + tenRad * 2;
+        var pt1_x = PT1_X + tenRad * 4;
+        var pt1_y = PT1_Y + tenRad * 3;
       } else if (2.5 * tenRad < Math.abs(squareRotation)) {
         if (Math.abs(squareRotation) < tenRad * 3.5) {
 	  var pt1_x = PT1_X + tenRad * 6 + (squareRotation - 2.5 * tenRad) * 2;
@@ -412,7 +415,7 @@ function initBuffersColor(gl) {
     // var brow_wid = BROW_WID + squareRotation;
     var pt1_x = PT1_X + squareRotation;
     var pt1_y = PT1_Y - squareRotation;
-  } else if (mode == 7) {  // tere
+  } else if (mode == 7) {  // odoroki || tere
     if (Math.abs(squareRotation) < tenRad * 2) {
       var rad1 = squareRotation * -0.5;
       var rad2 = squareRotation * -0.5;
@@ -430,6 +433,9 @@ function initBuffersColor(gl) {
       if (wait_flag) {
         var pt1_x = PT1_X + tenRad * 6;
         var pt1_y = PT1_Y + tenRad * 6;
+      } else if (Math.abs(squareRotation) < 2.5 * tenRad) {
+        var pt1_x = PT1_X + tenRad * 2;
+        var pt1_y = PT1_Y + tenRad * 2;
       } else if (2.5 * tenRad < Math.abs(squareRotation)) {
         if (Math.abs(squareRotation) < tenRad * 3.5) {
 	  var pt1_x = PT1_X + tenRad * 6 + (squareRotation - 2.5 * tenRad) * 2;
@@ -438,7 +444,7 @@ function initBuffersColor(gl) {
 	  var pt1_x = PT1_X + tenRad * 8 - (squareRotation - 3.5 * tenRad) * 2;
 	  var pt1_y = PT1_Y + tenRad * 27 - (squareRotation - tenRad) * 6;
 	} else {
-	  var pt1_x = PT1_X + tenRad * 6;
+          var pt1_x = PT1_X + tenRad * 6;
           var pt1_y = PT1_Y + tenRad * 6;
 	}
       } else {

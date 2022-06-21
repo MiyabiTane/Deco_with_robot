@@ -116,15 +116,16 @@ function main() {
   function render(now) {
 	now *= 0.001;  // convert to seconds
 	const deltaTime = now - then;
-        const buffers = initBuffers(gl);
-        const buffersColor = initBuffersColor(gl);
-        const buffersSleep = initBuffersSleep(gl);
         then = now;
         if (mode == 11) {
+	  const buffers = initBuffers(gl);
+	  const buffersSleep = initBuffersSleep(gl);
 	  drawSceneSome(gl, programInfo, programInfoColor, buffers, buffersSleep, 12, 11);
         } else if (mode < 6 || mode > 8) {
+	  const buffers = initBuffers(gl);
 	  drawScene(gl, programInfo, buffers, deltaTime, 12);
         } else if (mode == 6 || mode == 7 || mode == 8) {
+	  const buffersColor = initBuffersColor(gl);
 	  drawSceneColor(gl, programInfoColor, buffersColor, 12);
 	}
         update(deltaTime);
@@ -409,7 +410,7 @@ function initBuffersColor(gl) {
     // var brow_wid = BROW_WID - squareRotation;
     var pt1_x = PT1_X - squareRotation;
     var pt1_y = PT1_Y - squareRotation;
-  } else if (mode == 7) {  // tere || odororki
+  } else if (mode == 7) {  // odoroki || tere
     if (Math.abs(squareRotation) < tenRad * 2) {
       var rad1 = squareRotation * -0.5;
       var rad2 = squareRotation * -0.5;
@@ -427,6 +428,9 @@ function initBuffersColor(gl) {
       if (wait_flag) {
         var pt1_x = PT1_X - tenRad * 6;
         var pt1_y = PT1_Y + tenRad * 6;
+      } else if (Math.abs(squareRotation) < 2.5 * tenRad) {
+        var pt1_x = PT1_X + tenRad * 2;
+        var pt1_y = PT1_Y + tenRad * 2;
       } else if (2.5 * tenRad < Math.abs(squareRotation)) {
         if (Math.abs(squareRotation) < tenRad * 3.5) {
 	  var pt1_x = PT1_X - tenRad * 6 - (squareRotation - 2.5 * tenRad) * 2;
