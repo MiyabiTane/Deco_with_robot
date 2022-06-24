@@ -17,6 +17,9 @@ def run_sub_script():
 def run_pub_script():
     subprocess.call(["python", "sample_publisher.py"])
 
+def run_speak_script():
+    subprocess.call(["python", "text_to_sound.py"])
+
 def run_dummy():
     print("dummy run")
 
@@ -24,6 +27,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--json-path", default="/home/tork/ros/json/facialexpressionoriginal-cphs-377bf1229657.json")
 parser.add_argument("--project-id", default="facialexpressionoriginal-cphs")
 parser.add_argument("--no-sample", action="store_true")
+parser.add_argument("--with-speak", action="store_true")
 args = parser.parse_args()
 
 thread_1 = threading.Thread(target=run_launch, args=(args.json_path, args.project_id,))
@@ -32,7 +36,12 @@ if args.no_sample:
     thread_3 = threading.Thread(target=run_dummy)
 else:
     thread_3 = threading.Thread(target=run_pub_script)
+if args.with_speak:
+    thread_4 = threading.Thread(target=run_speak_script)
+else:
+    thread_4 = threading.Thread(target=run_dummy)
 thread_1.start()
 thread_2.start()
 time.sleep(5)
 thread_3.start()
+thread_4.start()

@@ -27,10 +27,12 @@ Webページで眉毛を作る▷[facial_expression/web_nodejs](https://github.c
   $ source ~/eyebrows_ws/devel/setup.bash
   ```
 
-1. それぞれのコマンドを別ターミナルで実行する
+1. [dialogflowのjsonファイル](https://drive.google.com/file/d/1_nvnwLta4yW7vOffhXcGwdUL6wudqood/view)をダウンロードし、<json_path>の場所に置く。それぞれのコマンドを別ターミナルで実行する
   ```
   $ cd facial_expression/text_to_expression
-  $ python dialogflow_run.py --no-sample
+  $ python dialogflow_run.py --json-path <json_path> --no-sample
+  # 送信した内容をロボットに喋らせたい場合は
+  # $ python dialogflow_run.py --json-path <json_path> --no-sample --with-speak
   ```
   ```
   $ cd facial_expression/web_nodejs/ver_13types
