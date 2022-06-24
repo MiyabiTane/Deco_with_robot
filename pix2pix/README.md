@@ -67,6 +67,15 @@ input_pdfは[こちら](https://drive.google.com/drive/folders/1izehNB7GK3bh5nqr
     $ pipenv run python trained_pix2pix.py --input test.jpg
     ```
 
+### 飾り付け配置を生成する
+
+最新スクリプトはこちら▷[Dockerfile](https://github.com/MiyabiTane/jsk_pr2eus/blob/deco_with_robot/pr2eus_tutorials/scripts/deco_demo/Dockerfile), [think_deco_node.py](https://github.com/MiyabiTane/jsk_pr2eus/blob/deco_with_robot/pr2eus_tutorials/scripts/deco_demo/think_deco_node.py), [think_deco.py](https://github.com/MiyabiTane/jsk_pr2eus/blob/deco_with_robot/pr2eus_tutorials/scripts/deco_demo/think_deco.py)
+
+初回のみ、`Dockerfile`が置いてあるディレクトリで以下のコマンドを実行する必要がある
+```
+$ docker image build -t deco_tensor .
+```
+
 ### 仮想環境(pipenv)の作り方
 
 0. Linuxの人は[このサイト](https://qiita.com/sabaku20XX/items/67eb69f006adbbf9c525)を参照してpipenvを使える環境にする。Macの人は```brew install```とかで簡単に入るはず。

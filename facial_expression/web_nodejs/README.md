@@ -44,7 +44,7 @@ http://localhost:3000/rbrow, http://localhost:3000/lbrow
     ```
 
 3. デバイスでWebページを開き、以下ページにアクセスする。横長向きにして全画面表示することをオススメする。<br>
-    AndroidであればFirefoxを使うとタブを非表示にすることができる。<br>
+    現状、Google Chromeで安定的に動作する<br>
     左眉毛▷http://<IPアドレス>:3000/lbrow<br>
     右眉毛▷http://<IPアドレス>:3000/rbrow<br>
 
