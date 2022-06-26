@@ -269,8 +269,8 @@ function initBuffers(gl) {
         var pt1_x = PT1_X + tenRad * 6;
         var pt1_y = PT1_Y + tenRad * 6;
       } else if (Math.abs(squareRotation) < 2.5 * tenRad) {
-        var pt1_x = PT1_X + tenRad * 4;
-        var pt1_y = PT1_Y + tenRad * 3;
+        var pt1_x = PT1_X + tenRad * 2;
+        var pt1_y = PT1_Y + tenRad * 2;
       } else if (2.5 * tenRad < Math.abs(squareRotation)) {
         if (Math.abs(squareRotation) < tenRad * 3.5) {
 	  var pt1_x = PT1_X + tenRad * 6 + (squareRotation - 2.5 * tenRad) * 2;
