@@ -14,7 +14,7 @@ class TextToSound(object):
         self.sound = -3
         self.arg2 = 'ja'
 
-        rospy.Subscriber("/text", String, self.speak_cb)
+        rospy.Subscriber("/text_for_sound", String, self.speak_cb)
 
         self.actionlib_client = actionlib.SimpleActionClient('/robotsound_jp', SoundRequestAction)
         print("waiting server ...")
@@ -22,6 +22,7 @@ class TextToSound(object):
         print("Server Called")
     
     def speak_cb(self, msg):
+        rospy.sleep(3+1)  # rostopic pubのせい。最終的には使わない
         speak_msg = SoundRequestGoal()
         speak_msg.sound_request.volume = self.volume
         speak_msg.sound_request.command = self.command

@@ -5,6 +5,7 @@ import rospy
 import time
 import subprocess
 from std_msgs.msg import Int32
+from std_msgs.msg import String
 from dialogflow_task_executive.msg import DialogResponse
 
 class DialogflowSample(object):
@@ -28,12 +29,16 @@ class DialogflowSample(object):
         action_to_int_dic = {"Happy": 1, "Relived": 2, "Smirking": 3, "Astonished": 4, "Unpleasant": 5, "Angry": 6,
                              "Flushed": 7, "Fearful": 8, "Love": 9, "Squinting": 10, "Boring": 11, "Cry": 12}
         if mode in action_to_int_dic:
-            if msg.intent_score > 0.65:
+            if msg.intent_score > 0.60:
                 pub_str_int = str(action_to_int_dic[mode])
                 # pub_msg = action_to_int_dic[mode]
         else:
             pub_str_int = "0"
             # pub_msg.data = 0
+        # 音声と表情の時差をなくしたいので一度デフォルトの表情に戻す
+        subprocess.call(["rostopic", "pub", "-1", "/eyebrows/input_type", "std_msgs/Int32", "data: 0"])
+
+        subprocess.call(["rostopic", "pub", "-1", "/text_for_sound", "std_msgs/String", "data: " + msg.query])
         subprocess.call(["rostopic", "pub", "-1", "/eyebrows/input_type", "std_msgs/Int32", "data: " + pub_str_int])
         # self.pub.publish(pub_msg)
 
