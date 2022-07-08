@@ -202,45 +202,48 @@ function initBuffers(gl) {
     }
   } else if (mode == 3) {  // warudakumi
     var tmp_num = squareRotation / tenRad;
-    if (squareRotation < 2 * tenRad) {
-      var rad1 = 2 * squareRotation;
-      var rad2 = 2 * squareRotation;
+    if (squareRotation <= 2 * tenRad) {
+      var rad1 = 0;
+      var rad2 = 0;
       var rad3 = 0;
       var rad4 = 0;
-      var brow_len = BROW_LEN + squareRotation * 0.5;
-      var brow_wid = BROW_WID - 1.5 * Math.abs(squareRotation);
+      // var brow_len = BROW_LEN - squareRotation * 0.5;
+      var brow_wid = BROW_WID - squareRotation * 0.5;
       var pt1_x = PT1_X - squareRotation * 0.5;
       var pt1_y = PT1_Y - squareRotation;
-    } else if (3 * tenRad < squareRotation &&
-	       Math.abs(maxRotation - squareRotation) > 0.1 && !wait_flag) {
-      if (Math.floor(tmp_num) % 2 == 1) {  // down
-        var rad1 = (4 + Math.floor(tmp_num)) * tenRad - squareRotation;
-        var rad2 = (4 + Math.floor(tmp_num)) * tenRad - squareRotation;
+      var left_len = LEFT_LEN + squareRotation * 0.25;
+      var right_len = RIGHT_LEN - squareRotation * 0.25;
+    } else {
+      // var brow_len = BROW_LEN - tenRad;
+      var brow_wid = BROW_WID - tenRad;
+      var pt1_x = PT1_X - tenRad + 0.5;
+      var pt1_y = PT1_Y - tenRad * 2 - 0.1;
+      var left_len = LEFT_LEN + 0.5;
+      var right_len = RIGHT_LEN - 0.5;
+      if (squareRotation <= 4 * tenRad) {
+        var rad1 = squareRotation - 2 * tenRad;
+        var rad2 = (squareRotation - 2 * tenRad) * 0.5;
         var rad3 = 0;
         var rad4 = 0;
-	var brow_len = BROW_LEN + tenRad;
-        var brow_wid = BROW_WID - 3 * tenRad;
-	var pt1_x = PT1_X - tenRad;
-        var pt1_y = PT1_Y - tenRad * 2;
-      } else {  // up
-        var rad1 = (3 - Math.floor(tmp_num)) * tenRad + squareRotation;
-	var rad2 = (3 - Math.floor(tmp_num)) * tenRad + squareRotation;
-	var rad3 = 0;
-	var rad4 = 0;
-	var brow_len = BROW_LEN + tenRad;
-        var brow_wid = BROW_WID - 3 * tenRad;
-        var pt1_x = PT1_X - tenRad;
-        var pt1_y = PT1_Y - tenRad * 2;
+      } else if (5 * tenRad < squareRotation &&
+	         Math.abs(maxRotation - squareRotation) > 0.1 && !wait_flag) {
+	if (Math.floor(tmp_num) % 2 == 1) {  // down
+          var rad1 = (2 + Math.floor(tmp_num)) * tenRad - squareRotation;
+          var rad2 = (1 + Math.floor(tmp_num)) * tenRad - squareRotation;
+          var rad3 = 0;
+          var rad4 = 0;
+	} else {  // up
+          var rad1 = (2 - Math.floor(tmp_num)) * tenRad + squareRotation;
+	  var rad2 = (1 - Math.floor(tmp_num)) * tenRad + squareRotation;
+	  var rad3 = 0;
+	  var rad4 = 0;
+        }
+      } else {
+	var rad1 = 2 * tenRad;
+        var rad2 = tenRad;
+        var rad3 = 0;
+        var rad4 = 0;
       }
-    } else {
-      var rad1 = 4 * tenRad;
-      var rad2 = 4 * tenRad;
-      var rad3 = 0;
-      var rad4 = 0;
-      var brow_len = BROW_LEN + tenRad;
-      var brow_wid = BROW_WID - 3 * tenRad;
-      var pt1_x = PT1_X - tenRad;
-      var pt1_y = PT1_Y - tenRad * 2;
     }
   } else if (mode == 4) {  // odoroki || tere
     if (Math.abs(squareRotation) < tenRad * 2) {
@@ -250,7 +253,7 @@ function initBuffers(gl) {
       var rad4 = squareRotation * -0.5;
       var brow_len = BROW_LEN - squareRotation * 1.5;
       var pt1_x = PT1_X - squareRotation * 3;
-      var pt1_y = PT1_Y + squareRotation * 3;
+      var pt1_y = PT1_Y + squareRotation;
     } else {
       var rad1 = tenRad * -1;
       var rad2 = tenRad * -1;
@@ -258,25 +261,22 @@ function initBuffers(gl) {
       var rad4 = tenRad * -1;
       var brow_len = BROW_LEN - tenRad * 3;
       if (wait_flag) {
-        var pt1_x = PT1_X - tenRad * 6;
-        var pt1_y = PT1_Y + tenRad * 6;
+        var pt1_x = Math.max(PT1_X - tenRad * 6 - (squareRotation - 2 * tenRad) * 3, PT1_X - tenRad * 12);
+        var pt1_y = Math.min(PT1_Y + tenRad * 2 + (squareRotation - 2 * tenRad) * 3, PT1_Y + tenRad * 8);
       } else if (Math.abs(squareRotation) < 2.5 * tenRad) {
-        var pt1_x = PT1_X + tenRad * 2;
-        var pt1_y = PT1_Y + tenRad * 2;
+        var pt1_x = PT1_X - tenRad * 2;
+        var pt1_y = PT1_Y;
       } else if (2.5 * tenRad < Math.abs(squareRotation)) {
-        if (Math.abs(squareRotation) < tenRad * 3.5) {
-	  var pt1_x = PT1_X - tenRad * 6 - (squareRotation - 2.5 * tenRad) * 2;
-	  var pt1_y = PT1_Y + tenRad * 6 + squareRotation * 6;
-	} else if (Math.abs(squareRotation) < tenRad * 4.5) {
-	  var pt1_x = PT1_X - tenRad * 8 + (squareRotation - 3.5 * tenRad) * 2;
-	  var pt1_y = PT1_Y + tenRad * 27 - (squareRotation - tenRad) * 6;
+        if (Math.abs(squareRotation) < tenRad * 3) {
+	  var pt1_x = PT1_X - tenRad * 6 - (squareRotation - 2.5 * tenRad) * 10;
+	  var pt1_y = PT1_Y + tenRad * 2 + (squareRotation - 2.5 * tenRad) * 15;
 	} else {
-          var pt1_x = PT1_X - tenRad * 6;
-          var pt1_y = PT1_Y + tenRad * 6;
+	  var pt1_x = PT1_X - tenRad * 11;
+	  var pt1_y = PT1_Y + tenRad * 9.5;
 	}
       } else {
-        var pt1_x = PT1_X - tenRad * 6;
-        var pt1_y = PT1_Y + tenRad * 8;
+        var pt1_x = PT1_X - tenRad * 11;
+        var pt1_y = PT1_Y + tenRad * 9.5;
       }
     }
   } else if (mode == 12) {  // kanashimi
@@ -418,7 +418,7 @@ function initBuffersColor(gl) {
       var rad4 = squareRotation * -0.5;
       var brow_len = BROW_LEN - squareRotation * 1.5;
       var pt1_x = PT1_X - squareRotation * 3;
-      var pt1_y = PT1_Y + squareRotation * 3;
+      var pt1_y = PT1_Y + squareRotation;
     } else {
       var rad1 = tenRad * -1;
       var rad2 = tenRad * -1;
@@ -426,25 +426,22 @@ function initBuffersColor(gl) {
       var rad4 = tenRad * -1;
       var brow_len = BROW_LEN - tenRad * 3;
       if (wait_flag) {
-        var pt1_x = PT1_X - tenRad * 6;
-        var pt1_y = PT1_Y + tenRad * 6;
+        var pt1_x = Math.max(PT1_X - tenRad * 6 - (squareRotation - 2 * tenRad) * 3, PT1_X - tenRad * 12);
+        var pt1_y = Math.min(PT1_Y + tenRad * 2 + (squareRotation - 2 * tenRad) * 3, PT1_Y + tenRad * 8);
       } else if (Math.abs(squareRotation) < 2.5 * tenRad) {
-        var pt1_x = PT1_X + tenRad * 2;
-        var pt1_y = PT1_Y + tenRad * 2;
+        var pt1_x = PT1_X - tenRad * 2;
+        var pt1_y = PT1_Y;
       } else if (2.5 * tenRad < Math.abs(squareRotation)) {
-        if (Math.abs(squareRotation) < tenRad * 3.5) {
-	  var pt1_x = PT1_X - tenRad * 6 - (squareRotation - 2.5 * tenRad) * 2;
-	  var pt1_y = PT1_Y + tenRad * 6 + squareRotation * 6;
-	} else if (Math.abs(squareRotation) < tenRad * 4.5) {
-	  var pt1_x = PT1_X - tenRad * 8 + (squareRotation - 3.5 * tenRad) * 2;
-	  var pt1_y = PT1_Y + tenRad * 27 - (squareRotation - tenRad) * 6;
+        if (Math.abs(squareRotation) < tenRad * 3) {
+	  var pt1_x = PT1_X - tenRad * 6 - (squareRotation - 2.5 * tenRad) * 10;
+	  var pt1_y = PT1_Y + tenRad * 2 + (squareRotation - 2.5 * tenRad) * 15;
 	} else {
-          var pt1_x = PT1_X - tenRad * 6;
-          var pt1_y = PT1_Y + tenRad * 6;
+	  var pt1_x = PT1_X - tenRad * 11;
+	  var pt1_y = PT1_Y + tenRad * 9.5;
 	}
       } else {
-        var pt1_x = PT1_X - tenRad * 6;
-        var pt1_y = PT1_Y + tenRad * 8;
+        var pt1_x = PT1_X - tenRad * 11;
+        var pt1_y = PT1_Y + tenRad * 9.5;
       }
     }
   } else if (mode == 8) {  // kyoufu

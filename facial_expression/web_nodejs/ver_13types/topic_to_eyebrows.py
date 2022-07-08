@@ -26,7 +26,7 @@ class TopicToEyebrows(object):
         11. Boring😪
         12. Cry😭
         """
-        degrees = [0, 20, 90, 70, 50, 30, 20, 60, 70, 120, 70, 130, 50]
+        degrees = [0, 20, 90, 100, 50, 30, 20, 60, 70, 120, 70, 130, 50]
         subprocess.call(["curl", "-X", "POST", "--data-urlencode", "mode=" + str(msg.data),
                          "--data-urlencode", "degree=" + str(degrees[msg.data]), "http://localhost:3000/api/info"])
 
