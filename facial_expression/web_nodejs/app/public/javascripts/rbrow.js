@@ -171,7 +171,7 @@ function initBuffers(gl) {
     // var brow_len = BROW_LEN + squareRotation;
     var brow_wid = BROW_WID - Math.abs(squareRotation / 2);
     var pt1_x = PT1_X;
-    var pt1_y = PT1_Y + squareRotation * 2;
+    var pt1_y = PT1_Y + squareRotation;
     var left_len = LEFT_LEN + squareRotation;
     var right_len = RIGHT_LEN + squareRotation;
   } else if (mode == 2 || mode == 11) {  // anshin || taikutsu
@@ -208,39 +208,54 @@ function initBuffers(gl) {
       var rad3 = 0;
       var rad4 = 0;
       // var brow_len = BROW_LEN - squareRotation * 0.5;
-      var brow_wid = BROW_WID - squareRotation * 0.5;
-      var pt1_x = PT1_X - squareRotation * 0.5;
+      var brow_wid = BROW_WID - squareRotation * 0.75;
+      var pt1_x = PT1_X - squareRotation;
       var pt1_y = PT1_Y - squareRotation;
       var left_len = LEFT_LEN + squareRotation * 0.25;
       var right_len = RIGHT_LEN - squareRotation * 0.25;
     } else {
       // var brow_len = BROW_LEN - tenRad;
-      var brow_wid = BROW_WID - tenRad;
-      var pt1_x = PT1_X - tenRad + 0.5;
+      var brow_wid = BROW_WID - tenRad * 1.5;
+      var pt1_x = PT1_X - tenRad * 2 + 0.5;
       var pt1_y = PT1_Y - tenRad * 2 - 0.1;
       var left_len = LEFT_LEN + 0.5;
       var right_len = RIGHT_LEN - 0.5;
-      if (squareRotation <= 4 * tenRad) {
+      if (wait_flag) {
+        var rad1 = 0;
+        var rad2 = 0;
+        var rad3 = 0;
+        var rad4 = 0;
+     } else if (squareRotation <= 4 * tenRad) {
         var rad1 = squareRotation - 2 * tenRad;
         var rad2 = (squareRotation - 2 * tenRad) * 0.5;
         var rad3 = 0;
         var rad4 = 0;
-      } else if (5 * tenRad < squareRotation &&
-	         Math.abs(maxRotation - squareRotation) > 0.1 && !wait_flag) {
+     } else if (squareRotation <= 5 * tenRad) {
+	var rad1 = 2 * tenRad;
+        var rad2 = tenRad;
+        var rad3 = 0;
+        var rad4 = 0;
+     } else if (Math.abs(maxRotation - squareRotation) > 0.1 &&
+		squareRotation < 10 * tenRad) {
 	if (Math.floor(tmp_num) % 2 == 1) {  // down
           var rad1 = (2 + Math.floor(tmp_num)) * tenRad - squareRotation;
           var rad2 = (1 + Math.floor(tmp_num)) * tenRad - squareRotation;
           var rad3 = 0;
           var rad4 = 0;
 	} else {  // up
-          var rad1 = (2 - Math.floor(tmp_num)) * tenRad + squareRotation;
-	  var rad2 = (1 - Math.floor(tmp_num)) * tenRad + squareRotation;
+          var rad1 = (1 - Math.floor(tmp_num)) * tenRad + squareRotation;
+	  var rad2 = (0 - Math.floor(tmp_num)) * tenRad + squareRotation;
 	  var rad3 = 0;
 	  var rad4 = 0;
         }
+      } else if (squareRotation < 11 * tenRad) {
+	  var rad1 = (1 + Math.floor(tmp_num)) * tenRad - squareRotation;
+          var rad2 = (0 + Math.floor(tmp_num)) * tenRad - squareRotation;
+          var rad3 = 0;
+          var rad4 = 0;
       } else {
-	var rad1 = 2 * tenRad;
-        var rad2 = tenRad;
+	var rad1 = tenRad * 0.5;
+        var rad2 = tenRad * -0.5;
         var rad3 = 0;
         var rad4 = 0;
       }
