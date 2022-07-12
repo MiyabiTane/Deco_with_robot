@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 import rospy
-from std_msgs.msg import Int32, Int32MultiArray  # [motion_mode, time_delay]
+from miraikan_demo.srv import Mode
+from std_msgs.msg import Int32
 
 class MiraikanDemo(object):
     def __init__(self):
@@ -11,16 +11,11 @@ class MiraikanDemo(object):
 
         self.pub_motion_talk = rospy.Publisher("motion_talk/input", Int32, queue_size=1)
         self.pub_eyebrows = rospy.Publisher("eyebrows/input", Int32, queue_size=1)
-
-        rospy.Subscriber("~input", Int32MultiArray, self.demo_cb)
     
-    def demo_cb(self, msg):
+    def demo_srv_cb(self, req):
         # ToDo: 動きと眉毛を組み合わせる
-        motion_mode = msg.data[0]
-        if len(msg.data) > 1:
-            time_delay = msg.data[1]
-        else:
-            time_delay = 3
+        motion_mode = req.mode
+        time_delay = req.time_delay
         if motion_mode == 0:
             self.mt_pub_msg.data = 0
             self.eb_pub_msg.data = 1
@@ -36,8 +31,12 @@ class MiraikanDemo(object):
             self.pub_eyebrows.publish(self.eb_pub_msg)
         else:
             print("Error out of range")
+        return True
+
 
 if __name__ == '__main__':
     rospy.init_node("miraikan_demo")
-    miraikan_demmo = MiraikanDemo()
+    miraikan_demo = MiraikanDemo()
+    s = rospy.Service('demo_mode', Mode, miraikan_demo.demo_srv_cb)
+    print("Ready to start demo node")
     rospy.spin()
