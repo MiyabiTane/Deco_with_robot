@@ -1,0 +1,15 @@
+<launch>
+  
+  <node name="motion_talk" pkg="miraikan_demo" type="motion_talk_node.py"
+        output="screen" respawn="true">
+  </node>
+  
+  <node name="eyebrows" pkg="miraikan_demo" type="eyebrows_node.py"
+        output="screen" respawn="true">
+  </node>
+  
+  <node name="demo_mode" pkg="miraikan_demo" type="demo_node.py"
+        output="screen" respawn="true">
+  </node>
+  
+</launch>
