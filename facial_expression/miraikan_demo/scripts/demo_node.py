@@ -12,23 +12,25 @@ class MiraikanDemo(object):
         self.pub_motion_talk = rospy.Publisher("motion_talk/input", Int32, queue_size=1)
         self.pub_eyebrows = rospy.Publisher("eyebrows/input", Int32, queue_size=1)
     
+    def pub_topics(self, mt_int, eb_int, time_delay):
+        self.mt_pub_msg.data = mt_int
+        self.eb_pub_msg.data = eb_int
+        self.pub_motion_talk.publish(self.mt_pub_msg)
+        rospy.sleep(time_delay)
+        self.pub_eyebrows.publish(self.eb_pub_msg)
+
     def demo_srv_cb(self, req):
-        # ToDo: 動きと眉毛を組み合わせる
         motion_mode = req.mode
         time_delay = req.time_delay
         if motion_mode == 0:
-            self.mt_pub_msg.data = 0
-            self.eb_pub_msg.data = 1
-            self.pub_motion_talk.publish(self.mt_pub_msg)
-            # 眉毛を送るタイミングをセリフに合わせる
-            rospy.sleep(time_delay)
-            self.pub_eyebrows.publish(self.eb_pub_msg)
+            # 8年が経ったね😳
+            self.pub_topics(motion_mode, 7, time_delay)
         elif motion_mode == 1:
-            self.mt_pub_msg.data = 1
-            self.eb_pub_msg.data = 2
-            self.pub_motion_talk.publish(self.mt_pub_msg)
-            rospy.sleep(time_delay)
-            self.pub_eyebrows.publish(self.eb_pub_msg)
+            # 振り向いてもらえなくて悲しかったよ😭
+            self.pub_topics(motion_mode, 12, time_delay)
+        elif motion_mode == 2:
+            # 見つけてくれたよね😀
+            self.pub_topics(motion_mode, 1, time_delay)
         else:
             print("Error out of range")
         return True

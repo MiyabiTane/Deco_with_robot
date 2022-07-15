@@ -14,9 +14,11 @@ class TopicToMotion(object):
     
     def motion_cb(self, msg):
         if msg.data == 0:
-            self.talk_class.test_func_0()
+            self.talk_class.episode_11()
         elif msg.data == 1:
-            self.talk_class.test_func_1()
+            self.talk_class.episode_12()
+        elif msg.data == 2:
+            self.talk_class.episode_13()
         else:
             print("Error, out of range")
 

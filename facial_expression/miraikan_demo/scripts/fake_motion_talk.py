@@ -8,12 +8,17 @@ class Talk(object):
     def __init__(self):
         print("Start node of choregraph")
     
-    def test_func_0(self):
-        for i in range(5):
-            print("func0: {}".format(i))
+    def episode_11(self):
+        for i in range(11):
+            print("epospde 1-1: {}".format(i))
             time.sleep(1)
 
-    def test_func_1(self):
-        for i in range(5):
-            print("func1: {}".format(i))
+    def episode_12(self):
+        for i in range(17):
+            print("eposode 1-2: {}".format(i))
+            time.sleep(1)
+
+    def episode_13(self):
+        for i in range(11):
+            print("eposode 1-3: {}".format(i))
             time.sleep(1)
