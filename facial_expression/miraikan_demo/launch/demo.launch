@@ -1,15 +1,38 @@
 <launch>
+  <arg name="eyebrows_server_ip" default="localhost" />
+  <arg name="run_eyebrows_server" default="false" />
+  <arg name="use_robot" default="false" />
   
-  <node name="motion_talk" pkg="miraikan_demo" type="motion_talk_node.py"
-        output="screen" respawn="true">
-  </node>
+  <!-- run docker-compose up -->
+  <group if="$(arg run_eyebrows_server)">
+    <node name="launch_server" pkg="miraikan_demo" type="launch_eyebrows_server.py"
+          output="screen" respawn="true">
+    </node>
+  </group>
   
+  <!-- run motion_talk -->
+  <group if="$(arg use_robot)">
+    <node name="motion_talk" pkg="miraikan_demo" type="motion_talk_node.py"
+          output="screen" respawn="true">
+    </node>
+  </group>
+  <group unless="$(arg use_robot)">
+    <node name="motion_talk" pkg="miraikan_demo" type="fake_motion_talk_node.py"
+          output="screen" respawn="true">
+    </node>
+  </group>
+
+  <!-- topic -> eyebrows -->
   <node name="eyebrows" pkg="miraikan_demo" type="eyebrows_node.py"
         output="screen" respawn="true">
+    <rosparam subst_value="true">
+      server_ip: $(arg eyebrows_server_ip)
+    </rosparam>
   </node>
-  
+
+  <!-- main node -->
   <node name="demo_mode" pkg="miraikan_demo" type="demo_node.py"
         output="screen" respawn="true">
   </node>
-  
+
 </launch>

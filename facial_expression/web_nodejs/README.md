@@ -20,6 +20,7 @@ http://localhost:3000
 $ sudo cp app/route/* src/routes/  # 本ディレクトリtypoしてるので注意
 $ sudo cp app/public/javascripts/* src/public/javascripts
 $ sudo cp app/views/* src/views
+$ sudo cp app/app.js src/app.js
 ```
 ```
 $ docker-compose up

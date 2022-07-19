@@ -11,6 +11,7 @@ WAIT_TIME = 7
 
 class TopicToEyebrows(object):
     def __init__(self):
+        self.server_ip = rospy.get_param("~server_ip", "")
         rospy.Subscriber("~input", Int32, self.eyebrows_cb)
 
     def post_mode(self, input_mode):
@@ -38,7 +39,7 @@ class TopicToEyebrows(object):
             'degree': degrees[input_mode],
         }
         try:
-            response = requests.post('http://localhost:3000/api/info', headers=headers, data=data, timeout=(3.0, WAIT_TIME))
+            response = requests.post('http://' + self.server_ip + ':3000/api/info', headers=headers, data=data, timeout=(3.0, WAIT_TIME))
         except:
             pass  # timeoutを設定しないと2回目以降のpublishができない
     

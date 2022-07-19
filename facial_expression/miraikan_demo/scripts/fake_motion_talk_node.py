@@ -3,24 +3,24 @@
 
 import rospy
 from std_msgs.msg import Int32
+import time
 
-from motion_talk import Talk
+class Talk(object):
+    def __init__(self):
+        print("Start fake node of choregraph")
+    
+    def episode_fake(self):
+        for i in range(16):
+            print("fake node: {}".format(i))
+            time.sleep(1)
 
 class TopicToMotion(object):
     def __init__(self):
         self.talk_class = Talk()
-
         rospy.Subscriber("~input", Int32, self.motion_cb)
     
     def motion_cb(self, msg):
-        if msg.data == 0:
-            self.talk_class.episode_11()
-        elif msg.data == 1:
-            self.talk_class.episode_12()
-        elif msg.data == 2:
-            self.talk_class.episode_13()
-        else:
-            print("Error, out of range")
+        self.talk_class.episode_fake()
 
 if __name__ == '__main__':
     rospy.init_node("topic_to_motion")
