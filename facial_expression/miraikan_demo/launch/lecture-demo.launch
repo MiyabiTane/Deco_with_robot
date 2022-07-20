@@ -1,0 +1,40 @@
+<launch>
+<arg name="network_interface"   default="enp0s31f6" />
+<arg name="launch_joy" default="false" />
+<arg name="eyebrows_server_ip" default="localhost" />
+<arg name="run_eyebrows_server" default="false" />
+<arg name="use_robot" default="true" />
+
+<include file="$(find jsk_pepper_startup)/launch/jsk_pepper_startup.launch" >
+  <arg name="network_interface"   value="$(arg network_interface)" />
+  <arg name="launch_joy" default="false" />
+  <arg name="launch_dashboard" default="false" />
+</include>
+  
+<node pkg="joy" type="joy_node" name="joy_node" respawn="true" >
+  <param name="dev" value="/dev/input/js0" />
+  <param name="deadzone" value="0.3" />
+  <param name="autorepeat_rate" value="20" />
+</node>
+
+<!-- kochigami-develop -->
+<include file="$(find naoqi_apps)/launch/basic_awareness.launch" />
+
+<!-- kochigami-develop -->
+<include file="$(find naoqi_apps)/launch/background_movement.launch" />
+
+<!-- kochigami-develop -->
+<include file="$(find naoqi_apps)/launch/tablet.launch" />
+
+<node name="robot_behavior_server"
+      pkg="roseus" type="roseus"
+      args="$(find miraikan_demo)/euslisp/robot-behavior-server.l &quot;(progn (main))&quot;" output="screen" respawn="true" />
+
+<!-- requires source ~/miraikan_ws/devel/setup.bash -->
+<include file="$(find miraikan_demo)/launch/demo.launch">
+  <arg name="eyebrows_server_ip" value="$(arg eyebrows_server_ip)"/>
+  <arg name="run_eyebrows_server" value="$(arg run_eyebrows_server)" />
+  <arg name="use_robot" value="$(arg use_robot)" />
+</include>
+
+</launch>
