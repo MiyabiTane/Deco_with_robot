@@ -51,6 +51,7 @@
       (send *ri* :disable-life))
   (send *ri* :servo-on)
   (send *ri* :set-language "Japanese")
+  (send *ri* :speak "\\vct=130\\ヨイショ")
   (send *ri* :set-master-volume 50) ;; with mic
   (send *ri* :stop-grasp)
   ;;(send *ri* :set-basic-awareness-enabled nil)
