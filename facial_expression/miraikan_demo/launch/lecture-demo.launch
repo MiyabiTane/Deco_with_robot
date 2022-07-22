@@ -30,6 +30,10 @@
       pkg="roseus" type="roseus"
       args="$(find miraikan_demo)/euslisp/robot-behavior-server.l &quot;(progn (main))&quot;" output="screen" respawn="true" />
 
+<node name="lecture_demo"
+      pkg="roseus" type="roseus"
+      args="$(find miraikan_demo)/euslisp/lecture-demo.l &quot;(progn (unix:sleep 5) (main))&quot;" output="screen" respawn="true" />
+
 <!-- requires source ~/miraikan_ws/devel/setup.bash -->
 <include file="$(find miraikan_demo)/launch/demo.launch">
   <arg name="eyebrows_server_ip" value="$(arg eyebrows_server_ip)"/>
