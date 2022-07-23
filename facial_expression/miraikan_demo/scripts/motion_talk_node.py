@@ -4,7 +4,7 @@
 import rospy
 from std_msgs.msg import Int32
 
-from motion_talk import Talk
+from talk_motion import Talk
 
 class TopicToMotion(object):
     def __init__(self):
