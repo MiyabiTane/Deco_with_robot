@@ -7,8 +7,6 @@ import os
 import requests
 import json
 
-WAIT_TIME = 7
-
 class TopicToEyebrows(object):
     def __init__(self):
         self.server_ip = rospy.get_param("~server_ip", "")
@@ -31,6 +29,12 @@ class TopicToEyebrows(object):
         12. Cry（泣き）😭
         """
         degrees = [0, 20, 90, 120, 50, 30, 20, 60, 70, 120, 70, 130, 50]
+        wait_times = [5] * 13
+        wait_times[4] = 3.0
+        wait_times[5] = 4.0
+        wait_times[7] = 3.0
+        wait_times[9] = 1.0
+        wait_times[10] = 1.0
         headers = {
             'Accept': 'application/json',
         }
@@ -39,7 +43,7 @@ class TopicToEyebrows(object):
             'degree': degrees[input_mode],
         }
         try:
-            response = requests.post('http://' + self.server_ip + ':3000/api/info', headers=headers, data=data, timeout=(3.0, WAIT_TIME))
+            response = requests.post('http://' + self.server_ip + ':3000/api/info', headers=headers, data=data, timeout=(3.0, wait_times[input_mode]))
         except:
             pass  # timeoutを設定しないと2回目以降のpublishができない
     

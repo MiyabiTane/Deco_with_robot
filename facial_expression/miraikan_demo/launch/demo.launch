@@ -2,6 +2,8 @@
   <arg name="eyebrows_server_ip" default="localhost" />
   <arg name="run_eyebrows_server" default="false" />
   <arg name="use_robot" default="false" />
+  <arg name="pepper_ip" default="169.xxx.xx.xx" />
+  <arg name="memories_talk" default="true" />
   
   <!-- run docker-compose up -->
   <group if="$(arg run_eyebrows_server)">
@@ -14,6 +16,10 @@
   <group if="$(arg use_robot)">
     <node name="motion_talk" pkg="miraikan_demo" type="motion_talk_node.py"
           output="screen" respawn="true">
+      <rosparam subst_value="true">
+        pepper_ip: $(arg pepper_ip)
+        memories_talk: $(arg memories_talk)
+      </rosparam>
     </node>
   </group>
   <group unless="$(arg use_robot)">
@@ -33,6 +39,23 @@
   <!-- main node -->
   <node name="demo_mode" pkg="miraikan_demo" type="demo_node.py"
         output="screen" respawn="true">
+    <rosparam subst_value="true">
+      memories_talk: $(arg memories_talk)
+    </rosparam>
   </node>
+
+  <!-- demo service call -->
+  <group if="$(arg memories_talk)">
+    <node name="robot_behavior_server"
+	  pkg="roseus" type="roseus"
+	  args="$(find miraikan_demo)/euslisp/robot-behavior-server.l
+		&quot;(progn (main_memories))&quot;" output="screen" respawn="true" />
+  </group>
+  <group unless="$(arg memories_talk)">
+    <node name="robot_behavior_server"
+	  pkg="roseus" type="roseus"
+	  args="$(find miraikan_demo)/euslisp/robot-behavior-server.l
+		&quot;(progn (main_no_memories))&quot;" output="screen" respawn="true" />
+  </group>
 
 </launch>

@@ -25,15 +25,15 @@
 		      ;; A button: deai_1
 		      (if (eq (elt button 0) 1)
 			  (progn
-			    (ros::wait-for-service "deai_1")
-                            (call-empty-service "deai_1")
+			    (ros::wait-for-service "episode_11")
+                            (call-empty-service "episode_11")
 			    ))
 
 		      ;; B button: deai_2
 		      (if (eq (elt button 1) 1)
 			  (progn
-			    (ros::wait-for-service "deai_2")
-                            (call-empty-service "deai_2")
+			    (ros::wait-for-service "episode_12")
+                            (call-empty-service "episode_12")
 			    ))
 		      
 		      ;; Logicool button: stop this node
