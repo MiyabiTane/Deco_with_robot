@@ -38,7 +38,7 @@
     $ python
     >>> import talk_motion
     >>> talk = talk_motion.Talk()
-    >>> talk.episode_11()
+    >>> talk.episode_11("<Pepper_IP>")
     ```
 
 ### 実行方法

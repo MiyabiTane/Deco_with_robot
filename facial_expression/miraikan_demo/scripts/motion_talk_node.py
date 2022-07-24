@@ -5,7 +5,7 @@ import rospy
 from std_msgs.msg import Int32
 
 import episode_motion
-import no_episode_motion
+import explanation_motion
 
 class TopicToMotion(object):
     def __init__(self):
@@ -15,7 +15,7 @@ class TopicToMotion(object):
         if memories_talk:
             self.talk_class = episode_motion.Talk(pepper_ip)
         else:
-            self.talk_class = no_episode_motion.Talk(pepper_ip)
+            self.talk_class = explanation_motion.Talk(pepper_ip)
 
         rospy.Subscriber("~input", Int32, self.motion_cb)
     
