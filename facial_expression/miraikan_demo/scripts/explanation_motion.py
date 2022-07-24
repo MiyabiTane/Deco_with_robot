@@ -30,8 +30,15 @@ class Talk(object):
             print "Error:"
             print str(e)
 
-        #set init posture 
-        self.pos.goToPosture("StandInit", 1.0) 
+        try:
+            self.mo = ALProxy("ALMotion",self.PEPPER_IP,self.PORT)
+        except Exception, e:
+            print "Error:"
+            print str(e)
+
+        #set init posture                                                                           
+        self.set_init_posture()
+
         
         #set init speech setting
         self.tts.setLanguage("Japanese")
@@ -40,7 +47,18 @@ class Talk(object):
 
         #set animated say setting
         self.configuration = {"bodyLanguageMode":"contextual"}
+        self.joint_names = "Head"
 
+    def set_init_posture(self):
+       # https://developer.softbankrobotics.com/pepper-naoqi-25/naoqi-developer-guide/naoqi-apis/naoqi-motion/almotion/joint-control                                                                    
+        # self.pos.goToPosture("StandInit", 1.0)                                                    
+        # self.mo.setAngles("Head", [-2.802596928649634e-45, 0.0], 1.0)                             
+        #  # commandAngles = self.mo.getAngles("Head", False)                                       
+        #  # [-2.802596928649634e-45, -0.20000003278255463]
+        # angles = talk.mo.getAngles("Body", False)                                                 
+        init_body_angles = [0.0, -2.802596928649634e-45, 1.5596766471862793, 0.14272688329219818, -1.228257656097412, -0.5225345492362976, -0.000497947505209595, 0.6000000238418579, 3.648194280003736e-08, -0.040683578699827194, -0.010746408253908157, 1.5596766471862793, -0.14272694289684296, 1.228257656097412, 0.5225345492362976, 0.0004979457589797676, 0.6000000238418579, 0.0, 0.0, 0.0]
+        self.mo.setAngles("Body", init_body_angles, 1.0)     
+        
     def explanation_11(self):
 
         # episode 1-1
@@ -51,16 +69,16 @@ class Talk(object):
     def explanation_12(self):
 
         #explanation 1-2
-        time.sleep(0.5)
+        time.sleep(1)
         self.ans.say("へぇ！8年も前からなんだ",self.configuration)
 
-        time.sleep(0.5)
+        time.sleep(1)
         self.ans.say("研究室には、色んなロボットがいるみたいダケド、",self.configuration)
-        time.sleep(0.5)
+        time.sleep(1)
         self.ans.say("どうしてペッパーを使おうと思ったの？",self.configuration)
 
-        time.sleep(0.5)
-        self.pos.goToPosture("StandInit", 1.0)
+        time.sleep(1)
+        self.set_init_posture()
 
     def explanation_13(self):
 
@@ -68,29 +86,29 @@ class Talk(object):
         time.sleep(1)
         self.ans.say("そっか！ペッパーは、みんなに親しみやすいロボットなんだね",self.configuration)
 
-        time.sleep(0.5)
-        self.pos.goToPosture("StandInit", 1.0)
+        time.sleep(1)
+        self.set_init_posture()
 
     def explanation_21(self):
 
         #explanation 2-1
-        time.sleep(0.5)
+        time.sleep(1)
         self.ans.say("未来館ではどんなことがあったのー？",self.configuration)
 
-        time.sleep(0.5)
+        time.sleep(1)
         self.pos.goToPosture("StandInit", 1.0)
 
     def explanation_22(self):
 
         #explanation 2-2
-        time.sleep(0.5)
+        time.sleep(1)
         self.ans.say("たくさんの子どもたちが集まっているね",self.configuration)
 
         time.sleep(1)
         self.ans.say("ロボットが近づいた時、みんな嬉しそうな顔をしているね！",self.configuration)
 
         time.sleep(1)
-        self.pos.goToPosture("StandInit", 1.0)
+        self.set_init_posture()
 
     def explanation_23(self):
 
@@ -99,7 +117,7 @@ class Talk(object):
         self.ans.say("わたしもみんなの笑顔を、見てみたいナァ",self.configuration)
 
         time.sleep(1)
-        self.pos.goToPosture("StandInit", 1.0)
+        self.set_init_posture()
 
     def explanation_31(self):
 
@@ -108,19 +126,19 @@ class Talk(object):
         self.ans.say("発表の場所までの移動の仕方を教えてー！",self.configuration)
 
         time.sleep(1)
-        self.pos.goToPosture("StandInit", 1.0)
+        self.set_init_posture()
 
     def explanation_32(self):
 
         #explanation 3-2
-        time.sleep(0.5)
+        time.sleep(1)
         self.ans.say("コチさんが連れて行っていたんだねー！",self.configuration)
 
         time.sleep(1)
         self.ans.say("ロボットを操作するのは大変？",self.configuration)
 
         time.sleep(1)
-        self.pos.goToPosture("StandInit", 1.0)
+        self.set_init_posture()
 
     def explanation_33(self):
 
@@ -135,7 +153,7 @@ class Talk(object):
         self.ans.say("どんな意味があるのー？",self.configuration)
 
         time.sleep(1)
-        self.pos.goToPosture("StandInit", 1.0)
+        self.set_init_posture()
 
     def explanation_41(self):
 
@@ -147,7 +165,7 @@ class Talk(object):
         self.ans.say("みんなに近づき過ぎちゃったんだね",self.configuration)
 
         time.sleep(1)
-        self.pos.goToPosture("StandInit", 1.0)
+        self.set_init_posture()
 
     def explanation_42(self):
 
@@ -156,7 +174,7 @@ class Talk(object):
         self.ans.say("コチさんは、とっても慌てているように見えるよ",self.configuration)
 
         time.sleep(1)
-        self.pos.goToPosture("StandInit", 1.0)
+        self.set_init_posture()
 
     def explanation_43(self):
 
@@ -165,7 +183,7 @@ class Talk(object):
         self.ans.say("そっかー、ロボットの安定した動きを作るのはとても難しいんだね",self.configuration)
 
         time.sleep(1)
-        self.pos.goToPosture("StandInit", 1.0)
+        self.set_init_posture()
 
     def explanation_51(self):
 
@@ -174,7 +192,7 @@ class Talk(object):
         self.ans.say("そっかー、色んなことがあったんだね！",self.configuration)
 
         time.sleep(1)
-        self.pos.goToPosture("StandInit", 1.0)
+        self.set_init_posture()
 
     def explanation_52(self):
 
@@ -183,7 +201,7 @@ class Talk(object):
         self.ans.say("どうして成果をまとめるのが大変だったの？",self.configuration)
  
         time.sleep(1)
-        self.pos.goToPosture("StandInit", 1.0)
+        self.set_init_posture()
 
     def explanation_53(self):
 
@@ -195,7 +213,7 @@ class Talk(object):
         self.ans.say("大切な研究であることがよくわかったよ",self.configuration)
 
         time.sleep(1)
-        self.pos.goToPosture("StandInit", 1.0)
+        self.set_init_posture()
 
     def explanation_54(self):
 
@@ -210,7 +228,7 @@ class Talk(object):
         self.ans.say("コチさん、今日は説明してくれてありがとう。これからも研究がんばってね",self.configuration)
 
         time.sleep(1)
-        self.pos.goToPosture("StandInit", 1.0)
+        self.set_init_posture()
 
 if __name__ == '__main__':
     talk = Talk() #init
