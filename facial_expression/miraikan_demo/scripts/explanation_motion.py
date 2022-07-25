@@ -11,8 +11,8 @@ import time
 import re
 
 class Talk(object):
-    def __init__(self):
-        self.PEPPER_IP = "169.254.103.187"
+    def __init__(self, pepper_ip):
+        self.PEPPER_IP = pepper_ip
         self.PORT = 9559
 
         #pepper_proxy
