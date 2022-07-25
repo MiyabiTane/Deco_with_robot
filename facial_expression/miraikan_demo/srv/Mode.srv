@@ -1,4 +1,4 @@
 int32 mode
-int32 time_delay
+float32 time_delay
 ---
 bool success
