@@ -233,3 +233,4 @@ $ docker-compose run --rm app /bin/bash
 [Chromeがパスワードを求めないようにする](http://linuxlabo.labo.main.jp/?eid=4)<br>
 [WebGLで複数物体表示](https://www.programmingmat.jp/webgl_lab/triangles.html)<br>
 [WebGL多角形の書き方](https://qiita.com/ienaga/items/d9b92d6722aee6465d6c)<br>
+[Node.jsで日本時間を取得する](https://nju33.com/notes/javascript/articles/%E6%97%A5%E6%9C%AC%E6%99%82%E9%96%93%E3%82%92%E5%8F%96%E5%BE%97)<br>

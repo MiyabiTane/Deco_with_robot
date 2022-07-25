@@ -121,6 +121,10 @@ function main() {
 	  const buffers = initBuffers(gl);
 	  const buffersSleep = initBuffersSleep(gl);
 	  drawSceneSome(gl, programInfo, programInfoColor, buffers, buffersSleep, 12, 11);
+        } else if (mode == 9) {
+	  const buffers = initBuffers(gl);
+	  const buffersHeart = initBuffersHeart(gl);
+	  drawSceneSome(gl, programInfo, programInfoColor, buffers, buffersHeart, 12, 17);
         } else if (mode < 6 || mode > 8) {
 	  const buffers = initBuffers(gl);
 	  drawScene(gl, programInfo, buffers, deltaTime, 12);
@@ -580,6 +584,109 @@ function initBuffersColor(gl) {
   };
 }
 
+function initBuffersHeart(gl) {
+
+  // Create a buffer for the square's positions.
+
+  const positionBuffer = gl.createBuffer();
+
+  // Select the positionBuffer as the one to apply buffer
+  // operations to from here out.
+
+  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+
+  // Now create an array of positions for the square.
+  var HEART_WID = 3.2;
+  var HEART_HEI = 2.8;
+  // center
+  var CENTER_X = -3.0;
+  var pt1_x = CENTER_X;
+  var pt1_y = 5.0;
+  if (!wait_flag && squareRotation > 2 * tenRad) {
+    var diff_rad = squareRotation - 2 * tenRad;
+    var HEART_WID = 1.5 + diff_rad * 1;
+    var HEART_HEI = 1.5 + diff_rad * 1;
+    var pt1_y = squareRotation * 2.5 - 1.5;
+    var pt1_x = CENTER_X - diff_rad;
+  }
+  var pt2_x = pt1_x + HEART_WID / 2;
+  var pt2_y = pt1_y + HEART_HEI / 2;
+  var pt3_x = pt1_x + HEART_WID / 2;
+  var pt3_y = pt1_y + HEART_HEI * 3 / 4;
+  var pt4_x = pt1_x + HEART_WID * 2 / 5;
+  var pt4_y = pt1_y + HEART_HEI * 9 / 10;
+  var pt5_x = pt1_x + HEART_WID / 5;
+  var pt5_y = pt1_y + HEART_HEI - 0.05;
+  var pt6_x = pt1_x;
+  var pt6_y = pt1_y + HEART_HEI * 5 / 6;
+  var pt7_x = pt1_x - HEART_WID / 5;
+  var pt7_y = pt1_y + HEART_HEI - 0.05;
+  var pt8_x = pt1_x - HEART_WID * 2 / 5;
+  var pt8_y = pt1_y + HEART_HEI * 9 / 10;
+  var pt9_x = pt1_x - HEART_WID / 2;
+  var pt9_y = pt1_y + HEART_HEI * 3 / 4;
+  var pt10_x = pt1_x - HEART_WID / 2;
+  var pt10_y = pt1_y + HEART_HEI / 2;
+  const positions = [
+      pt10_x, pt10_y,
+      pt2_x,  pt2_y,
+      pt1_x,  pt1_y,
+      pt10_x, pt10_y,
+      pt9_x,  pt9_y,
+      pt3_x,  pt3_y,
+      pt2_x,  pt2_y,
+      pt10_x, pt10_y,
+      pt6_x,  pt6_y,
+      pt7_x,  pt7_y,
+      pt8_x,  pt8_y,
+      pt9_x,  pt9_y,
+      pt6_x,  pt6_y,
+      pt3_x,  pt3_y,
+      pt4_x,  pt4_y,
+      pt5_x,  pt5_y,
+      pt6_x,  pt6_y,
+  ];
+
+  // Now pass the list of positions into WebGL to build the
+  // shape. We do this by creating a Float32Array from the
+  // JavaScript array, then use it to fill the current buffer.
+
+  gl.bufferData(gl.ARRAY_BUFFER,
+                new Float32Array(positions),
+                gl.STATIC_DRAW);
+
+  // add color
+  var C = 0.9;
+  var colors = [  // red
+    C,  0.0,  0.0,  1.0,
+    C,  0.0,  0.0,  1.0,
+    C,  0.0,  0.0,  1.0,
+    C,  0.0,  0.0,  1.0,
+    C,  0.0,  0.0,  1.0,
+    C,  0.0,  0.0,  1.0,
+    C,  0.0,  0.0,  1.0,
+    C,  0.0,  0.0,  1.0,
+    C,  0.0,  0.0,  1.0,
+    C,  0.0,  0.0,  1.0,
+    C,  0.0,  0.0,  1.0,
+    C,  0.0,  0.0,  1.0,
+    C,  0.0,  0.0,  1.0,
+    C,  0.0,  0.0,  1.0,
+    C,  0.0,  0.0,  1.0,
+    C,  0.0,  0.0,  1.0,
+    C,  0.0,  0.0,  1.0,
+  ];
+
+  const colorBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
+
+  return {
+    position: positionBuffer,
+    color: colorBuffer,
+  };
+}
+
 function initBuffersSleep(gl) {
 
   // Create a buffer for the square's positions.
@@ -596,16 +703,16 @@ function initBuffersSleep(gl) {
   var SLEEP_RAD = 80 * Math.PI / 180;
   if (!wait_flag && squareRotation > 3 * tenRad) {
     if (squareRotation < 9 * tenRad) {
-      var SLEEP_SIZE = (squareRotation - 2 * tenRad)  * 3.5;
-      var OFFSET_Y = (squareRotation - 2 * tenRad) * 0.3;
+      var SLEEP_SIZE = (squareRotation - 2 * tenRad)  * 4.5;
+      var OFFSET_Y = (squareRotation - 2 * tenRad) * 0.2;
     } else {
       var tmp_num = squareRotation - 9 * tenRad;
-      var SLEEP_SIZE = Math.max(0, 6 * 3.5 * tenRad - tmp_num * 7);
-      var OFFSET_Y = (12 * tenRad - squareRotation) * 0.5;
+      var SLEEP_SIZE = Math.max(0, 6 * 4.5 * tenRad - tmp_num * 7);
+      var OFFSET_Y = (12 * tenRad - squareRotation) * 0.2;
     }
   }
-  var pt1_x = -2.5;
-  var pt1_y = -0.4;
+  var pt1_x = 2.1;
+  var pt1_y = -1.3;
   var pt2_x = pt1_x + SLEEP_SIZE * 3 / 5 * Math.cos(SLEEP_RAD / 5) * -1;
   var pt2_y = pt1_y + SLEEP_SIZE * 3 / 5 * Math.sin(SLEEP_RAD / 5) - OFFSET_Y;
   var pt3_x = pt1_x + SLEEP_SIZE * 5 / 6 * Math.cos(SLEEP_RAD * 2 / 5) * -1;
