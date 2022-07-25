@@ -1291,11 +1291,21 @@ function update(deltaTime) {
       wait_flag = false;
     } else {
       get_degree();
-      if (new_mode == mode) {
-	maxRotation = new_maxRotation;
-      } else {
-        maxRotation = 0;
-        wait_flag = true;
+      date = new Date();
+      current_time = formattedDateTime(date);
+      current_date = current_time.split(',')[0];
+      current_ms = parseInt(current_time.split(',')[1], 10);
+      // console.log("date: ", current_date, posted_date);
+      // console.log("current_time: ", current_ms);
+      // console.log("reflect_time" , reflect_ms);
+      if ((current_date == posted_date) && (current_ms > reflect_ms)) {
+        new_mode = tmp_mode;
+        if (new_mode == mode) {
+	  maxRotation = new_maxRotation;
+        } else {
+          maxRotation = 0;
+          wait_flag = true;
+        }
       }
     }
   }

@@ -8,6 +8,9 @@ html(lang='en')
       var new_mode = 0;
       var maxRotation = #{degree} * Math.PI / 180;
       var new_maxRotation = maxRotation;
+      var posted_date = "";
+      var reflect_ms = 100000000;
+      var delay_ms = 1400;
       function makeHttpObject() {
         try {return new XMLHttpRequest();}
         catch (error) {}
@@ -19,19 +22,32 @@ html(lang='en')
         throw new Error("Could not create HTTP request object.");
       }
 
+      function formattedDateTime(date) {
+        const y = date.getFullYear();
+        const m = ('0' + (date.getMonth() + 1)).slice(-2);
+        const d = ('0' + date.getDate()).slice(-2);
+        const ms = date.getHours() * 60 * 60 * 1000
+                 + date.getMinutes() * 60 * 1000
+                 + date.getSeconds() *1000
+                 + date.getMilliseconds();
+        return y + m + d + "," + String(ms);
+      }
       function get_degree() {
         var request = makeHttpObject();
         request.open("GET", "/api/info", true);
         request.send(null);
         request.onreadystatechange = function() {
-          if (request.readyState == 4)
-            // console.log("GOT INFO", request.responseText);
-            new_mode = request.responseText.split(',')[0];
+          if (request.readyState == 4) {
+            // date = new Date();
+            // console.log("got text", request.responseText);
+            posted_date = request.responseText.split(',')[2];
+            posted_ms = request.responseText.split(',')[3];
+            reflect_ms = parseInt(posted_ms, 10) + delay_ms;
+            tmp_mode = request.responseText.split(',')[0];
             new_maxRotation = request.responseText.split(',')[1] * Math.PI / 180;
+          };
         };
       }
-      // get_degree();
-      // setTimeout("location.reload()", 1000*3);
   body
     <canvas id="webgl"></canvas>
     script(type="text/javascript", src="/javascripts/rbrow.js")
