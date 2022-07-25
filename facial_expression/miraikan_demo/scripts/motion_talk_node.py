@@ -60,6 +60,8 @@ class TopicToMotion(object):
             self.talk_class.episode_54_1()
         elif msg.data == 19:
             self.talk_class.episode_54_2()
+        elif msg.data == 20:
+            self.talk_class.episode_54_3()
         else:
             print("Error, out of range")
 

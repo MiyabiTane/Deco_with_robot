@@ -117,7 +117,9 @@
   (let ((m (send req :response)))
     (call_demo 18 4)
     (ros::duration-sleep 5.0)
-    (call_demo 19 5)
+    (call_demo 19 4)
+    (ros::duration-sleep 5.0)
+    (call_demo 20 5)
     m)
   )
 
@@ -167,12 +169,16 @@
 (defun episode_32 (req)
   (let ((m (send req :response)))
     (call_demo 7 4)
+    (ros::duration-sleep 5)
+    (call_demo 8 4)
     m)
   )
 
 (defun episode_33 (req)
   (let ((m (send req :response)))
     (call_demo 9 4)
+    (ros::duration-sleep 5)
+    (call_demo 10 4)
     m)
   )
 
@@ -215,6 +221,10 @@
 (defun episode_54 (req)
   (let ((m (send req :response)))
     (call_demo 18 4)
+    (ros::duration-sleep 5)
+    (call_demo 19 4)
+    (ros::duration-sleep 5)
+    (call_demo 20 4)
     m)
   )
 

@@ -275,9 +275,16 @@ class Talk(object):
     def episode_54_1(self):
 
         #episode 5-4-1
-#        time.sleep(1)
-#        self.ans.say("でもわたしたちは、^start(animations/Stand/Emotions/Positive/Peaceful_1)8年間ふたりでたくさん乗り越えてきたヨね^wait(animations/Stand/Emotions/Positive/Peaceful_1)",self.configuration)
+        self.mo.setStiffnesses(self.joint_names, 1)
+        time.sleep(1)
+        self.ans.say("でもわたしたちは、^start(animations/Stand/Emotions/Positive/Peaceful_1)8年間ふたりでたくさん乗り越えてきたヨね^wait(animations/Stand/Emotions/Positive/Peaceful_1)",self.configuration)
 
+        time.sleep(1)
+        self.set_init_posture()
+
+    def episode_54_2(self):
+
+        # episode 5-4-2
         self.mo.setStiffnesses(self.joint_names, 1)
         time.sleep(1)
         self.ans.say("コチさん、^start(animations/Stand/BodyTalk/BodyTalk_1)博士の卒業、本当におめでとう^wait(animations/Stand/BodyTalk/BodyTalk_1)",self.configuration)
@@ -285,9 +292,9 @@ class Talk(object):
         time.sleep(1)
         self.set_init_posture()
 
-    def episode_54_2(self):
+    def episode_54_3(self):
 
-        #episode 5-4-2
+        #episode 5-4-3
         self.mo.setStiffnesses(self.joint_names, 1)
         time.sleep(1)
         self.ans.say("そして、^start(animations/Stand/Gestures/Yes_3)いつもありがとう。^wait(animations/Stand/Gestures/Yes_3)^start(animations/Stand/Gestures/Hey_3)これからもよろしくネ。^wait(animations/Stand/Gestures/Hey_3)",self.configuration)

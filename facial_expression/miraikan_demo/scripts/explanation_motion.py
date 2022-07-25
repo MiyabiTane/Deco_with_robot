@@ -59,16 +59,16 @@ class Talk(object):
         init_body_angles = [0.0, -2.802596928649634e-45, 1.5596766471862793, 0.14272688329219818, -1.228257656097412, -0.5225345492362976, -0.000497947505209595, 0.6000000238418579, 3.648194280003736e-08, -0.040683578699827194, -0.010746408253908157, 1.5596766471862793, -0.14272694289684296, 1.228257656097412, 0.5225345492362976, 0.0004979457589797676, 0.6000000238418579, 0.0, 0.0, 0.0]
         self.mo.setAngles("Body", init_body_angles, 1.0)     
         
-    def explanation_11(self):
+    def episode_11(self):
 
         # episode 1-1
         time.sleep(1)
         self.ans.say("^コチさんはいつからこの研究をしているの？",self.configuration)        
 
 
-    def explanation_12(self):
+    def episode_12(self):
 
-        #explanation 1-2
+        #episode 1-2
         time.sleep(1)
         self.ans.say("へぇ！8年も前からなんだ",self.configuration)
 
@@ -80,27 +80,27 @@ class Talk(object):
         time.sleep(1)
         self.set_init_posture()
 
-    def explanation_13(self):
+    def episode_13(self):
 
-        #explanation 1-3
+        #episode 1-3
         time.sleep(1)
         self.ans.say("そっか！ペッパーは、みんなに親しみやすいロボットなんだね",self.configuration)
 
         time.sleep(1)
         self.set_init_posture()
 
-    def explanation_21(self):
+    def episode_21(self):
 
-        #explanation 2-1
+        #episode 2-1
         time.sleep(1)
         self.ans.say("未来館ではどんなことがあったのー？",self.configuration)
 
         time.sleep(1)
         self.pos.goToPosture("StandInit", 1.0)
 
-    def explanation_22(self):
+    def episode_22(self):
 
-        #explanation 2-2
+        #episode 2-2
         time.sleep(1)
         self.ans.say("たくさんの子どもたちが集まっているね",self.configuration)
 
@@ -110,39 +110,45 @@ class Talk(object):
         time.sleep(1)
         self.set_init_posture()
 
-    def explanation_23(self):
+    def episode_23(self):
 
-        #explanation 2-3
+        #episode 2-3
         time.sleep(1)
         self.ans.say("わたしもみんなの笑顔を、見てみたいナァ",self.configuration)
 
         time.sleep(1)
         self.set_init_posture()
 
-    def explanation_31(self):
+    def episode_31(self):
 
-        #explanation 3-1
+        #episode 3-1
         time.sleep(1)
         self.ans.say("発表の場所までの移動の仕方を教えてー！",self.configuration)
 
         time.sleep(1)
         self.set_init_posture()
 
-    def explanation_32(self):
+    def episode_32_1(self):
 
-        #explanation 3-2
+        #episode 3-2-1
         time.sleep(1)
         self.ans.say("コチさんが連れて行っていたんだねー！",self.configuration)
 
+        time.sleep(1)
+        self.set_init_posture()
+
+    def episode_32_2(self):
+
+        #episode 3-2-2
         time.sleep(1)
         self.ans.say("ロボットを操作するのは大変？",self.configuration)
 
         time.sleep(1)
         self.set_init_posture()
 
-    def explanation_33(self):
+    def episode_33_1(self):
 
-        #explanation 3-3
+        #episode 3-3
         time.sleep(1)
         self.ans.say("ねぇねぇ、コチさん",self.configuration)
 
@@ -155,9 +161,12 @@ class Talk(object):
         time.sleep(1)
         self.set_init_posture()
 
-    def explanation_41(self):
+    def episode_33_2(self):
+        print("dummy func")
 
-        #explanation 4-1
+    def episode_41(self):
+
+        #episode 4-1
         time.sleep(1)
         self.ans.say("あれれッ、Pepperが突撃しているね",self.configuration)
 
@@ -167,45 +176,48 @@ class Talk(object):
         time.sleep(1)
         self.set_init_posture()
 
-    def explanation_42(self):
+    def episode_42_1(self):
 
-        #explanation 4-2
+        #episode 4-2
         time.sleep(1)
         self.ans.say("コチさんは、とっても慌てているように見えるよ",self.configuration)
 
         time.sleep(1)
         self.set_init_posture()
 
-    def explanation_43(self):
+    def episode_42_2(self):
+        print("dummy func")
 
-        #explanation 4-3
+    def episode_43(self):
+
+        #episode 4-3
         time.sleep(1)
         self.ans.say("そっかー、ロボットの安定した動きを作るのはとても難しいんだね",self.configuration)
 
         time.sleep(1)
         self.set_init_posture()
 
-    def explanation_51(self):
+    def episode_51(self):
 
-        #explanation 5-1
+        #episode 5-1
         time.sleep(1)
         self.ans.say("そっかー、色んなことがあったんだね！",self.configuration)
 
         time.sleep(1)
         self.set_init_posture()
 
-    def explanation_52(self):
+    def episode_52(self):
 
-        #explanation 5-2
+        #episode 5-2
         time.sleep(1)
         self.ans.say("どうして成果をまとめるのが大変だったの？",self.configuration)
  
         time.sleep(1)
         self.set_init_posture()
 
-    def explanation_53(self):
+    def episode_53(self):
 
-        #explanation 5-3
+        #episode 5-3
         time.sleep(1)
         self.ans.say("人とロボットの交流を作るのって、すごく大変ダケド、",self.configuration)
 
@@ -215,51 +227,61 @@ class Talk(object):
         time.sleep(1)
         self.set_init_posture()
 
-    def explanation_54(self):
+    def episode_54_1(self):
 
-        #explanation 5-4
+        #episode 5-4-1
         time.sleep(1)
         self.ans.say("コチさんはペッパーと8年間もこの研究をしているんだね",self.configuration)
 
         time.sleep(1)
+        self.set_init_posture()
+
+    def episode_54_2(self):
+
+        #episode 5-4-2
+        time.sleep(1)
         self.ans.say("わたし達ロボットがもっと社会でお友達を作るために、必要なことを研究しているんだなぁ",self.configuration)
 
+        time.sleep(1)
+        self.set_init_posture()
+
+    def episode_54_3(self):
+
+        #episode 5-4-3
         time.sleep(1)
         self.ans.say("コチさん、今日は説明してくれてありがとう。これからも研究がんばってね",self.configuration)
 
         time.sleep(1)
         self.set_init_posture()
 
+"""
 if __name__ == '__main__':
     talk = Talk() #init
     val = input('input Number:')
     if val == 1:
-        talk.explanation_11()
-        talk.explanation_12()
-        talk.explanation_13()
+        talk.episode_11()
+        talk.episode_12()
+        talk.episode_13()
         exit()
     elif val == 2:
-        talk.explanation_21()
-        talk.explanation_22()
-        talk.explanation_23()
+        talk.episode_21()
+        talk.episode_22()
+        talk.episode_23()
         exit()
     elif val == 3:
-        talk.explanation_31()
-        talk.explanation_32()
-        talk.explanation_33()
+        talk.episode_31()
+        talk.episode_32()
+        talk.episode_33()
         exit()
     elif val == 4:
-        talk.explanation_41()
-        talk.explanation_42()
-        talk.explanation_43()
+        talk.episode_41()
+        talk.episode_42()
+        talk.episode_43()
         exit()
     elif val == 5:
-        talk.explanation_51()
-        talk.explanation_52()
-        talk.explanation_53()
-        talk.explanation_54()
+        talk.episode_51()
+        talk.episode_52()
+        talk.episode_53()
+        talk.episode_54()
         exit()
-
-
-        
-        
+"""

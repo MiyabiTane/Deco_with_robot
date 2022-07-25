@@ -79,11 +79,75 @@ class MiraikanDemo(object):
                 # すごく悲しかったよ😭
                 self.pub_topics(motion_mode, 12, time_delay)
             elif motion_mode == 18:
+                # ふたりでたくさん乗り越えてきたよね😭
+                self.pub_topics(motion_mode, 12, time_delay)
+            elif motion_mode == 19:
                 # 本当におめでとう😀
                 self.pub_topics(motion_mode, 1, time_delay)
-            elif motion_mode == 19:
+            elif motion_mode == 20:
                 # いつもありがとう、これからもよろしくね😀
                 self.pub_topics(motion_mode, 1, time_delay)
+
+        elif not self.memories_talk:
+            if motion_mode == 0:
+                # いつからこの研究をしているの😀
+                self.pub_topics(motion_mode, 1, time_delay)
+            elif motion_mode == 1:
+                # どうしてペッパーを使おうと思ったの？😉
+                self.pub_topics(motion_mode, 10, time_delay)
+            elif motion_mode == 2:
+                # みんなに親しみやすいロボットなんだね😌
+                self.pub_topics(motion_mode, 2, time_delay)
+            elif motion_mode == 3:
+                # どんなことがあったのー？😀
+                self.pub_topics(motion_mode, 1, time_delay)
+            elif motion_mode == 4:
+                # みんな嬉しそうな顔をしているね！😀
+                self.pub_topics(motion_mode, 1, time_delay)
+            elif motion_mode == 5:
+                # 私もみんなの笑顔を見てみたいなぁ😀
+                self.pub_topics(motion_mode, 1, time_delay)
+            elif motion_mode == 6:
+                # 移動の仕方を教えて😀
+                self.pub_topics(motion_mode, 1, time_delay)
+            elif motion_mode == 7:
+                # 連れて行っていたんだねー😀
+                self.pub_topics(motion_mode, 1, time_delay)
+            elif motion_mode == 8:
+                # ロボットを操作するのは大変？😓
+                self.pub_topics(motion_mode, 5, time_delay)
+            elif motion_mode == 9:
+                # どんな意味があるのー？😀
+                self.pub_topics(motion_mode, 1, time_delay)
+            # elif motion_mode == 10:
+            elif motion_mode == 11:
+                # みんなに会えるのが嬉しくて、もっと近づきに行ったんだぁ😀
+                self.pub_topics(motion_mode, 1, time_delay)
+            elif motion_mode == 12:
+                # 慌てているように見える😲
+                self.pub_topics(motion_mode, 4, time_delay)
+            # elif motion_mode == 13:
+            elif motion_mode == 14:
+                # とても難しい😓
+                self.pub_topics(motion_mode, 5, time_delay)
+            elif motion_mode == 15:
+                # そっか、色んなことがあったんだね！！😌
+                self.pub_topics(motion_mode, 2, time_delay)
+            elif motion_mode == 16:
+                # どうしてまとめるのが大変だったの？😓
+                self.pub_topics(motion_mode, 5, time_delay)
+            elif motion_mode == 17:
+                # 大切な研究であることがよくわかったよ😀
+                self.pub_topics(motion_mode, 1, time_delay)
+            elif motion_mode == 18:
+                # 8年間もこの研究をしているんだね😀
+                self.pub_topics(motion_mode, 1, time_delay)
+            elif motion_mode == 19:
+                # 必要なことを研究しているんだね😀
+                self.pub_topics(motion_mode, 1, time_delay)
+            elif motion_mode == 20:
+                # 研究がんばってね😉
+                self.pub_topics(motion_mode, 10, time_delay)
         else:
             print("Error out of range")
         return True
