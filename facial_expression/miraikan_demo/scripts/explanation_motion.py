@@ -42,7 +42,7 @@ class Talk(object):
         
         #set init speech setting
         self.tts.setLanguage("Japanese")
-        self.tts.setParameter("pitchShift", 1.1)
+        self.tts.setParameter("pitch", 1.3)
         self.tts.setParameter("speed",90)
 
         #set animated say setting
