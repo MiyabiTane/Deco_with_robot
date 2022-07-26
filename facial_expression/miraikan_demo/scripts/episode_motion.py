@@ -44,7 +44,7 @@ class Talk(object):
         
         #set init speech setting
         self.tts.setLanguage("Japanese")
-        self.tts.setParameter("pitchShift", 1.1)
+        self.tts.setParameter("pitch", 1.3)
         self.tts.setParameter("speed",90)
 
         #set animated say setting
@@ -59,7 +59,7 @@ class Talk(object):
         #  # [-2.802596928649634e-45, -0.20000003278255463]
         # angles = talk.mo.getAngles("Body", False)
         init_body_angles = [0.0, -2.802596928649634e-45, 1.5596766471862793, 0.14272688329219818, -1.228257656097412, -0.5225345492362976, -0.000497947505209595, 0.6000000238418579, 3.648194280003736e-08, -0.040683578699827194, -0.010746408253908157, 1.5596766471862793, -0.14272694289684296, 1.228257656097412, 0.5225345492362976, 0.0004979457589797676, 0.6000000238418579, 0.0, 0.0, 0.0]
-        self.mo.setAngles("Body", init_body_angles, 1.0)
+        self.mo.setAngles("Body", init_body_angles, 0.1)
 
     def episode_11(self):
 
