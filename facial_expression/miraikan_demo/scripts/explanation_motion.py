@@ -164,14 +164,20 @@ class Talk(object):
         time.sleep(1)
         self.set_init_posture()
 
-    def episode_32(self):
+    def episode_32_1(self):
 
-        #episode 3-2
+        #episode 3-2-1
         time.sleep(1)
         self.ans.say("コチさんが連れて行っていたんだねー！",self.configuration)
 
         time.sleep(1)
         self.set_init_posture()
+
+    def episode_32_2(self):
+
+        #episode 3-2-2
+        print("dummy func")
+
 
     def episode_33_1(self):
 
@@ -260,14 +266,16 @@ class Talk(object):
     def episode_54_2(self):
 
         #episode 5-4-2
-        print("dummy func")
+        self.mo.setStiffnesses(self.joint_names, 1)
+        time.sleep(1)
+        self.ans.say("コチさん、^start(animations/Stand/BodyTalk/BodyTalk_1)博士の卒業、本当におめでとう^wait(animations/Stand/BodyTalk/BodyTalk_1)",self.configuration)
+
+        time.sleep(1)
+        self.set_init_posture()
 
     def episode_54_3(self):
 
-        #episode 5-4-3
-        time.sleep(1)
-        self.ans.say("コチさん、博士の卒業、本当におめでとう。")
-        
+        #episode 5-4-3        
         time.sleep(1)
         self.ans.say("今日は説明してくれてありがとう。これからも研究がんばってね",self.configuration)
 
@@ -359,7 +367,7 @@ class Talk(object):
 
     def summary_7(self):
 
-        #summary-7                                                                                                                                                                                          
+        #summary-7                                                                                  
         self.mo.setStiffnesses(self.joint_names, 1)
         time.sleep(1)
         self.ans.say("^start(animations/Stand/Gestures/Everything_2)他にも色んなたいへんなことがあったけど",self.configuration)
@@ -372,7 +380,7 @@ class Talk(object):
 
     def summary_8(self):
 
-        #summary-8                                                                                                                                                                                          
+        #summary-8                                                                       
         self.mo.setStiffnesses(self.joint_names, 1)
         time.sleep(1)
         self.ans.say("この研究は、人の交流を手助けできるだけでなく、",self.configuration)
@@ -389,9 +397,9 @@ class Talk(object):
         self.set_init_posture()
 
 
-
+"""
 if __name__ == '__main__':
-    talk = Talk("169.254.175.13") #init                                                                                                                                                                     
+    talk = Talk("169.254.175.13") #init                                                                
     val = input('input Number:')
     if val == 1:
         talk.episode_11()
@@ -437,4 +445,4 @@ if __name__ == '__main__':
     elif val== 8:
         talk.introduction()
         exit()
-        
+"""        

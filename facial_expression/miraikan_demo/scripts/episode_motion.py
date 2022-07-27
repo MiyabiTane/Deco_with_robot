@@ -462,7 +462,7 @@ class Talk(object):
         self.set_init_posture()
 
 
-
+"""
 if __name__ == '__main__':
     talk = Talk("169.254.175.13") #init
     val = input('input Number:')
@@ -509,4 +509,4 @@ if __name__ == '__main__':
     elif val == 8:
         talk.introduction()
         exit()
-
+"""
