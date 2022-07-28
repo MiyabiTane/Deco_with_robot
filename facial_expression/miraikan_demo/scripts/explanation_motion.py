@@ -16,8 +16,12 @@ class Talk(object):
         self.PORT = 9559
 
         #pepper_proxy
-        self.tts = ALProxy("ALTextToSpeech",self.PEPPER_IP,self.PORT)
-        
+        try:
+            self.tts = ALProxy("ALTextToSpeech",self.PEPPER_IP,self.PORT)
+        except Exception, e:
+            print "Error:"
+            print str(e)
+
         try:
             self.ans = ALProxy("ALAnimatedSpeech",self.PEPPER_IP,self.PORT)
         except Exception, e:
@@ -32,6 +36,12 @@ class Talk(object):
 
         try:
             self.mo = ALProxy("ALMotion",self.PEPPER_IP,self.PORT)
+        except Exception, e:
+            print "Error:"
+            print str(e)
+
+        try:
+            self.led = ALProxy("ALLeds",self.PEPPER_IP,self.PORT)
         except Exception, e:
             print "Error:"
             print str(e)
@@ -68,15 +78,13 @@ class Talk(object):
         self.ans.say("^start(animations/Stand/Gestures/Explain_6)名前は、ホップって言うよ。",self.configuration)
 
         time.sleep(2)
-        self.ans.say("今日は、シナモンの代わりに^start(animations/Stand/Gestures/Explain_11)コチさんの発表をお手伝いするよ",self.configuration)
+        self.ans.say("今日は、色々質問しながら^start(animations/Stand/Gestures/Explain_11)コチさんの発表をお手伝いするよ",self.configuration)
 
         time.sleep(2)
-        self.ans.say("みんな、どうぞよろしくね。^start(animations/Stand/Gestures/Hey_3)^wait(animations/Stand/Gestures/Hey_3)",self.configuration)
+        self.ans.say("みんな、今日はどうぞよろしくね。^start(animations/Stand/Gestures/Hey_3)^wait(animations/Stand/Gestures/Hey_3)",self.configuration)
 
         time.sleep(1)
         self.set_init_posture()
-
-        
 
     def episode_01(self):
         #episode 0-1
@@ -338,6 +346,7 @@ class Talk(object):
 
         time.sleep(1)
         self.set_init_posture()
+
     def summary_5(self):
 
         #summary-5                                                                                                                                                                                          
@@ -390,6 +399,8 @@ class Talk(object):
         time.sleep(0.3)
         self.mo.setStiffnesses(self.joint_names, 0)
         self.ans.say("^start(animations/Stand/Emotions/Positive/Peaceful_1)大切な研究だね。^wait(animations/Stand/Emotions/Positive/Peaceful_1)",self.configuration)
+        self.led.off('FaceLeds')
+        self.led.off('FaceLedsInternal')
 
         time.sleep(1)
         self.mo.setStiffnesses(self.joint_names, 1)
@@ -398,50 +409,57 @@ class Talk(object):
 
 """
 if __name__ == '__main__':
-    talk = Talk("169.254.175.13") #init                                                                
-    val = input('input Number:')
-    if val == 1:
-        talk.episode_11()
-        talk.episode_12()
-        talk.episode_13()
-        talk.episode_14()
-        exit()
-    elif val == 2:
-        talk.episode_21()
-	talk.episode_22()
-        talk.episode_23()
-        exit()
-    elif val == 3:
-	talk.episode_31()
-        talk.episode_32()
-        talk.episode_33()
-        exit()
-    elif val == 4:
-	talk.episode_41()
-	talk.episode_42()
-	talk.episode_43()
-	exit()
-    elif val == 5:
-	talk.episode_51()
-	talk.episode_52()
-	talk.episode_53()
-	talk.episode_54()
-	exit()
-    elif val == 0:
-	talk.episode_01()
-	talk.episode_02()
-	exit()
-    elif val == 7:
-	talk.summary_1()
-	talk.summary_2()
-	talk.summary_3()
-	talk.summary_4()
-	talk.summary_5()
-	talk.summary_6()
-	talk.summary_7()
-	talk.summary_8()
-        exit()
-    elif val== 8:
-        talk.introduction()
-        exit()
-"""        
+    talk = Talk("169.254.175.13") #init
+    while(True):
+        val = input('input Number:')
+        if val == 1:
+            talk.introduction()
+        elif val == 2:
+            talk.episode_01()
+            time.sleep(5.0)
+            talk.episode_02()
+        elif val == 3:
+            talk.episode_11()
+            time.sleep(3.0)
+            talk.episode_12()
+            time.sleep(10.0)
+            talk.episode_13()
+        elif val == 4:
+            talk.episode_14()
+        elif val == 5:
+            talk.episode_21()
+            talk.episode_22()
+            talk.episode_23()
+        elif val == 6:
+            talk.episode_31()
+            time.sleep(5.0)
+            talk.episode_32_1()
+            talk.episode_32_2()
+            time.sleep(3.0)
+            talk.episode_33_1()
+            talk.episode_33_2()
+        elif val == 7:
+            talk.episode_41()
+            talk.episode_42_1()
+            time.sleep(2.0)
+            talk.episode_42_2()
+            talk.episode_43()
+        elif val == 8:
+            talk.episode_51()
+            talk.episode_52()
+            time.sleep(10.0)
+            talk.episode_53()
+            talk.episode_54_1()
+        elif val == 9:
+            talk.summary_1()
+            talk.summary_2()
+            talk.summary_3()
+            talk.summary_4()
+            talk.summary_5()
+            talk.summary_6()
+            talk.summary_7()
+            talk.summary_8()
+            time.sleep(3.0)
+            talk.episode_54_2()
+            talk.episode_54_3()
+"""
