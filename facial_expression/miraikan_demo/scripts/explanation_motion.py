@@ -78,7 +78,7 @@ class Talk(object):
         self.ans.say("^start(animations/Stand/Gestures/Explain_6)名前は、ホップって言うよ。",self.configuration)
 
         time.sleep(2)
-        self.ans.say("今日は、司会として^start(animations/Stand/Gestures/Explain_11)コチさんの発表をお手伝いするよ",self.configuration)
+        self.ans.say("今日は、色々質問しながら^start(animations/Stand/Gestures/Explain_11)コチさんの発表をお手伝いするよ",self.configuration)
 
         time.sleep(2)
         self.ans.say("みんな、今日はどうぞよろしくね。^start(animations/Stand/Gestures/Hey_3)^wait(animations/Stand/Gestures/Hey_3)",self.configuration)
