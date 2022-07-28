@@ -119,6 +119,10 @@ class Talk(object):
         time.sleep(1.0)
         self.set_init_posture()
 
+    def look_at_kochisan_mini(self):
+        self.set_init_posture()
+        self.mo.angleInterpolation(["HeadYaw", "HeadPitch"], [[-10.0*almath.TO_RAD, -10.0*almath.TO_RAD, 0.0], [-5.0*almath.TO_RAD, -5.0*almath.TO_RAD, -2.802596928649634e-45]], [[1.0, 1.5, 2.5], [1.0, 1.5, 2.5]], True)
+
     def introduction(self):
         #introduction func     
         time.sleep(1)
@@ -138,6 +142,7 @@ class Talk(object):
 
     def episode_01(self):
         #episode 0-1
+        self.look_at_kochisan_mini()
         time.sleep(1)
         self.ans.say("^コチさん、どうしてこの研究を始めたのー？",self.configuration)
 
@@ -152,6 +157,7 @@ class Talk(object):
     def episode_11(self):
 
         # episode 1-1
+        self.look_at_kochisan_mini()
         time.sleep(1)
         self.ans.say("^コチさんはいつからこの研究をしているの？",self.configuration)        
 
@@ -224,6 +230,7 @@ class Talk(object):
     def episode_32_1(self):
 
         #episode 3-2-1
+        self.look_at_kochisan_mini()
         time.sleep(1)
         self.ans.say("コチさんが連れて行っていたんだねー！",self.configuration)
 
@@ -239,6 +246,7 @@ class Talk(object):
     def episode_33_1(self):
 
         #episode 3-3
+        self.look_at_kochisan_mini()
         time.sleep(1)
         self.ans.say("ねぇねぇ、コチさん",self.configuration)
 
@@ -266,6 +274,7 @@ class Talk(object):
     def episode_42_1(self):
 
         #episode 4-2
+        self.look_at_kochisan_mini()
         time.sleep(1)
         self.ans.say("コチさんは、とっても慌てているように見えるよ",self.configuration)
 
@@ -314,6 +323,7 @@ class Talk(object):
     def episode_54_1(self):
 
         #episode 5-4-1
+        self.look_at_kochisan_mini()
         time.sleep(1)
         self.ans.say("でもコチさん、８年間たくさん頑張ったんだね。",self.configuration)
 
@@ -324,6 +334,7 @@ class Talk(object):
 
         #episode 5-4-2
         self.mo.setStiffnesses(self.joint_names, 1)
+        self.look_at_kochisan_mini()
         time.sleep(1)
         self.ans.say("コチさん、^start(animations/Stand/BodyTalk/BodyTalk_1)博士の卒業、本当におめでとう^wait(animations/Stand/BodyTalk/BodyTalk_1)",self.configuration)
 
@@ -432,7 +443,8 @@ class Talk(object):
 
         self.mo.setStiffnesses(self.joint_names, 0)
         time.sleep(0.3)
-        self.ans.say("みんなのおかげで、^start(animations/Stand/Emotions/Positive/Peaceful_1)無事に博士論文をまとめられたんだね^wait(animations/Stand/Emotions/Positive/Peaceful_1)",self.configuration)   
+        self.ans.say("みんなのおかげで、^start(animations/Stand/Emotions/Positive/Peaceful_1)無事に博士論文をまとめられたんだね^wait(animations/Stand/Emotions/Positive/Peaceful_1)",self.configuration)
+        self.mo.setStiffnesses(self.joint_names, 1)
         time.sleep(1)
         self.set_init_posture()
 
@@ -449,8 +461,7 @@ class Talk(object):
         time.sleep(0.3)
         self.mo.setStiffnesses(self.joint_names, 0)
         self.ans.say("^start(animations/Stand/Emotions/Positive/Peaceful_1)大切な研究だね。^wait(animations/Stand/Emotions/Positive/Peaceful_1)",self.configuration)
-        self.led.off('FaceLeds')
-        self.led.off('FaceLedsInternal')
+        self.led.reset('FaceLeds')
 
         time.sleep(1)
         self.mo.setStiffnesses(self.joint_names, 1)
@@ -462,7 +473,9 @@ if __name__ == '__main__':
     talk = Talk("169.254.175.13") #init
     while(True):
         val = input('input Number:')
-        if val == 1:
+        if val == 0:
+            talk.look_at_kochisan_mini()
+        elif val == 1:
             talk.greeting()
         elif val == 2:
             talk.look_at_kochisan()
