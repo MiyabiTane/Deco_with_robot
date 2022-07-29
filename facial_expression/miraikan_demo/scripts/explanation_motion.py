@@ -152,7 +152,7 @@ class Talk(object):
         self.ans.say("^へー、ソウなんだ。知らない人と話すのって緊張するもんね。",self.configuration)
 
         time.sleep(1)
-        self.set_init_posture()       
+        self.set_init_posture()
         
     def episode_11(self):
 
