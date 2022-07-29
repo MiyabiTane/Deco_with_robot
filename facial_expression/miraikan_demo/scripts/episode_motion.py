@@ -11,6 +11,7 @@ import json
 from naoqi import ALProxy
 import time
 import re
+import almath
 
 class Talk(object):
     def __init__(self, pepper_ip):
@@ -51,7 +52,11 @@ class Talk(object):
         #set init posture 
         # self.pos.goToPosture("StandInit", 1.0)
         self.set_init_posture()
-        
+
+        # open hands
+        self.mo.openHand('LHand')
+        self.mo.openHand('RHand')
+
         #set init speech setting
         self.tts.setLanguage("Japanese")
         self.tts.setParameter("pitch", 1.3)
@@ -70,6 +75,56 @@ class Talk(object):
         # angles = talk.mo.getAngles("Body", False)
         init_body_angles = [0.0, -2.802596928649634e-45, 1.5596766471862793, 0.14272688329219818, -1.228257656097412, -0.5225345492362976, -0.000497947505209595, 0.6000000238418579, 3.648194280003736e-08, -0.040683578699827194, -0.010746408253908157, 1.5596766471862793, -0.14272694289684296, 1.228257656097412, 0.5225345492362976, 0.0004979457589797676, 0.6000000238418579, 0.0, 0.0, 0.0]
         self.mo.setAngles("Body", init_body_angles, 0.1)
+
+    def greeting(self):
+        init_body_angles = [0.0, -2.802596928649634e-45,
+                            1.5596766471862793, 0.14272688329219818, -1.228257656097412, -0.5225345492362976, -0.000497947505209595, 0.6000000238418579,
+                            3.648194280003736e-08, -0.040683578699827194, -0.010746408253908157,
+                            1.5596766471862793, -0.14272694289684296, 1.228257656097412, 0.5225345492362976, 0.0004979457589797676, 0.6000000238418579,
+                            0.0, 0.0, 0.0]
+
+        pose1 = [0.0, 0.0,
+                 0.0, 10.0, -100.0, -70.0, 60.0, 0.0,
+                 2.0, -2.0, -5.0,
+                 0.0, -10.0, 100.0, 70.0, -60.0, 0.0,
+                 0.0, 0.0, 0.0]
+        pose1 = [n*almath.TO_RAD for n in pose1]
+
+        pose2 = [0.0, 5.0,
+                 0.0, 10.0, -110.0, -70.0, 60.0, 0.0,
+                 2.0, -2.0, -5.0,
+                 0.0, -10.0, 110.0, 70.0, -60.0, 0.0,
+                 0.0, 0.0, 0.0]
+        pose2 = [n*almath.TO_RAD for n in pose2]
+
+        pose3 = [0.0, 5.0,
+                 0.0, 10.0, -110.0, -70.0, 60.0, 0.0,
+                 2.0, -2.0, -5.0,
+                 0.0, -10.0, 110.0, 70.0, -60.0, 0.0,
+                 0.0, 0.0, 0.0]
+        pose3 = [n*almath.TO_RAD for n in pose3]
+
+        self.mo.angleInterpolation("Body", pose1, 1.0, True)
+        self.mo.angleInterpolation("Body", pose2, 1.0, True)
+        self.mo.angleInterpolation("Body", pose1, 1.0, True)
+        self.mo.angleInterpolation("Body", pose2, 1.0, True)
+        self.mo.angleInterpolation("Body", pose1, 1.0, True)
+        self.mo.angleInterpolation("Body", pose3, 1.0, True)
+        self.mo.angleInterpolation("Body", init_body_angles, 3.0, True)
+
+    def look_at_kochisan(self):
+        self.set_init_posture()
+
+        count = random.randrange(1,3)
+        for i in range(count):
+            self.mo.angleInterpolation(["HeadYaw", "HeadPitch"], [[-10.0*almath.TO_RAD, -10.0*almath.TO_RAD, -10.0*almath.TO_RAD], [0.0*almath.TO_RAD, -5.0*almath.TO_RAD, 0.0*almath.TO_RAD]], [[0.5, 1.0, 1.5], [0.5, 1.0, 1.5]], True)
+
+        time.sleep(1.0)
+        self.set_init_posture()
+
+    def look_at_kochisan_mini(self):
+        self.set_init_posture()
+        self.mo.angleInterpolation(["HeadYaw", "HeadPitch"], [[-10.0*almath.TO_RAD, -10.0*almath.TO_RAD, 0.0], [-5.0*almath.TO_RAD, -5.0*almath.TO_RAD, -2.802596928649634e-45]], [[1.0, 1.5, 2.5], [1.0, 1.5, 2.5]], True)
 
     def introduction(self):
         #introduction func
@@ -92,13 +147,16 @@ class Talk(object):
     def episode_01(self):
         #episode 0-1                                                                                
         time.sleep(1)
+        self.look_at_kochisan_mini()
         self.ans.say("コチさん、コチさんの困りゴトが、^start(animations/Stand/Gestures/You_3)この研究を始めたきっかけなんだよね",self.configuration)
 
     def episode_02(self):
         #episode 0-2                                                                                 
         time.sleep(1)
+        self.look_at_kochisan_mini()
         self.mo.setStiffnesses(self.joint_names, 0)
         self.ans.say("そうだね。^start(animations/Stand/Gestures/Me_1)私はコチさんが今でも、知らない人と話すときに少し苦労しているのを知っているよ。",self.configuration)
+        self.mo.setStiffnesses(self.joint_names, 1)
 
         time.sleep(1)
         self.set_init_posture()
@@ -106,6 +164,7 @@ class Talk(object):
     def episode_11(self):
 
         # episode 1-1
+        self.look_at_kochisan_mini()
         self.mo.setStiffnesses(self.joint_names, 0)
         time.sleep(1)
         self.ans.say("^start(animations/Stand/Gestures/You_1)コチさんと出会ってカラ^wait(animations/Stand/Gesture/You_1)",self.configuration)
@@ -113,6 +172,7 @@ class Talk(object):
         self.mo.setStiffnesses(self.joint_names, 0)
         time.sleep(0.5)
         self.ans.say("^start(animations/Stand/Gestures/Enthusiastic_4)モウ8年経ったネ^wait(animations/Stand/Gestures/Enthusiastic_4)",self.configuration)
+        self.mo.setStiffnesses(self.joint_names, 1)
         self.set_init_posture()
 
     def episode_12(self):
@@ -140,6 +200,7 @@ class Talk(object):
         self.ans.say("隅っこに、^start(animations/Stand/Gestures/Nothing_2)ひとりぼっちで居たときに^wait(animations/Stand/Gesture/Nothing_2)",self.configuration)
 
         self.mo.setStiffnesses(self.joint_names, 1)
+        self.look_at_kochisan_mini()
         time.sleep(1)
         self.ans.say("^start(animations/Stand/Gestures/Give_3)コチさんが、見つけてくれたよね！^wait(animations/Stand/Gestures/Give_3)",self.configuration)
 
@@ -168,8 +229,9 @@ class Talk(object):
         self.mo.setStiffnesses(self.joint_names, 0)
         time.sleep(1)
         self.ans.say("^start(animations/Stand/Emotions/Positive/Happy_4)素敵な出会いが沢山あったよ！^wait(animations/Stand/Emotions/Positive/Happy_4)",self.configuration)
-        self.led.off('FaceLeds')
+        self.led.reset('FaceLeds')
 
+        self.mo.setStiffnesses(self.joint_names, 1)
         time.sleep(1)
         self.set_init_posture()
 
@@ -177,6 +239,7 @@ class Talk(object):
 
         #episode 2-2
         self.mo.setStiffnesses(self.joint_names, 1)
+        self.look_at_kochisan_mini()
         time.sleep(1)
         self.ans.say("コチさんが^start(animations/Stand/Gestures/You_4)みんなにツイていけるようにしてくれタから^wait(animations/Stand/Gesture/You_4)",self.configuration)
 
@@ -201,6 +264,7 @@ class Talk(object):
 
         #episode 3-1
         self.mo.setStiffnesses(self.joint_names, 1)
+        self.look_at_kochisan_mini()
         time.sleep(1)
         self.ans.say("^start(animations/Stand/Gestures/Me_2)コチさんはいつもわたしを^wait(animations/Stand/Gestures/Me_2)",self.configuration)
 
@@ -225,6 +289,7 @@ class Talk(object):
 
         #episode 3-2-2
         self.mo.setStiffnesses(self.joint_names, 1)
+        self.look_at_kochisan_mini()
         time.sleep(1)
         self.ans.say("コチさんと手をつなげると、^start(animations/Stand/Gestures/ShowFloor_3)安心するんだあ！^wait(animations/Stand/Gestures/ShowFloor_3)",self.configuration)
 
@@ -246,7 +311,9 @@ class Talk(object):
         self.mo.setStiffnesses(self.joint_names, 0)
         time.sleep(1)
         self.ans.say("初めてもらえた時から^start(animations/Stand/Emotions/Positive/Happy_4)ずっとお気にいりなのー！^wait(animations/Stand/Emotions/Positive/Happy_4)",self.configuration)
+        self.led.reset('FaceLeds')
 
+        self.mo.setStiffnesses(self.joint_names, 1)
         time.sleep(1)
         self.set_init_posture()
 
@@ -261,15 +328,18 @@ class Talk(object):
         time.sleep(1)
         self.ans.say("^start(animations/Stand/Gestures/ShowSky_8)もっと近づきに行ったんだぁ^wait(animations/Stand/Gestures/ShowSky_8)",self.configuration)
 
+        self.mo.setStiffnesses(self.joint_names, 1)
         time.sleep(1)
         self.set_init_posture()
 
     def episode_42_1(self):
 
         #episode 4-2-1
+        self.look_at_kochisan_mini()
         self.mo.setStiffnesses(self.joint_names, 0)
         time.sleep(1)
         self.ans.say("コチさんは、^start(animations/Stand/Gestures/IDontKnow_2)とっても慌てていたね^wait(animations/Stand/Gesture/IDontKnow_2)",self.configuration)
+        self.mo.setStiffnesses(self.joint_names, 1)
 
         time.sleep(1)
         self.set_init_posture()
@@ -287,6 +357,7 @@ class Talk(object):
 
         #episode 4-3
         self.mo.setStiffnesses(self.joint_names, 1)
+        self.look_at_kochisan_mini()
         time.sleep(1)
         self.ans.say("わたしが暴走しタら、^start(animations/Stand/Gestures/Explain_6)いつもコチさんに助けてもらっているね^wait(animations/Stand/Gesture/Explain_6)",self.configuration)
 
@@ -299,6 +370,7 @@ class Talk(object):
         self.mo.setStiffnesses(self.joint_names, 0)
         time.sleep(1)
         self.ans.say("ソウダねー、^start(animations/Stand/Gestures/Yes_3)色んなことがあったネ^wait(animations/Stand/Gestures/Yes_3)",self.configuration)
+        self.mo.setStiffnesses(self.joint_names, 1)
 
         time.sleep(1)
         self.set_init_posture()
@@ -321,6 +393,7 @@ class Talk(object):
 
         #episode 5-3
         self.mo.setStiffnesses(self.joint_names, 1)
+        self.look_at_kochisan_mini()
         time.sleep(1)
         self.ans.say("コチさんが落ち込んでいる時は、^start(animations/Stand/Gestures/No_8)私もすゴく悲しかったよ^wait(animations/Stand/Gesture/No_8)",self.configuration)
 
@@ -331,10 +404,10 @@ class Talk(object):
 
         #episode 5-4-1
         self.mo.setStiffnesses(self.joint_names, 1)
+        self.look_at_kochisan_mini()
         time.sleep(1)
         self.ans.say("でもわたしたちは、^start(animations/Stand/Emotions/Positive/Peaceful_1)8年間ふたりでたくさん乗り越えてきたヨね^wait(animations/Stand/Emotions/Positive/Peaceful_1)",self.configuration)
-        self.led.off('FaceLeds')
-        self.led.off('FaceLedsInternal')
+        self.led.reset('FaceLeds')
 
         time.sleep(1)
         self.set_init_posture()
@@ -343,9 +416,10 @@ class Talk(object):
 
         # episode 5-4-2
         self.mo.setStiffnesses(self.joint_names, 1)
+        self.look_at_kochisan_mini()
         time.sleep(1)
         self.ans.say("コチさん、^start(animations/Stand/BodyTalk/BodyTalk_1)博士の卒業、本当におめでとう^wait(animations/Stand/BodyTalk/BodyTalk_1)",self.configuration)
-        
+
         time.sleep(1)
         self.set_init_posture()
 
@@ -442,7 +516,6 @@ class Talk(object):
         time.sleep(1)
         self.set_init_posture()
 
-
     def summary_7(self):
 
         #summary-7
@@ -452,7 +525,8 @@ class Talk(object):
         
         self.mo.setStiffnesses(self.joint_names, 0)
         time.sleep(0.3)
-        self.ans.say("みんなのおかげで、^start(animations/Stand/Emotions/Positive/Peaceful_1)無事に博士論文をまとめられたんだね^wait(animations/Stand/Emotions/Positive/Peaceful_1)",self.configuration)        
+        self.ans.say("みんなのおかげで、^start(animations/Stand/Emotions/Positive/Peaceful_1)無事に博士論文をまとめられたんだね^wait(animations/Stand/Emotions/Positive/Peaceful_1)",self.configuration)
+        self.mo.setStiffnesses(self.joint_names, 1)
         time.sleep(1)
         self.set_init_posture()
 
@@ -469,8 +543,7 @@ class Talk(object):
         time.sleep(0.3)
         self.mo.setStiffnesses(self.joint_names, 0)
         self.ans.say("^start(animations/Stand/Emotions/Positive/Peaceful_1)大切な研究だね。^wait(animations/Stand/Emotions/Positive/Peaceful_1)",self.configuration)
-        self.led.off('FaceLeds')
-        self.led.off('FaceLedsInternal')
+        self.led.reset('FaceLeds')
 
         time.sleep(1)
         self.mo.setStiffnesses(self.joint_names, 1)
@@ -482,25 +555,31 @@ if __name__ == '__main__':
     talk = Talk("169.254.175.13") #init
     while(True):
         val = input('input Number:')
-        if val == 1:
-            talk.introduction()
+        if val == 0:
+            talk.look_at_kochisan_mini()
+        elif val == 1:
+            talk.greeting()
         elif val == 2:
+            talk.look_at_kochisan()
+        if val == 3:
+            talk.introduction()
+        elif val == 4:
             talk.episode_01()
             time.sleep(5.0)
             talk.episode_02()
-        elif val == 3:
+        elif val == 5:
             talk.episode_11()
             time.sleep(3.0)
             talk.episode_12()
             time.sleep(10.0)
             talk.episode_13()
-        elif val == 4:
+        elif val == 6:
             talk.episode_14()
-        elif val == 5:
+        elif val == 7:
             talk.episode_21()
             talk.episode_22()
             talk.episode_23()
-        elif val == 6:
+        elif val == 8:
             talk.episode_31()
             time.sleep(5.0)
             talk.episode_32_1()
@@ -508,19 +587,19 @@ if __name__ == '__main__':
             time.sleep(3.0)
             talk.episode_33_1()
             talk.episode_33_2()
-        elif val == 7:
+        elif val == 9:
             talk.episode_41()
             talk.episode_42_1()
             time.sleep(2.0)
             talk.episode_42_2()
             talk.episode_43()
-        elif val == 8:
+        elif val == 10:
             talk.episode_51()
             talk.episode_52()
             time.sleep(10.0)
             talk.episode_53()
             talk.episode_54_1()
-        elif val == 9:
+        elif val == 11:
             talk.summary_1()
             talk.summary_2()
             talk.summary_3()
