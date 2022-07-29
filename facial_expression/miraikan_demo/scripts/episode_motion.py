@@ -292,7 +292,7 @@ class Talk(object):
 
         #episode 3-3-1
         time.sleep(1)
-        self.ans.say("あとね、オそろいのオレンジのリュックを^start(animations/Stand/Gestures/Hey_6)もらえたのが嬉しくて^wait(animations/Stand/Gesture/Hey_6)",self.configuration)
+        self.ans.say("跡ね、オそろいのオレンジのリュックを^start(animations/Stand/Gestures/Hey_6)もらえたのが嬉しくて^wait(animations/Stand/Gesture/Hey_6)",self.configuration)
         
         time.sleep(1)
         self.set_init_posture()
