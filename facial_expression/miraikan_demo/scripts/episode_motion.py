@@ -123,12 +123,36 @@ class Talk(object):
         for i in range(count):
             self.mo.angleInterpolation(["HeadYaw", "HeadPitch"], [[-10.0*almath.TO_RAD, -10.0*almath.TO_RAD, -10.0*almath.TO_RAD], [0.0*almath.TO_RAD, -5.0*almath.TO_RAD, 0.0*almath.TO_RAD]], [[0.5, 1.0, 1.5], [0.5, 1.0, 1.5]], True)
 
+        rDuration = 0.05
+        self.led.post.fadeRGB( "FaceLed0", 0x000000, rDuration )
+        self.led.post.fadeRGB( "FaceLed1", 0x000000, rDuration )
+        self.led.post.fadeRGB( "FaceLed2", 0xffffff, rDuration )
+        self.led.post.fadeRGB( "FaceLed3", 0x000000, rDuration )
+        self.led.post.fadeRGB( "FaceLed4", 0x000000, rDuration )
+        self.led.post.fadeRGB( "FaceLed5", 0x000000, rDuration )
+        self.led.post.fadeRGB( "FaceLed6", 0xffffff, rDuration )
+        self.led.fadeRGB( "FaceLed7", 0x000000, rDuration )
+        time.sleep(0.1)
+        self.led.fadeRGB( "FaceLeds", 0xffffff, rDuration )
+
         time.sleep(1.0)
         self.set_init_posture()
 
     def look_at_kochisan_mini(self):
         self.set_init_posture()
-        self.mo.angleInterpolation(["HeadYaw", "HeadPitch"], [[-10.0*almath.TO_RAD, -10.0*almath.TO_RAD, 0.0], [-5.0*almath.TO_RAD, -5.0*almath.TO_RAD, -2.802596928649634e-45]], [[1.0, 1.5, 2.5], [1.0, 1.5, 2.5]], True)
+        self.mo.angleInterpolation(["HeadYaw", "HeadPitch"], [[-10.0*almath.TO_RAD, -10.0*almath.TO_RAD], [-5.0*almath.TO_RAD, -5.0*almath.TO_RAD]], [[1.0, 1.5], [1.0, 1.5]], True)
+        rDuration = 0.05
+        self.led.post.fadeRGB( "FaceLed0", 0x000000, rDuration )
+        self.led.post.fadeRGB( "FaceLed1", 0x000000, rDuration )
+        self.led.post.fadeRGB( "FaceLed2", 0xffffff, rDuration )
+        self.led.post.fadeRGB( "FaceLed3", 0x000000, rDuration )
+        self.led.post.fadeRGB( "FaceLed4", 0x000000, rDuration )
+        self.led.post.fadeRGB( "FaceLed5", 0x000000, rDuration )
+        self.led.post.fadeRGB( "FaceLed6", 0xffffff, rDuration )
+        self.led.fadeRGB( "FaceLed7", 0x000000, rDuration )
+        time.sleep(0.1)
+        self.led.fadeRGB( "FaceLeds", 0xffffff, rDuration )
+        self.mo.angleInterpolation(["HeadYaw", "HeadPitch"], [[0.0], [-2.802596928649634e-45]], [[1.0], [1.0]], True)
 
     def introduction(self):
         #introduction func
