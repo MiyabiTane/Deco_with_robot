@@ -30,7 +30,7 @@ class TopicToEyebrows(object):
         """
         degrees = [0, 20, 90, 120, 50, 30, 20, 60, 70, 120, 70, 130, 50]
         wait_times = [5] * 13
-        wait_times[5] = 4.0
+        # wait_times[5] = 8.0
         headers = {
             'Accept': 'application/json',
         }

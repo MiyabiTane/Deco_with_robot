@@ -20,7 +20,9 @@ var squareRotation = 0.0;
 var pre_sweat_y = 0.0;
 var wait_flag = false;
 var tenRad = 10 * Math.PI / 180;
-var back_color = 1.0;
+var back_red = 1.0;
+var back_green = 1.0;
+var back_blue = 0.9;
 var PT1_X = 0.5;
 var PT1_Y = -0.6;
 var BROW_LEN = 3;
@@ -779,7 +781,7 @@ function initBuffersSleep(gl) {
 //
 function drawScene(gl, programInfo, buffers, deltaTime, vertexCount) {
   // black:0, white:1
-  gl.clearColor(back_color, back_color, back_color, 1.0);  // Clear to black, fully opaque
+  gl.clearColor(back_red, back_green, back_blue, 1.0);  // Clear to black, fully opaque
   gl.clearDepth(1.0);                 // Clear everything
   gl.enable(gl.DEPTH_TEST);           // Enable depth testing
   gl.depthFunc(gl.LEQUAL);            // Near things obscure far things
@@ -868,7 +870,7 @@ function drawScene(gl, programInfo, buffers, deltaTime, vertexCount) {
 
 function drawSceneSome(gl, programInfo, programInfoAttach, buffers, buffersAttach, vertexCount, vertexCountAttach) {
   // black:0, white:1
-  gl.clearColor(back_color, back_color, back_color, 1.0);  // Clear to black, fully opaque
+  gl.clearColor(back_red, back_green, back_blue, 1.0);  // Clear to black, fully opaque
   gl.clearDepth(1.0);                 // Clear everything
   gl.enable(gl.DEPTH_TEST);           // Enable depth testing
   gl.depthFunc(gl.LEQUAL);            // Near things obscure far things
@@ -1016,7 +1018,7 @@ function drawSceneSome(gl, programInfo, programInfoAttach, buffers, buffersAttac
 
 function drawSceneColor(gl, programInfoAttach, buffersAttach, vertexCount) {
   // black:0, white:1
-  gl.clearColor(back_color, back_color, back_color, 1.0);  // Clear to black, fully opaque
+  gl.clearColor(back_red, back_green, back_blue, 1.0);  // Clear to black, fully opaque
   gl.clearDepth(1.0);                 // Clear everything
   gl.enable(gl.DEPTH_TEST);           // Enable depth testing
   gl.depthFunc(gl.LEQUAL);            // Near things obscure far things

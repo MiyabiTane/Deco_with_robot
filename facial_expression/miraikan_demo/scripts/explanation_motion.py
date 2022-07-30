@@ -193,6 +193,7 @@ class Talk(object):
     def episode_12(self):
 
         #episode 1-2
+        self.mo.setStiffnesses(self.joint_names, 0.1)
         time.sleep(1)
         self.ans.say("ソウなんだね^start(animations/Stand/Gestures/Yes_2)",self.configuration)
   
@@ -203,7 +204,9 @@ class Talk(object):
         self.ans.say("どうしてペッパーを使おうと思ったの？",self.configuration)
 
         time.sleep(1)
-        self.set_init_posture()
+        self.set_init_posture_with_time(1.0)
+        time.sleep(1.0)
+        self.mo.setStiffnesses(self.joint_names, 1)
 
     def episode_13(self):
 
@@ -249,7 +252,7 @@ class Talk(object):
     def episode_31(self):
 
         #episode 3-1
-        time.sleep(1)
+        time.sleep(2.5)
         self.ans.say("発表の場所までの移動の仕方を教えて！",self.configuration)
 
         time.sleep(1)
@@ -315,7 +318,7 @@ class Talk(object):
     def episode_43(self):
 
         #episode 4-3
-        time.sleep(1)
+        time.sleep(2)
         self.ans.say("そっかー、ロボットの安定した動きを作るのはとても難しいんだね",self.configuration)
 
         time.sleep(1)
@@ -324,7 +327,7 @@ class Talk(object):
     def episode_51(self):
 
         #episode 5-1
-        time.sleep(1)
+        time.sleep(3)
         self.ans.say("そっかー、色んなことがあったんだね！",self.configuration)
 
         time.sleep(1)
@@ -342,7 +345,7 @@ class Talk(object):
     def episode_53(self):
 
         #episode 5-3
-        time.sleep(1)
+        time.sleep(2.5)
         self.ans.say("そっかー、それは大変だったね。",self.configuration)
 
         time.sleep(1)
@@ -371,7 +374,7 @@ class Talk(object):
     def episode_54_3(self):
 
         #episode 5-4-3        
-        time.sleep(1)
+        time.sleep(3)
         self.ans.say("今日は説明してくれてありがとう。これからも研究がんばってね",self.configuration)
 
         time.sleep(1)
@@ -456,11 +459,11 @@ class Talk(object):
     def summary_7(self):
 
         #summary-7
-        time.sleep(1)
+        time.sleep(3.5)
         self.ans.say("^start(animations/Stand/Gestures/Everything_2)他にも色んなたいへんなことがあったけど",self.configuration)
 
         self.mo.setStiffnesses(self.joint_names, 0.1)
-        time.sleep(0.3)
+        time.sleep(2.0)
         self.ans.say("みんなのおかげで、^start(animations/Stand/Emotions/Positive/Peaceful_1)無事に博士論文をまとめられたんだね^wait(animations/Stand/Emotions/Positive/Peaceful_1)",self.configuration)
         self.set_init_posture_with_time(1.0)
         time.sleep(1.0)

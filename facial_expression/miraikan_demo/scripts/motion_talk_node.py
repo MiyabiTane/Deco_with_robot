@@ -21,46 +21,70 @@ class TopicToMotion(object):
     
     def motion_cb(self, msg):
         if msg.data == 0:
-            self.talk_class.episode_11()
+            self.talk_class.introduction()
         elif msg.data == 1:
-            self.talk_class.episode_12()
+            self.talk_class.episode_01()
         elif msg.data == 2:
-            self.talk_class.episode_13()
+            self.talk_class.episode_02()
         elif msg.data == 3:
-            self.talk_class.episode_21()
+            self.talk_class.episode_11()
         elif msg.data == 4:
-            self.talk_class.episode_22()
+            self.talk_class.episode_12()
         elif msg.data == 5:
-            self.talk_class.episode_23()
+            self.talk_class.episode_13()
         elif msg.data == 6:
-            self.talk_class.episode_31()
+            self.talk_class.episode_14()
         elif msg.data == 7:
-            self.talk_class.episode_32_1()
+            self.talk_class.episode_21()
         elif msg.data == 8:
-            self.talk_class.episode_32_2()
+            self.talk_class.episode_22()
         elif msg.data == 9:
-            self.talk_class.episode_33_1()
+            self.talk_class.episode_23()
         elif msg.data == 10:
-            self.talk_class.episode_33_2()
+            self.talk_class.episode_31()
         elif msg.data == 11:
-            self.talk_class.episode_41()
+            self.talk_class.episode_32_1()
         elif msg.data == 12:
-            self.talk_class.episode_42_1()
+            self.talk_class.episode_32_2()
         elif msg.data == 13:
-            self.talk_class.episode_42_2()
+            self.talk_class.episode_33_1()
         elif msg.data == 14:
-            self.talk_class.episode_43()
+            self.talk_class.episode_33_2()
         elif msg.data == 15:
-            self.talk_class.episode_51()
+            self.talk_class.episode_41()
         elif msg.data == 16:
-            self.talk_class.episode_52()
+            self.talk_class.episode_42_1()
         elif msg.data == 17:
-            self.talk_class.episode_53()
+            self.talk_class.episode_42_2()
         elif msg.data == 18:
-            self.talk_class.episode_54_1()
+            self.talk_class.episode_43()
         elif msg.data == 19:
-            self.talk_class.episode_54_2()
+            self.talk_class.episode_51()
         elif msg.data == 20:
+            self.talk_class.episode_52()
+        elif msg.data == 21:
+            self.talk_class.episode_53()
+        elif msg.data == 22:
+            self.talk_class.episode_54_1()
+        elif msg.data == 23:
+            self.talk_class.summary_1()
+        elif msg.data == 24:
+            self.talk_class.summary_2()
+        elif msg.data == 25:
+            self.talk_class.summary_3()
+        elif msg.data == 26:
+            self.talk_class.summary_4()
+        elif msg.data == 27:
+            self.talk_class.summary_5()
+        elif msg.data == 28:
+            self.talk_class.summary_6()
+        elif msg.data == 29:
+            self.talk_class.summary_7()
+        elif msg.data == 30:
+            self.talk_class.summary_8()
+        elif msg.data == 31:
+            self.talk_class.episode_54_2()
+        elif msg.data == 32:
             self.talk_class.episode_54_3()
         else:
             print("Error, out of range")

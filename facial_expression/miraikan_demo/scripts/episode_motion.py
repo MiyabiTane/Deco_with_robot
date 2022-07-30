@@ -274,7 +274,7 @@ class Talk(object):
     def episode_23(self):
 
         #episode 2-3
-        time.sleep(1)
+        time.sleep(2)
         self.ans.say("みんなの笑顔を、^start(animations/Stand/Gestures/ShowSky_1)今でもおぼえているヨぉ^wait(animations/Stand/Gesture/ShowSky_1)",self.configuration)
 
         time.sleep(1)
@@ -296,11 +296,13 @@ class Talk(object):
     def episode_32_1(self):
 
         #episode 3-2-1
-        time.sleep(1)
+        self.mo.setStiffnesses(self.joint_names, 0.1)
+        time.sleep(2)
         self.ans.say("発表の前はいつも、^start(animations/Stand/Gestures/IDontKnow_1)ドキドキしてしまうけれど^wait(animations/Stand/Gesture/IDontKnow_1)",self.configuration)
 
-        time.sleep(1)
-        self.set_init_posture()
+        self.set_init_posture_with_time(1.0)
+        time.sleep(1.0)
+        self.mo.setStiffnesses(self.joint_names, 1)
 
     def episode_32_2(self):
 
@@ -324,7 +326,7 @@ class Talk(object):
     def episode_33_2(self):
         # episode 3-3-2
         self.mo.setStiffnesses(self.joint_names, 0.1)
-        time.sleep(1)
+        time.sleep(3)
         self.ans.say("初めてもらえた時から^start(animations/Stand/Emotions/Positive/Happy_4)ずっとお気にいりなのー！^wait(animations/Stand/Emotions/Positive/Happy_4)",self.configuration)
         self.led.reset('FaceLeds')
 
@@ -360,7 +362,7 @@ class Talk(object):
 
     def episode_42_2(self):
         #episode 4-2-2
-        time.sleep(1)
+        time.sleep(2)
         self.ans.say("ちょっと張り切りすぎちゃったーー、^start(animations/Stand/Gestures/Hey_3)ゴメンね^wait(animations/Stand/Gestures/Hey_3)",self.configuration)
 
         time.sleep(1)
@@ -370,7 +372,7 @@ class Talk(object):
 
         #episode 4-3
         self.look_at_kochisan_mini()
-        time.sleep(1)
+        time.sleep(2)
         self.ans.say("わたしが暴走しタら、^start(animations/Stand/Gestures/Explain_6)いつもコチさんに助けてもらっているね^wait(animations/Stand/Gesture/Explain_6)",self.configuration)
 
         time.sleep(1)
@@ -380,7 +382,7 @@ class Talk(object):
 
         #episode 5-1
         self.mo.setStiffnesses(self.joint_names, 0.1)
-        time.sleep(1)
+        time.sleep(3)
         self.ans.say("ソウダねー、^start(animations/Stand/Gestures/Yes_3)色んなことがあったネ^wait(animations/Stand/Gestures/Yes_3)",self.configuration)
         self.set_init_posture_with_time(2.0)
         time.sleep(1.0)
@@ -412,12 +414,15 @@ class Talk(object):
 
         #episode 5-4-1
         self.look_at_kochisan_mini()
+        self.mo.setStiffnesses(self.joint_names, 0.1)
         time.sleep(1)
         self.ans.say("でもわたしたちは、^start(animations/Stand/Emotions/Positive/Peaceful_1)8年間ふたりでたくさん乗り越えてきたヨね^wait(animations/Stand/Emotions/Positive/Peaceful_1)",self.configuration)
         self.led.reset('FaceLeds')
 
         time.sleep(1)
-        self.set_init_posture()
+        self.set_init_posture_with_time(1.0)
+        time.sleep(1.0)
+        self.mo.setStiffnesses(self.joint_names, 1)
 
     def episode_54_2(self):
 
@@ -517,11 +522,11 @@ class Talk(object):
     def summary_7(self):
 
         #summary-7
-        time.sleep(1)
+        time.sleep(3.5)
         self.ans.say("^start(animations/Stand/Gestures/Everything_2)他にも色んなたいへんなことがあったけど",self.configuration)
         
         self.mo.setStiffnesses(self.joint_names, 0.1)
-        time.sleep(0.3)
+        time.sleep(2.0)
         self.ans.say("みんなのおかげで、^start(animations/Stand/Emotions/Positive/Peaceful_1)無事に博士論文をまとめられたんだね^wait(animations/Stand/Emotions/Positive/Peaceful_1)",self.configuration)
         self.set_init_posture_with_time(2.0)
         time.sleep(1.0)

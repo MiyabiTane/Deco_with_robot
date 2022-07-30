@@ -45,9 +45,17 @@
   </node>
 
   <!-- demo service call -->
-  <node name="robot_behavior_server"
-	pkg="roseus" type="roseus"
-	args="$(find miraikan_demo)/euslisp/robot-behavior-server.l
-	      &quot;(progn (main))&quot;" output="screen" respawn="true" />
+  <group if="$(arg memories_talk)">
+    <node name="robot_behavior_server"
+	  pkg="roseus" type="roseus"
+	  args="$(find miraikan_demo)/euslisp/robot-behavior-server.l
+		&quot;(progn (main_memories))&quot;" output="screen" respawn="true" />
+  </group>
+  <group unless="$(arg memories_talk)">
+    <node name="robot_behavior_server"
+	  pkg="roseus" type="roseus"
+	  args="$(find miraikan_demo)/euslisp/robot-behavior-server.l
+		&quot;(progn (main_no_memories))&quot;" output="screen" respawn="true" />
+  </group>
 
 </launch>
