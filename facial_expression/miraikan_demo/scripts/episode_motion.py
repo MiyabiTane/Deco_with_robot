@@ -274,7 +274,7 @@ class Talk(object):
     def episode_23(self):
 
         #episode 2-3
-        time.sleep(2)
+        time.sleep(3)
         self.ans.say("みんなの笑顔を、^start(animations/Stand/Gestures/ShowSky_1)今でもおぼえているヨぉ^wait(animations/Stand/Gesture/ShowSky_1)",self.configuration)
 
         time.sleep(1)
@@ -326,7 +326,7 @@ class Talk(object):
     def episode_33_2(self):
         # episode 3-3-2
         self.mo.setStiffnesses(self.joint_names, 0.1)
-        time.sleep(3)
+        time.sleep(2)
         self.ans.say("初めてもらえた時から^start(animations/Stand/Emotions/Positive/Happy_4)ずっとお気にいりなのー！^wait(animations/Stand/Emotions/Positive/Happy_4)",self.configuration)
         self.led.reset('FaceLeds')
 

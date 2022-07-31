@@ -188,7 +188,9 @@ class Talk(object):
         self.look_at_kochisan_mini()
         time.sleep(1)
         self.ans.say("^コチさんはいつからこの研究をしているの？",self.configuration)        
-
+        self.set_init_posture_with_time(1.0)
+        time.sleep(1.0)
+        self.mo.setStiffnesses(self.joint_names, 1)
 
     def episode_12(self):
 
@@ -355,7 +357,7 @@ class Talk(object):
 
         #episode 5-4-1
         self.look_at_kochisan_mini()
-        time.sleep(1)
+        time.sleep(2)
         self.ans.say("でもコチさん、８年間たくさん頑張ったんだね。",self.configuration)
 
         time.sleep(1)
@@ -421,12 +423,12 @@ class Talk(object):
         self.ans.say("交流のこつは",self.configuration)
 
         time.sleep(0.3)
-	self.ans.say("^start(animations/Stand/Gestures/Give_4)共感を引き出すこと^wait(animations/Stand/Gestures/Give_4)",self.configuration)
+        self.ans.say("^start(animations/Stand/Gestures/Give_4)共感を引き出すこと^wait(animations/Stand/Gestures/Give_4)",self.configuration)
 
         time.sleep(0.3)
-	self.ans.say("^start(animations/Stand/Gestures/Far_2)移動",self.configuration)
+        self.ans.say("^start(animations/Stand/Gestures/Far_2)移動",self.configuration)
 
-	time.sleep(0.3)
+        time.sleep(0.3)
         self.ans.say("^start(animations/Stand/Gestures/ShowTablet_2)触ってもらうことだとわかったよ",self.configuration)
 
         time.sleep(1)
