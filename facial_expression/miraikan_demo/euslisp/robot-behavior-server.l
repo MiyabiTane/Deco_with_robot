@@ -278,6 +278,18 @@
     m)
   )
 
+;; common function
+(defun greeting (req)
+  (let ((m (send req :response)))
+    (call_demo 33 1.0)
+    m)
+  )
+
+(defun look_at_kochisan (req)
+  (let ((m (send req :response)))
+    (call_demo 34 1.0)
+    m)
+  )
 
 ;; funcs -> rossrv msg
 (ros::load-ros-package "std_srvs")
@@ -301,6 +313,8 @@
   (ros::advertise-service "episode_5_2" std_srvs::Empty #'episode_5_2)
   (ros::advertise-service "episode_summary" std_srvs::Empty #'episode_summary)
   (ros::advertise-service "episode_6" std_srvs::Empty #'episode_6)
+  (ros::advertise-service "greeting" std_srvs::Empty #'greeting)
+  (ros::advertise-service "look_at_kochisan" std_srvs::Empty #'look_at_kochisan)
   (ros::rate *process-rate*)
   (format t "robot behavior server start~%")
   (while (ros::ok)
@@ -328,6 +342,8 @@
   (ros::advertise-service "episode_5_2" std_srvs::Empty #'explanation_5_2)
   (ros::advertise-service "episode_summary" std_srvs::Empty #'explanation_summary)
   (ros::advertise-service "episode_6" std_srvs::Empty #'explanation_6)
+  (ros::advertise-service "greeting" std_srvs::Empty #'greeting)
+  (ros::advertise-service "look_at_kochisan" std_srvs::Empty #'look_at_kochisan)
   (ros::rate *process-rate*)
   (format t "robot behavior server start~%")
   (while (ros::ok)

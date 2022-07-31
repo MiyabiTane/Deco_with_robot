@@ -36,9 +36,9 @@
 3. `talk_motion.py`を実行してPepperが動いて喋ることを確認する<br>
     ```
     $ python
-    >>> import talk_motion
-    >>> talk = talk_motion.Talk()
-    >>> talk.episode_11("<Pepper_IP>")
+    >>> import episode_motion
+    >>> talk = episode_motion.Talk("<Pepper_IP>")
+    >>> talk.episode_11()
     ```
 
 ### 実行方法

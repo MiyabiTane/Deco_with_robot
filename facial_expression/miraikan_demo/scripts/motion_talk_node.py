@@ -86,6 +86,10 @@ class TopicToMotion(object):
             self.talk_class.episode_54_2()
         elif msg.data == 32:
             self.talk_class.episode_54_3()
+        elif msg.data == 33:
+            self.talk_class.greeting()
+        elif msg.data == 34:
+            self.talk_class.look_at_kochisan()
         else:
             print("Error, out of range")
 

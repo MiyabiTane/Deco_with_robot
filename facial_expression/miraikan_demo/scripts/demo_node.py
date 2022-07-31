@@ -119,6 +119,10 @@ class MiraikanDemo(object):
             elif motion_mode == 32:
                 # いつもありがとう、これからもよろしくね😀
                 self.pub_topics(motion_mode, 1, time_delay)
+            elif motion_mode == 33:
+                self.pub_topics(motion_mode, 0, time_delay)
+            elif motion_mode == 34:
+                self.pub_topics(motion_mode, 0, time_delay)
         elif not self.memories_talk:
             if motion_mode == 0:
                 # 今日はどうぞよろしくね😉
@@ -209,6 +213,10 @@ class MiraikanDemo(object):
             elif motion_mode == 32:
                 # 今日は説明してくれてありがとう😀
                 self.pub_topics(motion_mode, 1, time_delay)
+            elif motion_mode == 33:
+                self.pub_topics(motion_mode, 0, time_delay)
+            elif motion_mode == 34:
+                self.pub_topics(motion_mode, 0, time_delay)
         else:
             print("Error out of range")
         return True
