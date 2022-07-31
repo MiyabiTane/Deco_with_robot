@@ -40,12 +40,11 @@ Webページで眉毛を作る▷[facial_expression/web_nodejs](https://github.c
   ```
 2. 2つのWebページにアクセスする▷ http://localhost:3000/lbrow, http://localhost:3000/rbrow
 
-3. 任意のテキストをPublishする。以下は"嬉しい"を送る例。Webページ上の眉毛の動きが変化する。
+3. 以下のスクリプトを実行すると13種類の表情を1例ずつ試すことができる
   ```
-  $ rostopic pub -1 /text std_msgs/String "data: '嬉しい'"
+  $ cd facial_expression/text_to_expression
+  $ python demo_sample_publisher.py
   ```
-  ※文章の内容によっては動きが変化しない場合がある。
-
 
 ### 対話部分
 

@@ -22,7 +22,6 @@ class TextToSound(object):
         print("Server Called")
     
     def speak_cb(self, msg):
-        rospy.sleep(3+1)  # rostopic pubのせい。最終的には使わない
         speak_msg = SoundRequestGoal()
         speak_msg.sound_request.volume = self.volume
         speak_msg.sound_request.command = self.command
