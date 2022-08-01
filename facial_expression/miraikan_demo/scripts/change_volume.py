@@ -18,7 +18,7 @@ def main(session, volume):
 
     ad.setOutputVolume(volume)
     tts.setLanguage("Japanese")
-    s = ad.getOutputVolume() + "に設定しましたッ\\pau=1000\\聞こえますか？"
+    s = str(ad.getOutputVolume()) + "に設定しましたッ\\pau=1000\\聞こえますか？"
     tts.say(s)
 
     print(ad.getOutputVolume())
