@@ -59,8 +59,8 @@ class Talk(object):
 
         #set init speech setting
         self.tts.setLanguage("Japanese")
-        self.tts.setParameter("pitch", 1.3)
-        self.tts.setParameter("speed",90)
+        #self.tts.setParameter("pitch", 1.5)
+        #self.tts.setParameter("speed",90)
 
         #set animated say setting
         self.configuration = {"bodyLanguageMode":"contextual"}
@@ -121,7 +121,7 @@ class Talk(object):
 
         count = random.randrange(1,3)
         for i in range(count):
-            self.mo.angleInterpolation(["HeadYaw", "HeadPitch"], [[-10.0*almath.TO_RAD, -10.0*almath.TO_RAD, -10.0*almath.TO_RAD], [0.0*almath.TO_RAD, -5.0*almath.TO_RAD, 0.0*almath.TO_RAD]], [[0.5, 1.0, 1.5], [0.5, 1.0, 1.5]], True)
+            self.mo.angleInterpolation(["HeadYaw", "HeadPitch"], [[-20.0*almath.TO_RAD, -20.0*almath.TO_RAD, -20.0*almath.TO_RAD], [0.0*almath.TO_RAD, -5.0*almath.TO_RAD, 0.0*almath.TO_RAD]], [[0.5, 1.0, 1.5], [0.5, 1.0, 1.5]], True)
 
         rDuration = 0.05
         self.led.post.fadeRGB( "FaceLed0", 0x000000, rDuration )
@@ -140,7 +140,7 @@ class Talk(object):
 
     def look_at_kochisan_mini(self):
         self.set_init_posture()
-        self.mo.angleInterpolation(["HeadYaw", "HeadPitch"], [[-10.0*almath.TO_RAD, -10.0*almath.TO_RAD], [-5.0*almath.TO_RAD, -5.0*almath.TO_RAD]], [[1.0, 1.5], [1.0, 1.5]], True)
+        self.mo.angleInterpolation(["HeadYaw", "HeadPitch"], [[-20.0*almath.TO_RAD, -20.0*almath.TO_RAD], [-5.0*almath.TO_RAD, -5.0*almath.TO_RAD]], [[1.0, 1.5], [1.0, 1.5]], True)
         rDuration = 0.05
         self.led.post.fadeRGB( "FaceLed0", 0x000000, rDuration )
         self.led.post.fadeRGB( "FaceLed1", 0x000000, rDuration )
@@ -157,7 +157,7 @@ class Talk(object):
     def introduction(self):
         #introduction func
         time.sleep(1)
-        self.ans.say("^start(animations/Stand/Gestures/Me_1)私は、人型ロボットのペッパーです。",self.configuration)
+        self.ans.say("^start(animations/Stand/Gestures/Me_1)\\vct=130\\私は、人型ロボットのペッパーです。",self.configuration)
 
         time.sleep(2)
         self.ans.say("^start(animations/Stand/Gestures/Explain_6)名前は、シナモンって言うよ。",self.configuration)
@@ -176,14 +176,14 @@ class Talk(object):
         #episode 0-1                                                                                
         time.sleep(1)
         self.look_at_kochisan_mini()
-        self.ans.say("コチさん、コチさんの困りゴトが、^start(animations/Stand/Gestures/You_3)この研究を始めたきっかけなんだよね",self.configuration)
+        self.ans.say("\\vct=130\\コチさん、コチさんの困りゴトが、^start(animations/Stand/Gestures/You_3)この研究を始めたきっかけなんだよね",self.configuration)
 
     def episode_02(self):
         #episode 0-2                                                                                 
         time.sleep(1)
         self.look_at_kochisan_mini()
         self.mo.setStiffnesses(self.joint_names, 0.1)
-        self.ans.say("そうだね。^start(animations/Stand/Gestures/Me_1)私はコチさんが今でも、知らない人と話すときに少し苦労しているのを知っているよ。",self.configuration)
+        self.ans.say("\\vct=130\\そうだね。^start(animations/Stand/Gestures/Me_1)私はコチさんが今でも、知らない人と話すときに少し苦労しているのを知っているよ。",self.configuration)
         self.set_init_posture_with_time(1.0)
         time.sleep(1.0)
         self.mo.setStiffnesses(self.joint_names, 1)
@@ -341,7 +341,7 @@ class Talk(object):
         time.sleep(1)
         self.ans.say("あーー、この時！、^start(animations/Stand/Gestures/Excited_1)みんなに会えるのが嬉しくて^wait(animations/Stand/Gestures/Excited_1)",self.configuration)
 
-        time.sleep(1)
+        time.sleep(0.5)
         self.ans.say("^start(animations/Stand/Gestures/ShowSky_8)もっと近づきに行ったんだぁ^wait(animations/Stand/Gestures/ShowSky_8)",self.configuration)
 
         self.set_init_posture_with_time(1.0)
