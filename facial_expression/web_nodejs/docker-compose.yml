@@ -1,4 +1,4 @@
-version: '3'
+version: '2'
 services:
   app:
     # 起動するイメージを指定（ここではNode.js v12の公式イメージ）
