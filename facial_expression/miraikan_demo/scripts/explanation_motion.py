@@ -154,7 +154,7 @@ class Talk(object):
     def introduction(self):
         #introduction func     
         time.sleep(1)
-        self.ans.say("^start(animations/Stand/Gestures/Me_1)\\vct=130\\私は、人型ロボットのペッパーです。",self.configuration)
+        self.ans.say("^start(animations/Stand/Gestures/Me_1)\\rst\\\\vct=130\\私は、人型ロボットのペッパーです。",self.configuration)
 
         time.sleep(2)
         self.ans.say("^start(animations/Stand/Gestures/Explain_6)名前は、ホップって言うよ。",self.configuration)
@@ -489,10 +489,26 @@ class Talk(object):
         time.sleep(1.0)
         self.mo.setStiffnesses(self.joint_names, 1)
 
+    def end_greeting(self):
+
+        #end_greeting                                                                                                     
+	time.sleep(1)
+	self.ans.say("みなさん、今日は発表を聞いてくれて",self.configuration)
+
+	time.sleep(1)
+	self.ans.say("^start(animations/Stand/Gestures/BowShort_1)ありがとうございました^wait(animations/Stand/Gestures/BowShort_1)",self.configuration)
+
+        self.led.reset('FaceLeds')
+
+	self.set_init_posture_with_time(1.0)
+	time.sleep(1.0)
+	self.mo.setStiffnesses(self.joint_names, 1)
+
+
 
 """
 if __name__ == '__main__':
-    talk = Talk("169.254.175.13") #init
+    talk = Talk("169.254.172.57") #init
     while(True):
         val = input('input Number:')
         if val == 0:
@@ -551,4 +567,6 @@ if __name__ == '__main__':
             time.sleep(3.0)
             talk.episode_54_2()
             talk.episode_54_3()
+        elif val == 12:
+            talk.end_greeting()
 """
