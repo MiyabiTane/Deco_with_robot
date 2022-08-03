@@ -138,6 +138,31 @@ class Talk(object):
         time.sleep(1.0)
         self.set_init_posture()
 
+    def attract_audience(self):
+        self.mo.angleInterpolation(["HipRoll"], [5.0*almath.TO_RAD, 0.0*almath.TO_RAD, -5.0*almath.TO_RAD, 0.0*almath.TO_RAD], [1.0, 2.0, 3.0, 4.0], True)
+
+    def look_at_audience(self):
+        self.set_init_posture()
+
+        #count = random.randrange(1,3)
+        for i in range(2):
+            self.mo.angleInterpolation(["HeadYaw", "HeadPitch"], [[10.0*almath.TO_RAD, 10.0*almath.TO_RAD, 10.0*almath.TO_RAD], [0.0*almath.TO_RAD, -5.0*almath.TO_RAD, 0.0*almath.TO_RAD]], [[0.5, 1.0, 1.5], [0.5, 1.0, 1.5]], True)
+
+        rDuration = 0.05
+        self.led.post.fadeRGB( "FaceLed0", 0x000000, rDuration )
+        self.led.post.fadeRGB( "FaceLed1", 0x000000, rDuration )
+        self.led.post.fadeRGB( "FaceLed2", 0xffffff, rDuration )
+        self.led.post.fadeRGB( "FaceLed3", 0x000000, rDuration )
+        self.led.post.fadeRGB( "FaceLed4", 0x000000, rDuration )
+        self.led.post.fadeRGB( "FaceLed5", 0x000000, rDuration )
+        self.led.post.fadeRGB( "FaceLed6", 0xffffff, rDuration )
+        self.led.fadeRGB( "FaceLed7", 0x000000, rDuration )
+        time.sleep(0.1)
+        self.led.fadeRGB( "FaceLeds", 0xffffff, rDuration )
+
+        time.sleep(1.0)
+        self.set_init_posture()
+
     def look_at_kochisan_mini(self):
         self.set_init_posture()
         self.mo.angleInterpolation(["HeadYaw", "HeadPitch"], [[-20.0*almath.TO_RAD, -20.0*almath.TO_RAD], [-5.0*almath.TO_RAD, -5.0*almath.TO_RAD]], [[1.0, 1.5], [1.0, 1.5]], True)
@@ -632,4 +657,8 @@ if __name__ == '__main__':
             talk.episode_54_3()
         elif val == 12:
             talk.end_greeting()
+        elif val == 13:
+            talk.look_at_audience()
+        elif val == 14:
+            talk.attract_audience()
 """
