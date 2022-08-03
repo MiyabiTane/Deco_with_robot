@@ -90,6 +90,8 @@ class TopicToMotion(object):
             self.talk_class.greeting()
         elif msg.data == 34:
             self.talk_class.look_at_kochisan()
+        elif msg.data == 35:
+            self.talk_class.end_greeting()
         else:
             print("Error, out of range")
 
