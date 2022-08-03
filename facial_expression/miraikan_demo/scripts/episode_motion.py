@@ -317,14 +317,16 @@ class Talk(object):
     def episode_33_1(self):
 
         #episode 3-3-1
-        time.sleep(1)
-        self.ans.say("跡ね、オそろいのオレンジのリュックを^start(animations/Stand/Gestures/Hey_6)もらえたのが嬉しくて^wait(animations/Stand/Gesture/Hey_6)",self.configuration)
+        time.sleep(1.5)
+        self.ans.say("オそろいのオレンジのリュックを^start(animations/Stand/Gestures/Hey_6)もらえたのが嬉しくて^wait(animations/Stand/Gesture/Hey_6)",self.configuration)
         
         time.sleep(1)
         self.set_init_posture()
     
     def episode_33_2(self):
+
         # episode 3-3-2
+	self.look_at_kochisan_mini()
         self.mo.setStiffnesses(self.joint_names, 0.1)
         time.sleep(2)
         self.ans.say("初めてもらえた時から^start(animations/Stand/Emotions/Positive/Happy_4)ずっとお気にいりなのー！^wait(animations/Stand/Emotions/Positive/Happy_4)",self.configuration)
