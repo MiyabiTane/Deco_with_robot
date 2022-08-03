@@ -297,9 +297,24 @@
     m)
   )
 
+(defun listening (req)
+  (let ((m (send req :response)))
+    (call_demo 36 1.0)  ;; attract_audience
+    (ros::duration-sleep 2.0)
+    (call_demo 37 1.0)  ;; look_at_audience
+    (ros::duration-sleep 8.0)
+    (call_demo 36 1.0)
+    (ros::duration-sleep 2.0)
+    (call_demo 37 1.0)
+    (ros::duration-sleep 8.0)
+    (call_demo 34 1.0)  ;; look_at_kochisan
+    m)
+  )
+
 ;; funcs -> rossrv msg
 (ros::load-ros-package "std_srvs")
 (defvar *process-rate* 5)
+;; (setq tm (ros::time-now))
 
 (defun main_memories ()
   (ros::advertise-service "episode_introduction" std_srvs::Empty #'episode_introduction)
@@ -322,9 +337,13 @@
   (ros::advertise-service "greeting" std_srvs::Empty #'greeting)
   (ros::advertise-service "look_at_kochisan" std_srvs::Empty #'look_at_kochisan)
   (ros::advertise-service "end_greeting" std_srvs::Empty #'end_greeting)
+  (ros::advertise-service "listening" std_srvs::Empty #'listening)
   (ros::rate *process-rate*)
   (format t "robot behavior server start~%")
   (while (ros::ok)
+    ;; (when (> (send (ros::time- (ros::time-now) tm) :to-sec) 10)
+    ;;   (call_demo 34 1.0)
+    ;;   (setq tm (ros::time-now)))
     (ros::spin-once)
     (ros::sleep)
     )
@@ -352,6 +371,7 @@
   (ros::advertise-service "greeting" std_srvs::Empty #'greeting)
   (ros::advertise-service "look_at_kochisan" std_srvs::Empty #'look_at_kochisan)
   (ros::advertise-service "end_greeting" std_srvs::Empty #'end_greeting)
+  (ros::advertise-service "listening" std_srvs::Empty #'listening)
   (ros::rate *process-rate*)
   (format t "robot behavior server start~%")
   (while (ros::ok)
