@@ -366,8 +366,8 @@ class Talk(object):
     def episode_54_2(self):
 
         #episode 5-4-2
-        self.look_at_kochisan_mini()
-        time.sleep(1)
+        # self.look_at_kochisan_mini()
+        time.sleep(1.2)
         self.ans.say("コチさん、^start(animations/Stand/BodyTalk/BodyTalk_1)博士の卒業、本当におめでとう^wait(animations/Stand/BodyTalk/BodyTalk_1)",self.configuration)
 
         time.sleep(1)
@@ -375,8 +375,9 @@ class Talk(object):
 
     def episode_54_3(self):
 
-        #episode 5-4-3        
-        time.sleep(3)
+        #episode 5-4-3
+	self.look_at_kochisan_mini()
+        time.sleep(1.5)
         self.ans.say("今日は説明してくれてありがとう。これからも研究がんばってね",self.configuration)
 
         time.sleep(1)

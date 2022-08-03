@@ -87,9 +87,9 @@
 
 (defun episode_3_3 (req)
   (let ((m (send req :response)))
-    (call_demo 13 (+ TIME_OFFSET 0.5))
-    (ros::duration-sleep 6.0)
-    (call_demo 14 (+ TIME_OFFSET 0.0))
+    (call_demo 13 (+ TIME_OFFSET 0.0))
+    (ros::duration-sleep 4.0)
+    (call_demo 14 (+ TIME_OFFSET 0.5))
     m)
   )
 
@@ -204,7 +204,7 @@
 
 (defun explanation_3_1 (req)
   (let ((m (send req :response)))
-    (call_demo 10 (+ TIME_OFFSET 0.0))
+    (call_demo 10 (+ TIME_OFFSET 0.5))
     m)
   )
 
@@ -266,13 +266,13 @@
     (ros::duration-sleep 7.0)
     (call_demo 29 (+ TIME_OFFSET 1.7))
     (ros::duration-sleep 10.0)
-    (call_demo 30 (+ TIME_OFFSET 7.5))
+    (call_demo 30 (+ TIM0_OFFSET 7.5))
     m)
   )
 
 (defun explanation_6 (req)
   (let ((m (send req :response)))
-    (call_demo 31 (+ TIME_OFFSET 2.5))
+    (call_demo 31 (+ TIME_OFFSET 0.0))
     (ros::duration-sleep 5.0)
     (call_demo 32 (+ TIME_OFFSET 0.0))
     m)
