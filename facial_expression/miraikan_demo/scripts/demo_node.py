@@ -17,8 +17,9 @@ class MiraikanDemo(object):
         self.mt_pub_msg.data = mt_int
         self.eb_pub_msg.data = eb_int
         self.pub_motion_talk.publish(self.mt_pub_msg)
-        rospy.sleep(time_delay)
-        self.pub_eyebrows.publish(self.eb_pub_msg)
+	if eb_int != 0:
+            rospy.sleep(time_delay)
+            self.pub_eyebrows.publish(self.eb_pub_msg)
 
     def demo_srv_cb(self, req):
         motion_mode = req.mode
