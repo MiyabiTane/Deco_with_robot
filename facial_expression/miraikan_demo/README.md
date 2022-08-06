@@ -1,19 +1,48 @@
 ## ペッパーとこちさんのトークイベント
 
 ### 本ディレクトリの環境構築
-1. 本ディレクトリをコピーし、以下のようなファイル構成にする
+1. クローンとビルド
     ```
-    -- miraikan_ws
-       `-- src
-           `-- miraikan_demo
-    ```
-
-2. ビルドする
-    ```
-    $ cd miraikan_ws
+    $ mkdir -p miraikan_ws/src
+    $ cd miraikan_ws/src
+    $ git clone git@github.com:MiyabiTane/Deco_with_robot.git
+    $ cd ../
     $ catkin build miraikan_demo
     $ source ~/miraikan_ws/devel/setup.bash
     ```
+
+2. 眉毛デバイスのサーバーを立ち上げる場合には以下も行う<br>
+
+    0. [公式サイト](https://docs.docker.com/engine/install/ubuntu/)を参照してdockerとdocker-composeをインストールしておく。sudoがなくてもdockerが立ち上がるよう、以下のコマンドを実行し、PCを再起動する<br>
+        ```
+        $ sudo groupadd docker
+        $ sudo usermod -aG docker $USER
+        ```
+
+    1. Webサーバの環境構築
+        ```
+        $ source ~/miraikan_ws/devel/setup.bash
+        $ roscd miraikan_demo
+        $ cd ../web_nodejs
+        $ docker-compose run --rm app /bin/bash
+        # npx express-generator
+        # npm install
+        # exit
+        $ docker-compose up
+        ```
+        http://localhost:3000 にアクセスしてHello Worldの画面が出ることを確認する
+
+    2. 眉毛プログラムのDockerへのコピー
+        ```
+        $ sudo cp app/route/* src/routes/  # 本ディレクトリtypoしてるので注意
+        $ sudo cp app/public/javascripts/* src/public/javascripts
+        $ sudo cp app/views/* src/views
+        $ sudo cp app/app.js src/app.js
+        ```
+        ```
+        $ docker-compose up
+        ```
+        http://localhost:3000/rbrow, http://localhost:3000/lbrow にアクセスできればOK。Chromeブラウザ推奨。
 
 ### ペッパーとの接続・動作確認
 0. Pepperのボタン操作<br>
@@ -41,9 +70,54 @@
     >>> talk.episode_11()
     ```
 
+### Scratchの環境構築
+1. npmのインストール（安易にaptでいれるとROSが消えるので注意する！！）
+    ```
+    $ sudo snap install node --channel=14/stable --classic
+    $ npm --version
+    # 6.14.17になることを確認する
+    ```
+
+2. scratch-rosの環境構築
+    ```
+    $ mkdir scratch
+    $ cd scratch
+    $ git clone https://github.com/Affonso-Gui/scratch3-ros-parser
+    $ git clone -b jsk_robots https://github.com/Affonso-Gui/scratch3-ros-vm
+    $ git clone -b jsk_robots https://github.com/Affonso-Gui/scratch3-ros-gui
+    # 以下、時間がかかっても気長に待つこと
+    $ cd scratch/scratch3-ros-vm && npm install
+    $ cd ../scratch-ros-parser && npm install
+    $ cd ../scratch-ros-gui && npm install
+    $ cd ../scratch-ros-vm && sudo npm link
+    $ cd ../scratch-ros-parser && sudo npm link
+    $ cd ../scratch-ros-gui && sudo npm link
+    $ npm link scratch-vm
+    $ npm link scratch-parser
+    $ npm start
+    ```
+    別ターミナルで
+    ```
+    $ roslaunch rosbridge_server rosbridge_websocket.launch
+    ```
+    http://0.0.0.0:8601/ にアクセスして、画面が立ち上がればOK
+
+3. 本デモ用ボックスの追加<br>
+
+    `scratch3-ros-vm/src/extensions/scratch3_pepperrobot/index.js`を[kochigami/add-pepper-extensionのもの](https://github.com/kochigami/scratch3-ros-vm/blob/add-pepper-extension/src/extensions/scratch3_pepperrobot/index.js)に書き換えて以下を実行
+    ```
+    $ cd ~/scratch/scratch-gui
+    $ npm start
+    ```
+    別ターミナルで
+    ```
+    $ roslaunch rosbridge_server rosbridge_websocket.launch
+    ```
+    http://0.0.0.0:8601/ にアクセスして、左下ボタンからメニューページに飛び、Pepperを選択。Mster URLを尋ねられるので`localhost`と打ち込む。
+
 ### 実行方法
 1. 以下の図のようにネットワーク接続を行う。<br>
-    <img width="400" src="./img_README/network_connection.png"><br>
+    <img width="350" src="./img_README/network_connection.png"><br>
 
 2. PCの設定からネットワーク▷有線▷Pepperを選択する。Pepperの電源を入れてIPアドレス`<Pepper_IP>`を聞き取ったら以下を実行する
     ```
@@ -51,40 +125,37 @@
     ```
     詳細は[ペッパーとの接続・動作確認](#ペッパーとの接続・動作確認)参照
 
-3. PC2で眉毛デバイスサーバーを立ち上げる。以降、PC2のIPアドレスを`<PC2_IP>`とする。
-    ```
-    $ cd ../web_nodejs
-    $ docker-compose up
-    ```
-    ※眉毛デバイスサーバーのセットアップは[web_nodejs:初回設定](https://github.com/MiyabiTane/Deco_with_robot/tree/main/facial_expression/web_nodejs#%E5%88%9D%E5%9B%9E%E8%A8%AD%E5%AE%9A)を参照。<br>
-    ※IPアドレスはターミナルに`$ifconfig`と打ち込んだ時の`wlp1s0:`下の`inet`以降の値`xxx.xxx.xxx.xxx`
-
-3. スマートフォンを2台用意し、それぞれで左眉毛(http://<PC2_IP>:3000/lbrow)、右眉毛(http://<PC2_IP>:3000/rbrow)の画面を表示する。<br>
+3. ターミナルに`$ifconfig`と打ち込んだ時の`wlp1s0:`下の`inet`以降の値`<EServer_IP>`を確認する。スマートフォンを2台用意し、それぞれで左眉毛(http://<EServer_IP>:3000/lbrow)、右眉毛(http://<EServer_IP>:3000/rbrow)の画面を表示する。<br>
     ※ブラウザはGoogle Chrome推奨。ページが立ち上がったらアドレスバーを隠すよう、上にスワイプする。
 
-4.  PC2にジョイスティックを接続して以下を実行
+4. scratchの立ち上げ（スクラッチを用いずに[rosservice](#rosservice)をターミナルから直接呼び出すこともできる）
     ```
-    $ export NAO_IP="<Pepper_IP>"
-    $ source ~/miraikan_ws/devel/setup.bash
-    $ roslaunch miraikan_demo lecture-demo.launch eyebrows_server_ip:="<PC2_IP>" pepper_ip:="<Pepper_IP>"
+    $ cd scratch/scratch-gui
+    $ npm start
     ```
-    ジョイスティックのボタンを押してPepperが話して動き、ブラウザ上の眉毛が動けばOK
+    ※[Scratchの環境構築](#Scratchの環境構築)が終わっている必要がある
 
-5. `lecture-demo.launch`の引数詳細<br>
+5. launchファイルの立ち上げ
+    ```
+    $ source ~/miraikan_ws/devel/setup.bash
+    $ roslaunch miraikan_demo lecture-demo.launch pepper_ip:="<Pepper_IP>" run_eyebrows_server:=true memories_talk:=<true or false>
+    ```
+    http://0.0.0.0:8601/ にアクセスして、左下ボタンからメニューページに飛び、Pepperを選択。Mster URLを尋ねられるので`localhost`と打ち込む。デモ用に追加したgreeting以下のボックスを押すと、Pepperと眉毛が動く
+
+6. `lecture-demo.launch`の引数詳細<br>
     `run_eyebrows_server` launchを立ち上げる際に眉毛デバイスサーバーを立ち上げるか否か<br>
-    `eyebrows_server_ip` 眉毛デバイスのサーバーをたてているIPアドレス。run_eyebrows_serverがFalseの場合は指定が必要<br>
+    `eyebrows_server_ip` 眉毛デバイスのサーバーをたてているIPアドレス。。眉毛デバイスのサーバーを別のPCで立てている場合は指定が必要。<br>
     `use_robot` 実機を繋いでいるか否か。繋いでいない場合は実機の動作の代わりにターミナルに経過秒数が表示される。<br>
     `pepper_ip` 実機のIPアドレス。use_robotがTrueの場合は指定が必要<br>
     `memories_talk` Trueの場合は思い出語りver, Falseの場合は発表形式verのデモが起動する。use_robotがFalseの場合には機能しない<br>
-    ※`run_eyebrows_server:=True`を指定する場合は以下のようなファイル構想にしておく必要がある
+
+7. 眉毛の左右ずれの調節<br>
+    用いているスマホによっては左右の眉毛の動きがずれる場合がある。その場合は[lbrow.jade](https://github.com/MiyabiTane/Deco_with_robot/blob/main/facial_expression/web_nodejs/app/views/lbrow.jade#L14), [rbrow.jade](https://github.com/MiyabiTane/Deco_with_robot/blob/main/facial_expression/web_nodejs/app/views/rbrow.jade#L14)の`delay_ms`を調節する。<br>
+    ファイルを変更したら
     ```
-    -- miraikan_ws
-       `-- src
-           |-- miraikan_demo
-           `-- web_nodejs
-               |-- src
-               `--docker-compose.yml
+    web_nodejs$ sudo cp app/views/* src/views
     ```
+    して変更を反映させること。src以下のファイルをsudoで直接いじっても良い。
 
 ### rosservice
 1. /demo_mode
