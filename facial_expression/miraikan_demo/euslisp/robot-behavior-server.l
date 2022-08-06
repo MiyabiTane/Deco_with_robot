@@ -311,6 +311,12 @@
     m)
   )
 
+(defun hello (req)
+  (let ((m (send req :response)))
+    (call_demo 38 1.0)
+    m)
+  )
+
 ;; funcs -> rossrv msg
 (ros::load-ros-package "std_srvs")
 (defvar *process-rate* 5)
@@ -338,6 +344,7 @@
   (ros::advertise-service "look_at_kochisan" std_srvs::Empty #'look_at_kochisan)
   (ros::advertise-service "end_greeting" std_srvs::Empty #'end_greeting)
   (ros::advertise-service "listening" std_srvs::Empty #'listening)
+  (ros::advertise-service "hello" std_srvs::Empty #'hello)
   (ros::rate *process-rate*)
   (format t "robot behavior server start~%")
   (while (ros::ok)
@@ -372,6 +379,7 @@
   (ros::advertise-service "look_at_kochisan" std_srvs::Empty #'look_at_kochisan)
   (ros::advertise-service "end_greeting" std_srvs::Empty #'end_greeting)
   (ros::advertise-service "listening" std_srvs::Empty #'listening)
+  (ros::advertise-service "hello" std_srvs::Empty #'hello)
   (ros::rate *process-rate*)
   (format t "robot behavior server start~%")
   (while (ros::ok)

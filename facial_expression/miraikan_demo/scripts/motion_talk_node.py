@@ -96,6 +96,8 @@ class TopicToMotion(object):
             self.talk_class.attract_audience()
         elif msg.data == 37:
             self.talk_class.look_at_audience()
+        elif msg.data == 38:
+            self.talk_class.say_hello()
         else:
             print("Error, out of range")
 

@@ -104,8 +104,11 @@
 
 3. 本デモ用ボックスの追加<br>
 
-    `scratch3-ros-vm/src/extensions/scratch3_pepperrobot/index.js`を[kochigami/add-pepper-extensionのもの](https://github.com/kochigami/scratch3-ros-vm/blob/add-pepper-extension/src/extensions/scratch3_pepperrobot/index.js)に書き換えて以下を実行
+    `scratch3-ros-vm/src/extensions/scratch3_pepperrobot/index.js`を[scratch/index.js](https://github.com/MiyabiTane/Deco_with_robot/blob/main/facial_expression/miraikan_demo/scratch/index.js)で書き換えてビルドする
     ```
+    $ source ~/miraikan_ws/devel/setup.bash
+    $ roscd miraikan_demo
+    $ cp scratch/index.js ~/scratch/scratch3-ros-vm/src/extensions/scratch3_pepperrobot/index.js
     $ cd ~/scratch/scratch-gui
     $ npm start
     ```

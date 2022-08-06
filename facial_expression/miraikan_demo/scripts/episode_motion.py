@@ -592,6 +592,11 @@ class Talk(object):
         time.sleep(1.0)
         self.mo.setStiffnesses(self.joint_names, 1)
 
+    def say_hello(self):
+
+        # test sound
+        time.sleep(1)
+        self.tts.say("こんにちは")
 
 
 """
