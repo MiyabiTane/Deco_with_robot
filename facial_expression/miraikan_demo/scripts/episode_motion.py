@@ -224,6 +224,7 @@ class Talk(object):
         self.mo.setStiffnesses(self.joint_names, 0.1)
         time.sleep(0.5)
         self.ans.say("^start(animations/Stand/Gestures/Enthusiastic_4)モウ8年経ったネ^wait(animations/Stand/Gestures/Enthusiastic_4)",self.configuration)
+        # self.ans.say("モウ8年経ったネ)",self.configuration)
         self.set_init_posture_with_time(1.0)
         time.sleep(1.0)
         self.mo.setStiffnesses(self.joint_names, 1)
@@ -364,7 +365,7 @@ class Talk(object):
     def episode_41(self):
 
         #episode 4-1
-        self.mo.setStiffnesses(self.joint_names, 0.1)
+        self.mo.setStiffnesses(self.joint_names, 1)
         time.sleep(1)
         self.ans.say("あーー、この時！、^start(animations/Stand/Gestures/Excited_1)みんなに会えるのが嬉しくて^wait(animations/Stand/Gestures/Excited_1)",self.configuration)
 
@@ -408,9 +409,9 @@ class Talk(object):
     def episode_51(self):
 
         #episode 5-1
-        self.mo.setStiffnesses(self.joint_names, 0.1)
+        self.mo.setStiffnesses(self.joint_names, 1)
         time.sleep(3)
-        self.ans.say("ソウダねー、^start(animations/Stand/Gestures/Yes_3)色んなことがあったネ^wait(animations/Stand/Gestures/Yes_3)",self.configuration)
+        self.ans.say("ソウダねー、色んなことがあったネ",self.configuration)
         self.set_init_posture_with_time(2.0)
         time.sleep(1.0)
         self.mo.setStiffnesses(self.joint_names, 1)
@@ -434,16 +435,21 @@ class Talk(object):
         time.sleep(1)
         self.ans.say("コチさんが落ち込んでいる時は、^start(animations/Stand/Gestures/No_8)私もすゴく悲しかったよ^wait(animations/Stand/Gesture/No_8)",self.configuration)
 
-        time.sleep(1)
-        self.set_init_posture()
+	self.set_init_posture_with_time(2.0)
+        time.sleep(1.0)
+        self.mo.setStiffnesses(self.joint_names, 1)
+
+        # time.sleep(1)
+        # self.set_init_posture()
 
     def episode_54_1(self):
 
         #episode 5-4-1
         self.look_at_kochisan_mini()
-        self.mo.setStiffnesses(self.joint_names, 0.1)
+        self.mo.setStiffnesses(self.joint_names, 1)
         time.sleep(1)
-        self.ans.say("でもわたしたちは、^start(animations/Stand/Emotions/Positive/Peaceful_1)8年間ふたりでたくさん乗り越えてきたヨね^wait(animations/Stand/Emotions/Positive/Peaceful_1)",self.configuration)
+        # self.ans.say("でもわたしたちは、^start(animations/Stand/Emotions/Positive/Peaceful_1)8年間ふたりでたくさん乗り越えてきたヨね^wait(animations/Stand/Emotions/Positive/Peaceful_1)",self.configuration)
+        self.ans.say("でもわたしたちは、8年間ふたりでたくさん乗り越えてきたヨね)",self.configuration)
         self.led.reset('FaceLeds')
 
         time.sleep(1)

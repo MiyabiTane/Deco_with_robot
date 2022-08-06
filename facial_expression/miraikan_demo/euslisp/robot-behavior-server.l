@@ -121,7 +121,7 @@
   (let ((m (send req :response)))
     (call_demo 21 (+ TIME_OFFSET 3.0))
     (ros::duration-sleep 5.0)
-    (call_demo 22 (+ TIME_OFFSET 3.0))
+    (call_demo 22 (+ TIME_OFFSET 4.0))
     m)
   )
 
