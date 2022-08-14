@@ -42,7 +42,8 @@
         ```
         $ docker-compose up
         ```
-        http://localhost:3000/rbrow, http://localhost:3000/lbrow にアクセスできればOK。Chromeブラウザ推奨。
+        http://localhost:3000/rbrow, http://localhost:3000/lbrow にアクセスできればOK。Chromeブラウザ推奨。<br>
+        ※Ubuntu16の場合は[docker-compose.yml](https://github.com/MiyabiTane/Deco_with_robot/blob/main/facial_expression/web_nodejs/docker-compose.yml#L1)の`version`を`2`に変更する
 
 ### ペッパーとの接続・動作確認
 0. Pepperのボタン操作<br>
