@@ -161,6 +161,12 @@
     ```
     して変更を反映させること。src以下のファイルをsudoで直接いじっても良い。
 
+8. デモの実行<br>
+   こちさんの発話に合わせてスクラッチのボックスをクリックし，ROSのサービスコールを呼び出すことで，ペッパーに発話させる。<br>
+   [発表時に用いたスライド（思い出語り有ver，研究室内部のみアクセス可能）](https://drive.google.com/file/d/1G7Z8F2-A9S_qwATh27KCqMO9ENFahSXu/view?usp=sharing)<br>
+   [発表時に用いたスライド（思い出語り無ver，研究室内部のみアクセス可能）](https://drive.google.com/file/d/1fm9xKDxIA1S6sVjR47mSQkQ4DY2ZQEjA/view?usp=sharing)<br>
+   [スクラッチのボックスのクリックの仕方が書かれた台本（研究室内部のみアクセス可能）](https://drive.google.com/file/d/1W3VTZFpUgeKUDFErIHt5hg3JlxO547oC/view?usp=sharing)
+
 ### rosservice
 1. /demo_mode
     ```
