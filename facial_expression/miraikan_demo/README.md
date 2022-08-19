@@ -117,7 +117,7 @@
     ```
     $ roslaunch rosbridge_server rosbridge_websocket.launch
     ```
-    http://0.0.0.0:8601/ にアクセスして、左下ボタンからメニューページに飛び、Pepperを選択。Mster URLを尋ねられるので`localhost`と打ち込む。
+    http://0.0.0.0:8601/ にアクセスして、左下ボタンからメニューページに飛び、Pepperを選択。Master URLを尋ねられるので`localhost`と打ち込む。
 
 ### 実行方法
 1. 以下の図のようにネットワーク接続を行う。<br>
@@ -144,11 +144,11 @@
     $ source ~/miraikan_ws/devel/setup.bash
     $ roslaunch miraikan_demo lecture-demo.launch pepper_ip:="<Pepper_IP>" run_eyebrows_server:=true memories_talk:=<true or false>
     ```
-    http://0.0.0.0:8601/ にアクセスして、左下ボタンからメニューページに飛び、Pepperを選択。Mster URLを尋ねられるので`localhost`と打ち込む。デモ用に追加したgreeting以下のボックスを押すと、Pepperと眉毛が動く
+    http://0.0.0.0:8601/ にアクセスして、左下ボタンからメニューページに飛び、Pepperを選択。Master URLを尋ねられるので`localhost`と打ち込む。デモ用に追加したgreeting以下のボックスを押すと、Pepperと眉毛が動く
 
 6. `lecture-demo.launch`の引数詳細<br>
     `run_eyebrows_server` launchを立ち上げる際に眉毛デバイスサーバーを立ち上げるか否か<br>
-    `eyebrows_server_ip` 眉毛デバイスのサーバーをたてているIPアドレス。。眉毛デバイスのサーバーを別のPCで立てている場合は指定が必要。<br>
+    `eyebrows_server_ip` 眉毛デバイスのサーバーを立てているIPアドレス。眉毛デバイスのサーバーを別のPCで立てている場合は指定が必要。<br>
     `use_robot` 実機を繋いでいるか否か。繋いでいない場合は実機の動作の代わりにターミナルに経過秒数が表示される。<br>
     `pepper_ip` 実機のIPアドレス。use_robotがTrueの場合は指定が必要<br>
     `memories_talk` Trueの場合は思い出語りver, Falseの場合は発表形式verのデモが起動する。use_robotがFalseの場合には機能しない<br>
@@ -160,6 +160,12 @@
     web_nodejs$ sudo cp app/views/* src/views
     ```
     して変更を反映させること。src以下のファイルをsudoで直接いじっても良い。
+
+8. デモの実行<br>
+   こちさんの発話に合わせてスクラッチのボックスをクリックし，ROSのサービスコールを呼び出すことで，ペッパーに発話させる。<br>
+   [発表時に用いたスライド（思い出語り有ver，研究室内部のみアクセス可能）](https://drive.google.com/file/d/1G7Z8F2-A9S_qwATh27KCqMO9ENFahSXu/view?usp=sharing)<br>
+   [発表時に用いたスライド（思い出語り無ver，研究室内部のみアクセス可能）](https://drive.google.com/file/d/1fm9xKDxIA1S6sVjR47mSQkQ4DY2ZQEjA/view?usp=sharing)<br>
+   [スクラッチのボックスのクリックの仕方が書かれた台本（研究室内部のみアクセス可能）](https://drive.google.com/file/d/1W3VTZFpUgeKUDFErIHt5hg3JlxO547oC/view?usp=sharing)
 
 ### rosservice
 1. /demo_mode
