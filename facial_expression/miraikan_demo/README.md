@@ -120,6 +120,9 @@
     http://0.0.0.0:8601/ にアクセスして、左下ボタンからメニューページに飛び、Pepperを選択。Master URLを尋ねられるので`localhost`と打ち込む。
 
 ### 実行方法
+
+#### 【デモの実行手順】
+
 1. 以下の図のようにネットワーク接続を行う。<br>
     <img width="350" src="./img_README/network_connection.png"><br>
 
@@ -146,26 +149,38 @@
     ```
     http://0.0.0.0:8601/ にアクセスして、左下ボタンからメニューページに飛び、Pepperを選択。Master URLを尋ねられるので`localhost`と打ち込む。デモ用に追加したgreeting以下のボックスを押すと、Pepperと眉毛が動く
 
-6. `lecture-demo.launch`の引数詳細<br>
-    `run_eyebrows_server` launchを立ち上げる際に眉毛デバイスサーバーを立ち上げるか否か<br>
-    `eyebrows_server_ip` 眉毛デバイスのサーバーを立てているIPアドレス。眉毛デバイスのサーバーを別のPCで立てている場合は指定が必要。<br>
-    `use_robot` 実機を繋いでいるか否か。繋いでいない場合は実機の動作の代わりにターミナルに経過秒数が表示される。<br>
-    `pepper_ip` 実機のIPアドレス。use_robotがTrueの場合は指定が必要<br>
-    `memories_talk` Trueの場合は思い出語りver, Falseの場合は発表形式verのデモが起動する。use_robotがFalseの場合には機能しない<br>
+    ※`lecture-demo.launch`の引数詳細
+    ```
+    run_eyebrows_server: launchを立ち上げる際に眉毛デバイスサーバーを立ち上げるか否か
+    eyebrows_server_ip: 眉毛デバイスのサーバーを立てているIPアドレス。眉毛デバイスのサーバーを別のPCで立てている場合は指定が必要。
+    use_robot: 実機を繋いでいるか否か。繋いでいない場合は実機の動作の代わりにターミナルに経過秒数が表示される。
+    pepper_ip: 実機のIPアドレス。use_robotがTrueの場合は指定が必要
+    memories_talk: Trueの場合は思い出語りver, Falseの場合は発表形式verのデモが起動する。use_robotがFalseの場合には機能しない
+    ```
 
-7. 眉毛の左右ずれの調節<br>
-    用いているスマホによっては左右の眉毛の動きがずれる場合がある。その場合は[lbrow.jade](https://github.com/MiyabiTane/Deco_with_robot/blob/main/facial_expression/web_nodejs/app/views/lbrow.jade#L14), [rbrow.jade](https://github.com/MiyabiTane/Deco_with_robot/blob/main/facial_expression/web_nodejs/app/views/rbrow.jade#L14)の`delay_ms`を調節する。<br>
+6. デモの実行
+
+   こちさんの発話に合わせてスクラッチのボックスをクリックし，ROSのサービスコールを呼び出すことで，ペッパーに発話させる。<br>
+   [発表時に用いたスライド（思い出語り有ver，研究室内部のみアクセス可能）](https://drive.google.com/file/d/1G7Z8F2-A9S_qwATh27KCqMO9ENFahSXu/view?usp=sharing)<br>
+   [発表時に用いたスライド（思い出語り無ver，研究室内部のみアクセス可能）](https://drive.google.com/file/d/1fm9xKDxIA1S6sVjR47mSQkQ4DY2ZQEjA/view?usp=sharing)<br>
+   [スクラッチのボックスのクリックの仕方が書かれた台本（研究室内部のみアクセス可能）](https://drive.google.com/file/d/1W3VTZFpUgeKUDFErIHt5hg3JlxO547oC/view?usp=sharing)
+
+#### 【オフセット値調節】
+
+デモを実行した際に以下の症状が出たらオフセット値を調節する。各実験日の朝に確認しておくこと。
+
+1. 眉毛の左右の動きにずれが生じる
+
+    用いているスマホによっては左右の眉毛の動きに時間差が生じる場合がある。その場合は[lbrow.jade](https://github.com/MiyabiTane/Deco_with_robot/blob/main/facial_expression/web_nodejs/app/views/lbrow.jade#L14), [rbrow.jade](https://github.com/MiyabiTane/Deco_with_robot/blob/main/facial_expression/web_nodejs/app/views/rbrow.jade#L14)の`delay_ms`を調節する。値を大きくするほど実行タイミングが遅くなる。<br>
     ファイルを変更したら
     ```
     web_nodejs$ sudo cp app/views/* src/views
     ```
     して変更を反映させること。src以下のファイルをsudoで直接いじっても良い。
 
-8. デモの実行<br>
-   こちさんの発話に合わせてスクラッチのボックスをクリックし，ROSのサービスコールを呼び出すことで，ペッパーに発話させる。<br>
-   [発表時に用いたスライド（思い出語り有ver，研究室内部のみアクセス可能）](https://drive.google.com/file/d/1G7Z8F2-A9S_qwATh27KCqMO9ENFahSXu/view?usp=sharing)<br>
-   [発表時に用いたスライド（思い出語り無ver，研究室内部のみアクセス可能）](https://drive.google.com/file/d/1fm9xKDxIA1S6sVjR47mSQkQ4DY2ZQEjA/view?usp=sharing)<br>
-   [スクラッチのボックスのクリックの仕方が書かれた台本（研究室内部のみアクセス可能）](https://drive.google.com/file/d/1W3VTZFpUgeKUDFErIHt5hg3JlxO547oC/view?usp=sharing)
+2. Pepperの発話タイミングと眉毛の動きのタイミングにずれが生じる
+
+    [robot-behavior-server.l](https://github.com/MiyabiTane/Deco_with_robot/blob/main/facial_expression/miraikan_demo/euslisp/robot-behavior-server.l#L8)の`TIME_OFFSET`の値を変更して調節を行う。値を大きくするほど眉毛の実行タイミングが遅くなる。
 
 ### rosservice
 1. /demo_mode
@@ -174,14 +189,14 @@
              : time_delay ... int32: デモを開始して何秒後に眉毛を動かし始めるか
     publish  : success    ... bool : service callの呼び出しに成功したか否か 
     ```
-2. /demo_deai_1, /demo_deai_2
+2. /episode_introduction, /episode_0_1, ...
     ```
     Empty service
     ```
 
 ※コマンドから呼び出す例
 ```
-$ rosservice call /episode_11 "{}"
+$ rosservice call /episode_introduction
 $ rosservice call /demo_mode "mode: 1 time_delay: 5"
 ```
 
