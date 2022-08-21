@@ -20,12 +20,12 @@ class MosaicClickedPos:
         cv2.waitKey(0)
         cv2.destroyAllWindows()
     
-    def make_mosaic(self, x, y, width=10, height=10, ratio=0.1):
+    def make_mosaic(self, x, y, width=30, height=30, ratio=0.1):
         mosaic_img = self.img.copy()
         output_img = self.img.copy()
         mosaic_img = mosaic_img[y:y + height, x:x + width]
-        mosaic_img = cv2.resize(mosaic_img, None, fx=ratio, fy=ratio, interpolation=cv2.INTER_NEAREST)
-        mosaic_img = cv2.resize(mosaic_img, mosaic_img.shape[:2][::-1], interpolation=cv2.INTER_NEAREST)
+        small_img = cv2.resize(mosaic_img, None, fx=ratio, fy=ratio, interpolation=cv2.INTER_NEAREST)
+        mosaic_img = cv2.resize(small_img, mosaic_img.shape[:2][::-1], interpolation=cv2.INTER_NEAREST)
         output_img[y:y + height, x:x + width] = mosaic_img
         self.img = output_img
     
@@ -46,10 +46,11 @@ def main():
     mosaic_clicked_pos.get_clicked_pos()
     output_img = mosaic_clicked_pos.mosaic_main()
     while True:
-        print("please check output 5s")
+        print("If finish checking, please press any key")
         cv2.namedWindow('window', cv2.WINDOW_NORMAL)
         cv2.imshow('window', output_img)
-        cv2.waitKey(5000)
+        # cv2.waitKey(5000)
+        cv2.waitKey(0)
         cv2.destroyAllWindows()
         input_text = raw_input("continue? [Y/n]: ")
         if input_text != 'Y':
