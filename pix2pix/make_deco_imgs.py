@@ -1,39 +1,50 @@
-"""
-('lt: ', 1932.3476365247489, 998.372717774108, 1784.875143483393)
-('rb: ', 1927.2403589830274, -1261.042495069667, 39.911393436548224)
-('head_angle: ', 29.662153031493034)
-('look_at_point: ', x: 1180.10895533
-y: -181.063904022
-z: 654.224529006)
+"""s
+... thinking decoration ...
+Back Img info->
+('lt: ', 1932.3653923846878, 998.3951007831643, 1784.9823432069206)
+('rb: ', 1927.2010199713968, -1260.9923844731593, 40.04882008628147)
+('head_angle: ', 32.31637692749683)
+('look_at_point: ', x: 1068.30170515
+y: -172.769141042
+z: 653.992004864)
+('look_at_uv: ', x: 312.801434704
+y: 292.505059252
+z: 0.0)
+('dimg_rect_pos: ', array([x: 2147.39202783
+y: 672.95587784
+z: 1076.35317635,
+       x: 886.685198837
+y: -1078.03702755
+z: 4.57065396599], dtype=object))
 = decos_pos
-[x: 1117.07664006
-y: -678.027945277
-z: 654.235697998
- x: 1253.48854073
-y: 310.8842684
-z: 654.134191761
- x: 1185.31627926
-y: -182.925776119
-z: 654.475951655]
+[x: 1006.33938725
+y: -667.517274584
+z: 653.77801336
+ x: 1136.28470115
+y: 321.170410664
+z: 653.814447653
+ x: 1071.88769772
+y: -173.292084519
+z: 653.996440072]
 = decos_dims
-[x: 211.495101452
-y: 210.085630417
-z: 89.1058444977
- x: 211.82730794
-y: 208.705306053
-z: 89.1456007957
- x: 151.7547369
-y: 152.527987957
-z: 89.241206646]
-= decos_req_uv
+[x: 211.286127567
+y: 207.858324051
+z: 89.3031358719
+ x: 211.575657129
+y: 207.611441612
+z: 89.3883705139
+ x: 151.288926601
+y: 152.40624547
+z: 89.7635817528]
+= decos_rec_uv
 [ header: 
   seq: 0
   stamp: 
     secs: 0
     nsecs:         0
   frame_id: ''
-xs: [463.5361633300781, 541.403564453125, 490.3731384277344, 575.0953979492188]
-ys: [251.89376831054688, 245.59803771972656, 332.85540771484375, 324.47265625]
+xs: [473.3926696777344, 555.76123046875, 510.2060852050781, 603.1673583984375]
+ys: [250.5164794921875, 243.0118408203125, 308.7667541503906, 299.02618408203125]
 type: 0
 label: ''
 fit_line: False
@@ -44,8 +55,8 @@ fit_line_ransac: False
     secs: 0
     nsecs:         0
   frame_id: ''
-xs: [70.7800521850586, 155.0377655029297, 59.7741813659668, 152.2384796142578]
-ys: [253.37588500976562, 247.0721435546875, 334.9308166503906, 326.5277404785156]
+xs: [49.51151657104492, 140.52293395996094, 26.32427215576172, 130.5523681640625]
+ys: [255.45819091796875, 247.78318786621094, 315.3082580566406, 305.3094787597656]
 type: 0
 label: ''
 fit_line: False
@@ -56,8 +67,8 @@ fit_line_ransac: False
     secs: 0
     nsecs:         0
   frame_id: ''
-xs: [279.44622802734375, 339.48834228515625, 286.2708435058594, 349.6729736328125]
-ys: [258.05303955078125, 253.30751037597656, 324.44281005859375, 318.5474853515625]
+xs: [275.5888671875, 340.2502746582031, 281.9150390625, 352.7976379394531]
+ys: [259.103271484375, 253.34063720703125, 301.0009460449219, 294.0481872558594]
 type: 0
 label: ''
 fit_line: False
@@ -70,23 +81,25 @@ import numpy as np
 
 class MakeDecoImgs(object):
     def __init__(self):
-        self.bimg_lt_3d_pos = [1932.3476365247489, 998.372717774108, 1784.875143483393]
-        self.bimg_rb_3d_pos = [1927.2403589830274, -1261.042495069667, 39.911393436548224]
-        self.head_angle = 29.662153031493034
-        self.look_at_point = [1180.10895533, -181.063904022, 654.224529006]
-        self.deco_3d_pos = [[1117.07664006, -678.027945277, 654.235697998],
-                            [1253.48854073, 310.8842684, 654.134191761],
-                            [1185.31627926, -182.925776119, 654.475951655]]
-        self.decos_3d_dims = [[211.495101452, 210.085630417, 89.1058444977],
-                              [211.82730794, 208.705306053, 89.1456007957],
-                              [151.7547369, 152.527987957, 89.241206646]]
-
-        self.deco0_xs = [463.5361633300781, 541.403564453125, 490.3731384277344, 575.0953979492188]
-        self.deco0_ys = [251.89376831054688, 245.59803771972656, 332.85540771484375, 324.47265625]
-        self.deco1_xs = [70.7800521850586, 155.0377655029297, 59.7741813659668, 152.2384796142578]
-        self.deco1_ys = [253.37588500976562, 247.0721435546875, 334.9308166503906, 326.5277404785156]
-        self.deco2_xs = [279.44622802734375, 339.48834228515625, 286.2708435058594, 349.6729736328125]
-        self.deco2_ys = [258.05303955078125, 253.30751037597656, 324.44281005859375, 318.5474853515625]
+        self.bimg_lt_3d_pos = [1932.3653923846878, 998.3951007831643, 1784.9823432069206]
+        self.bimg_rb_3d_pos = [1927.2010199713968, -1260.9923844731593, 40.04882008628147]
+        self.head_angle = 32.31637692749683
+        self.look_at_point = [1068.30170515, -172.769141042, 653.992004864]
+        self.look_at_uv = [312.801434704, 292.505059252, 0.0]
+        self.dimg_lt_3d = [2147.39202783, 672.95587784, 1076.35317635]
+        self.dimg_rb_3d = [886.685198837, -1078.03702755, 4.57065396599]
+        self.deco_3d_pos = [[1006.33938725, -667.517274584, 653.77801336],
+                            [1136.28470115, 321.170410664, 653.814447653],
+                            [1071.88769772, -173.292084519, 653.996440072]]
+        self.decos_3d_dims = [[211.286127567, 207.858324051, 89.3031358719],
+                              [211.575657129, 207.611441612, 89.3883705139],
+                              [151.288926601, 152.40624547, 89.7635817528]]
+        self.deco0_xs = [473.3926696777344, 555.76123046875, 510.2060852050781, 603.1673583984375]
+        self.deco0_ys = [250.5164794921875, 243.0118408203125, 308.7667541503906, 299.02618408203125]
+        self.deco1_xs = [49.51151657104492, 140.52293395996094, 26.32427215576172, 130.5523681640625]
+        self.deco1_ys = [255.45819091796875, 247.78318786621094, 315.3082580566406, 305.3094787597656]
+        self.deco2_xs = [275.5888671875, 340.2502746582031, 281.9150390625, 352.7976379394531]
+        self.deco2_ys = [259.103271484375, 253.34063720703125, 301.0009460449219, 294.0481872558594]
 
         self.back_img = cv2.imread("img_from_gazebo/input.png")
         self.decos_img = cv2.imread("img_from_gazebo/decos_img.jpg")
@@ -152,42 +165,74 @@ class MakeDecoImgs(object):
         input_pos = np.ones((1, 4))
         input_pos[0][:3] = xyz_array - self.camera_pos
         output_pos = np.matmul(np.linalg.inv(self.R_matrix), input_pos.T)
-        return output_pos[:3]
+        return np.array(output_pos[:3])
     
     def camera_3d_to_2d(self, xyz_array):
+        # robot x, y -> img -y, -x
         x = int(-1 * xyz_array[1])
         y = int(xyz_array[0])
-        return [x, y]
-    
-    def convert_img(self):
-        # robot x, y -> img -y, -x
+        return np.array([x, y])
+
+    def convert_img_all(self):
         """
         convert the image to one viewed from the camera directly above
         world -> camera
             self.world_to_camera_pos(input_pos)
         camera -> world
-            center_pos = np.matmul(np.linalg.inv(self.R_matrix), input_pos.T)
+            center_pos = np.matmul(self.R_matrix, input_pos.T)
         """
-        world_lt = self.look_at_point + np.array([240, 360, 0])
-        world_rt = self.look_at_point + np.array([240, -360, 0])
-        world_lb = self.look_at_point + np.array([-240, 360, 0])
-        world_rb = self.look_at_point + np.array([-240, -360, 0])
-        camera_lt = self.world_to_camera_pos(world_lt)
-        camera_rt = self.world_to_camera_pos(world_rt)
-        camera_lb = self.world_to_camera_pos(world_lb)
-        camera_rb = self.world_to_camera_pos(world_rb)
-        img_rt = self.camera_3d_to_2d(camera_rt - camera_lt)
-        img_lb = self.camera_3d_to_2d(camera_lb - camera_lt)
-        img_rb = self.camera_3d_to_2d(camera_rb - camera_lt)
+        camera_lt = self.world_to_camera_pos(self.dimg_lt_3d)
+        camera_rb = self.world_to_camera_pos(self.dimg_rb_3d)
+        center_pos = self.world_to_camera_pos(self.look_at_point)
+        img_lt = self.camera_3d_to_2d(camera_lt) + np.array(self.look_at_uv[:2])
+        img_rt = np.array([img_lt[0] * -1, img_lt[1]]) + np.array(self.look_at_uv[:2])
+        img_rb = self.camera_3d_to_2d(camera_rb) + np.array(self.look_at_uv[:2])
+        img_lb = np.array([img_rb[0] * -1, img_rb[1]]) + np.array(self.look_at_uv[:2])
+        print(center_pos)
+        print(camera_lt)
+        print(camera_rb)
+        print("")
+        print(img_lt)
         print(img_rt)
-        print(img_lb)
         print(img_rb)
+        print(img_lb)
 
-        pts1 = np.float32([[0, 0], img_rt, img_lb, img_rb])
+        pts1 = np.float32([img_lt, img_rt, img_lb, img_rb])
         pts2 = np.float32([[0, 0], [640, 0], [0, 480], [640, 480]])
         self.M_matrix = cv2.getPerspectiveTransform(pts1,pts2)
         decos_img_trans = cv2.warpPerspective(self.decos_img, self.M_matrix, (640,480))
         cv2.imwrite("img_from_gazebo/decos_convert_img.jpg", decos_img_trans)
+
+    def convert_img_deco(self):
+        decos_3d_pos = self.deco_3d_pos[0]
+        decos_3d_dims = self.decos_3d_dims[0]
+        xs = self.deco0_xs
+        ys = self.deco0_ys
+        lt, lb, rt, rb = self.reorder_point(xs, ys)
+        H = int(decos_3d_dims[0])
+        W = int(decos_3d_dims[1])
+        pts1 = np.float32([lt, rt, lb, rb])
+        pts2 = np.float32([[0, 0], [W, 0], [0, H], [W, H]])
+        self.M_matrix = cv2.getPerspectiveTransform(pts1, pts2)
+        decos_img_trans = cv2.warpPerspective(self.decos_img, self.M_matrix, (W, H))
+        cv2.imwrite("img_from_gazebo/decos_convert_img.jpg", decos_img_trans)
+
+    def convert_img_size(self):  #, deco_3d_dims):
+        img = cv2.imread("img_from_gazebo/decos_convert_img.jpg")
+        H, W, C = img.shape
+        decos_3d_dims = self.decos_3d_dims[0]
+        bimg_width = self.bimg_lt_3d_pos[1] - self.bimg_rb_3d_pos[1]
+        bimg_height = self.bimg_lt_3d_pos[2] - self.bimg_rb_3d_pos[2]
+        ratio_w = decos_3d_dims[1] / bimg_width
+        ratio_h = decos_3d_dims[0] / bimg_height
+        deco_w = int(640 * ratio_w)
+        deco_h = int(480 * ratio_h)
+        dst = cv2.resize(img, dsize=(deco_w, deco_h))
+        cv2.imwrite("img_from_gazebo/decos_convert_img.jpg", dst)
+
+        # make mask img
+        img_white = np.ones((deco_w, deco_h), np.uint8) * 255
+        cv2.imwrite("img_from_gazebo/mask.jpg", img_white)
 
     def convert_rect_pos(self):
         for i in range(len(self.deco0_xs)):
@@ -211,15 +256,9 @@ class MakeDecoImgs(object):
         right = int(max(xs_lst))
         bottom = int(max(ys_lst))
         return img[up: bottom, left: right, :]
-    
-    def mask_img(self):
-        print("ToDo")
 
 make_deco_imgs = MakeDecoImgs()
 make_deco_imgs.debug_draw_deco_rect(make_deco_imgs.decos_img)
 make_deco_imgs.make_rotation_matrix()
-make_deco_imgs.convert_img()
-make_deco_imgs.convert_rect_pos()
-converted_img = cv2.imread("img_from_gazebo/decos_convert_img.jpg")
-img = make_deco_imgs.clip_img(converted_img, make_deco_imgs.deco0_xs, make_deco_imgs.deco0_ys)
-cv2.imwrite("img_from_gazebo/output.jpg", img)
+make_deco_imgs.convert_img_deco()
+make_deco_imgs.convert_img_size()
