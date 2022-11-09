@@ -27,18 +27,19 @@ class InstructChat(object):
         rospy.Subscriber("/input_gcl_text", String, self.gcl_cb)
 
     def set_words(self):
-        self.clear_direction = ["上", "下", "左", "右"]
-        self.request = ["ほしい", "方が"]
-        self.objects = ["飾り", "風船"]
-        self.indicator_objects = ["これ", "それ", "あれ"]
+        self.clear_direction = ["左", "右", "上", "下"]
+        self.request = ["欲しい", "方が", "が良い"]
+        objects = ["飾り", "風船"]
+        indicator_objects = ["これ", "それ", "あれ"]
         self.degree_words = ["もっと", "たくさん", "少し", "ちょっと"]
         self.indicator_direction = ["そっち", "こっち", "あっち", "ここ", "あそこ"]
         self.indicator_here = ["そこ"]
-        self.excess_and_denial = ["過ぎ", "逆", "違う", "戻し"]
+        self.place = ["場所", "所"]
+        self.excess_and_denial = ["過ぎ", "逆", "違う", "戻し", "じゃない"]
         self.agree = ["うん", "はい", "良い"]
-        self.action_verb = ["置い", "する", "動かす", "動かし"]
+        self.action_verb = ["置い", "動かす", "動かし", "ずらし"]  # "する" 
 
-        self.triggers = self.objects + self.indicator_objects + self.degree_words + self.indicator_direction + self.indicator_here
+        self.triggers = self.indicator_direction + self.indicator_here + self.place
 
     def convert_sentence(self, sentence):
         sentence = sentence.replace("よい", "良い")
@@ -47,6 +48,9 @@ class InstructChat(object):
         sentence = sentence.replace("すぎ", "過ぎ")
         sentence = sentence.replace("ちがう", "違う")
         sentence = sentence.replace("もどし", "戻し")
+        sentence = sentence.replace("ほしい", "欲しい")
+        sentence = sentence.replace("ばしょ", "場所")
+        sentence = sentence.replace("ところ", "所")
         return sentence
 
     def get_parsing_result(self, input_sentence):
@@ -58,8 +62,12 @@ class InstructChat(object):
         return result
 
     def gcl_cb(self, msg):
+        # print(self.direction_up, self.direction_down, self.direction_left, self.direction_right)
+        self.degree = -1
         if msg.data == "":  # for debug
             self.called_count = 0
+            self.degree = -1
+            self.direction_up, self.direction_down, self.direction_left, self.direction_right = 0, 0, 0, 0
         else:
             input_sentence = self.convert_sentence(msg.data)
             result = self.get_parsing_result(input_sentence)
@@ -72,7 +80,8 @@ class InstructChat(object):
                 response = self.first_call(input_sentence)
             else:
                 response = self.interactive_call(input_sentence)
-            self.get_degree(input_sentence)
+            if self.degree == -1:
+                self.get_degree(input_sentence)
 
             print(input_sentence)
             print("-> " + response)
@@ -87,65 +96,84 @@ class InstructChat(object):
         # 上下左右
         response = self.get_clear_direction(input_sentence)
         if response:
+            # print("- 上下左右")
             return response
-        # トリガーワード
-        trigger_flag = False
-        for trigger in self.triggers:
-            if trigger in input_sentence:
-                trigger_flag = True
-        if trigger_flag:
-            for request in self.request:
-                return "上下左右どちらに動かしたら良いですか？"
         # お願い語
+        request_flag = False
         for i, request in enumerate(self.request):
             if request in input_sentence:
+                request_flag = True
                 if request == "方が":
                     request = "方"
                 if self.is_head_index_instruct(request):
+                    # print("- お願い語")
+                    return "上下左右どちらに動かしたら良いですか？"
+        # トリガーワード
+        if request_flag:
+            for trigger in self.triggers:
+                if trigger in input_sentence:
+                    # print("- トリガーワード")
                     return "上下左右どちらに動かしたら良いですか？"
 
+        self.called_count = -1
         return "指示モードに入らない"
 
     def interactive_call(self, input_sentence):
         # 上下左右
         response = self.get_clear_direction(input_sentence)
         if response:
+            # print("- 上下左右")
             return response
         # 曖昧方向指示
         for indicator_direction in self.indicator_direction:
             if indicator_direction in input_sentence:
-                return "ごめんなさい、代わりに置いてもらえますか？"
+                # print("- 曖昧方向指示")
+                self.called_count = -1
+                return "ごめんなさい、代わりに置いてもらえますか？指示モード終了"
         # 否定
         if self.is_neg(input_sentence):
             if self.direction_left == 1:
                 self.direction_right = 1
                 self.direction_left = 0
-            if self.direction_right == 1:
+            elif self.direction_right == 1:
                 self.direction_left = 1
                 self.direction_right = 0
             if self.direction_up == 1:
                 self.direction_down = 1
                 self.direction_up = 0
-            if self.direction_down == 1:
+            elif self.direction_down == 1:
                 self.direction_up = 1
                 self.direction_down = 0
             move_direction = self.get_move_direction()
             if move_direction:
-                return "風船を" + move_direction + "に動かします"
+                self.degree = 0
+                # print("- 否定")
+                return "風船を" + move_direction + "に動かします、この辺で良いですか？"
         # 程度
         self.get_degree(input_sentence)
         if self.degree > -1:
             move_direction = self.get_move_direction()
             if move_direction:
-                return "風船を" + move_direction + "に動かします"
+                # print("- 程度")
+                return "風船を" + move_direction + "に動かします、この辺で良いですか？"
         # 肯定
         for agree in self.agree:
             if agree in input_sentence:
+                # print("- 肯定")
+                self.called_count = -1
                 return "対話指示モード終了"
 
         return "上下左右どっちに動かしたら良いですか？"
 
     def get_clear_direction(self, input_sentence):
+        keep_info = [self.direction_up, self.direction_down, self.direction_left, self.direction_right]
+        self.direction_up, self.direction_down, self.direction_left, self.direction_right = 0, 0, 0, 0
+
+        def get_prev_direction(keep_info):
+            self.direction_up = keep_info[0]
+            self.direction_down = keep_info[1]
+            self.direction_left = keep_info[2]
+            self.direction_right = keep_info[3]
 
         def store_direction(direction_word):
             if "左" in direction_word:
@@ -157,11 +185,13 @@ class InstructChat(object):
             if "下" in direction_word:
                 self.direction_down = 1
         # 上下左右
-        direction_flag = False
+        not_neg_flag = False
+        move_direction = ""
         for direction in self.clear_direction:
             if direction in input_sentence:
-                direction_flag = True
+                move_direction += direction
                 if not self.is_head_index_neg(direction):
+                    not_neg_flag = True
                     if direction == "左":
                         self.direction_left = 1
                     elif direction == "右":
@@ -170,27 +200,30 @@ class InstructChat(object):
                         self.direction_up = 1
                     elif direction == "下":
                         self.direction_down = 1
-        if not direction_flag:
+        if not move_direction:
+            get_prev_direction(keep_info)
             return ""
-        move_direction = self.get_move_direction()
-        if move_direction:
-            return "風船を" + move_direction + "に動かします"
+        if not_neg_flag:
+            return "風船を" + move_direction + "に動かします。この辺で良いですか？"
         if not self.is_head_index_neg(move_direction):
             store_direction(move_direction)
-            return "風船を" + move_direction + "に動かします"
+            return "風船を" + move_direction + "に動かします、この辺で良いですか？"
+        get_prev_direction(keep_info)
         return ""
 
     def is_head_index_instruct(self, word):
+        # print(word, self.lemma_lst)
         if not word in self.lemma_lst:
             return False
         word_pos = self.lemma_lst.index(word)
-        for syntax in self.syntaxes:
-            if syntax.dependency_edge == word_pos:
-                if syntax.lemma in self.action_verb:
-                    return True
+        depend_word_pos = self.syntaxes[word_pos].dependency_edge
+        # print(self.syntaxes[word_pos].name, self.syntaxes[depend_word_pos].name)
+        if self.syntaxes[depend_word_pos].name in self.action_verb:
+            return True
         return False
 
     def is_head_index_neg(self, word):
+        # print(word, self.lemma_lst)
         if not word in self.lemma_lst:
             return True
         word_pos = self.lemma_lst.index(word)
@@ -202,6 +235,7 @@ class InstructChat(object):
 
     def is_neg(self, input_sentence):
         for syntax in self.syntaxes:
+            # print(syntax.name, syntax.parse_label)
             if syntax.parse_label == 25:
                 return True
         for neg in self.excess_and_denial:
