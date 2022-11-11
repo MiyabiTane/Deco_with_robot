@@ -35,7 +35,7 @@ class InstructChat(object):
         self.indicator_direction = ["そっち", "こっち", "あっち", "ここ", "あそこ"]
         self.indicator_here = ["そこ"]
         self.place = ["場所", "所"]
-        self.excess_and_denial = ["過ぎ", "逆", "違う", "戻し", "じゃない"]
+        self.excess_and_denial = ["過ぎ", "逆", "違う", "戻し", "じゃない", "じゃなく"]
         self.agree = ["うん", "はい", "良い"]
         self.action_verb = ["置い", "動かす", "動かし", "ずらし"]  # "する" 
 
@@ -204,6 +204,7 @@ class InstructChat(object):
             get_prev_direction(keep_info)
             return ""
         if not_neg_flag:
+            move_direction = self.get_move_direction()
             return "風船を" + move_direction + "に動かします。この辺で良いですか？"
         if not self.is_head_index_neg(move_direction):
             store_direction(move_direction)
@@ -228,8 +229,9 @@ class InstructChat(object):
             return True
         word_pos = self.lemma_lst.index(word)
         for syntax in self.syntaxes:
+            print(syntax.name, self.syntaxes[syntax.dependency_edge].name, syntax.parse_label)
             if syntax.dependency_edge == word_pos:
-                if syntax.parse_label == 25:
+                if syntax.parse_label == 25 or syntax.name in ["ない", "じゃない", "じゃなく"]:
                     return True
         return False
 
